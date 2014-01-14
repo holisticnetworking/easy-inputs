@@ -5,7 +5,7 @@
 /*
 Plugin Name: Easy Inputs
 Plugin URI: 
-Description: Provides custom post types to support scholarly websites.
+Description: A hypothetical WordPress Forms API, meant to replace the Settings API.
 Version: 0.1b
 Author: Thomas J Belknap
 Author URI: http://belknap.biz
@@ -91,5 +91,3 @@ class EasyInputs {
 		add_action( 'save_post', 'EasyInputs::save_inputs' );
 	}
 }
-
-die('hi');
