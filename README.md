@@ -16,6 +16,15 @@ if( !class_exists( 'EasyInputs' ) ) {
 $ea	= new EasyInputs;
 ```
 
+Note also that EasyInputs takes one optional argument which specifies the name of the object once instantiated. If you would prefer not to use EasyInputs as the name, you can set it here. The name of the object will define the base POST variable like so:
+```
+EasyInputs[your-group-name][your-data-field]
+```
+
+An example of how to call with a custom name:
+```
+$mi	= new EasyInputs('MyInput');
+
 Usage
 =====
 
