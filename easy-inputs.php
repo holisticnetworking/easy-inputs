@@ -72,12 +72,12 @@ class EasyInputs {
 		// Append our fieldset, if required:
 		$result	.= !empty( $fieldset ) ? $this->fieldset_open( $fieldset ) : '';
 		// Append each input per it's own function, else the generic input function:
-		foreach( $inputs as $input ) :
+		foreach( $inputs as $key=>$input ) :
 			if( is_array( $input ) ) :
 				if( method_exists( 'EasyInputs', $input['type'] ) ) :
-					$result	.= $this->$input['type']( $input );
+					$result	.= $this->$input['type']( $key, $input, $name );
 				else :
-					$result .= $this->input( $input );
+					$result .= $this->input( $key, $input, $name );
 				endif;
 			else :
 				$result	.= $this->input( $input, null, $name );

@@ -19,3 +19,4 @@ $ea	= new EasyInputs;
 Usage
 =====
 
+Please see the included "plugin" file, testing-easy-inputs.php, for an in-place example of how to use the Easy Inputs API.
