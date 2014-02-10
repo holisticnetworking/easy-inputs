@@ -29,8 +29,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 class EasyInputs {
-	var $name		= 'EasyInputs';
-	var $validate	= 'EasyInputs::validate()';
+	// All of these variables will have their values set in the __construct function:
+	var $name, $action, $method, $nonce_base, $validate;
+	
+	
+	/*
+	 * open:			Begin at the beginning
+	 */
+	public function open( $id=null ) {
+		$id		= !empty( $id ) ? $id : $this->name;
+		$action	= $this->action;
+		$method = $this->method;
+		return sprintf('<form id="%s" action="%s" method="%s">', $id, $action, $method);
+	}
+	public function close() {
+		return '</form>';
+	}
 	
 	
 	/*
@@ -39,7 +53,7 @@ class EasyInputs {
 	 * 					need to do something further before output.
 	 * @var str $name:	The name we wish to call the nonce by
 	 */
-	public function nonce( $action=null, $name=null ) {
+	public function nonce( $name=null, $action=null ) {
 		if( !($action) ) $action = plugin_basename( __FILE__ );
 		if( !($name) ) $name = $this->name;
 		return wp_nonce_field( $action, $name, true, false );
@@ -54,7 +68,7 @@ class EasyInputs {
 	 * @var arr $args:	Our array of arguments, see below.
 	 * $args	= array(
 	 * 		'fieldset'	=> array(
-	 * 							'legend'	=> null,
+	 * 							'legend'	=> array(),
 	 * 							'disabled' 	=> false,
 	 * 							'name'		=> null
 	 * 						),
@@ -74,7 +88,7 @@ class EasyInputs {
 		// Append each input per it's own function, else the generic input function:
 		foreach( $inputs as $key=>$input ) :
 			if( is_array( $input ) ) :
-				if( method_exists( 'EasyInputs', $input['type'] ) ) :
+				if( !empty( $input['type'] ) && method_exists( 'EasyInputs', $input['type'] ) ) :
 					$result	.= $this->$input['type']( $key, $input, $name );
 				else :
 					$result .= $this->input( $key, $input, $name );
@@ -174,6 +188,28 @@ class EasyInputs {
 		return sprintf( '<label %s %s>%s</label>', $is_for, $attr, $str );
 	}
 	
+	/*
+	 * button:			Create an HTML button
+	 */
+	public function button( $type='submit', $val="Submit", $args=null ) {
+		if( is_array( $args ) ) extract( $args );
+		$group	= !empty( $group ) ? $group : null;
+		$attr	= !empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '';
+		$value	= !empty( $val ) ? $val : '';
+		$type	= !empty( $type ) ? $type : 'text';
+		$name	= !empty( $name ) ? $name : $this->field_name( $type, $group );
+		
+		return sprintf(
+			'<button id="%s" type="%s" name="%s" %s value="%s">%s</button>',
+			$type,
+			$type,
+			$name,
+			$attr,
+			$value,
+			$value
+		);
+	}
+	
 	
 	
 	/*
@@ -207,15 +243,48 @@ class EasyInputs {
 	}
 	
 	
+	/*
+	 * SAVING THE DATA
+	 */
+	public function save( $data ) {
+		$add	= 'add_' . $this->type;
+		$update	= 'update_' . $this->type;
+		// Look for our EasyInputs variable name, else move on:
+		if( !empty( $data[$this->name] ) ) :
+			foreach( $data[$this->name] as $key=>$vals ) :	
+				// For our first pass, we're just assuming we're getting groups of data.
+				// Nonce check:
+				if ( !isset( $data[$key . '_nonce'] ) || !wp_verify_nonce( $data[$key . '_nonce'], $this->nonce_base ) ) return;
+				foreach( $vals as $k=>$v ) :
+					if( !$add( $key, $value ) ) : $update( $key, $value ); endif;
+				endforeach;
+			endforeach;
+		endif;
+		return $data;
+	}
 	
 	
 	
 	
 	
 	
+	
+	/*
+	 * Our Constructor Function
+	 * $args = array(
+	 * 		'action', <-- The action our form will call, if we're creating a full form
+	 * 		'nonce_base', <-- The base string to form our nonce from
+	 * 		'validate' <-- Function to which we pass our form data for validation 
+	 * );
+	 */
 	// Ready, steady, go:
-	public function __construct( $name='EasyInputs' ) {
-		$this->name	= $name;
+	public function __construct( $name='EasyInputs', $args=null ) {
+		if( !empty( $args ) ) extract( $args );
+		$this->name			= $name;
+		$this->action		= empty( $action ) ? '' : $action;
+		$this->method		= empty( $method ) ? 'post' : $method;
+		$this->nonce_base	= empty( $nonce_base ) ? plugin_basename( __FILE__ ) : $nonce_base;
+		$this->validate		= empty( $validate ) ? array( $this, 'validate' ) : $validate;
 		// Check for Easy Inputs on save:
 		add_action( 'save_post', 'EasyInputs::save' );
 	}

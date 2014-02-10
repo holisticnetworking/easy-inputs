@@ -37,56 +37,65 @@ function options_page() {
 	}
 	$ei	= new EasyInputs();
 	
-	// Dead-simple input inclusion:
-	echo '<h3>Dead-simple input inclusion</h3>';
-	echo $ei->input( 'my_text_input' );
-	
-	
-	// Now, let's include a value and some HTML attributes:
-	echo '<h3>Now, let\'s include a value and some HTML attributes:</h3>';
-	echo $ei->input( 'another_text_input', array(
-		'value'	=> 'Input Value',
-		'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
-		'label' => 'Specify any label you want, man.'
-	) );
-	// Labels Optional:
-	echo '<p>Labels optional:</p>';
-	echo $ei->input( 'another_text_input', array(
-		'value'	=> 'Input Value',
-		'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
-		'label' => false
-	) );
-	// Or even separable:
-	echo '<br />';
-	echo $ei->input( 'separate_label', array(
-		'value'	=> '42',
-		'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
-		'label' => false
-	) );
-	echo $ei->label( 'Or even separable, if you like', 'separate_label' );
-	
-	
-	
-	// Slightly more complex, but still simple. This version is the simplest way
-	// to include both your input AND an automatically-generated nonce:
-	echo '<h3>Slightly more complex, but still simple.</h3><p>This version is the simplest way to include both your input AND an automatically-generated nonce:</p>';
-	echo $ei->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
-	
-	
-	/* */
-	echo '<h3>Considerably more complex</h3><p>We treat each input as a single call to the input() function, include a fieldset and legend.</p>';
-	echo $ei->group( 'seuss-group', array( 
-		'fieldset'	=> array(
-			'attrs'		=> array( 'class' => 'sneetch' ),
-			'legend'	=> array( 'title' => "Don't cry because it's over, smile because it happened." )
-		),
-		'inputs' => array( 
-			'one-input'		=> array( 'attrs'	=> array( 'class' => 'my-custom-class' ) ),
-			'two-input'		=> array( 'value' => 'Cindy-loo Hoo' ),
-			'red-input'		=> array( 'attrs'	=> array( 'data-stars' => 'on thars' ) ),
-			'blue-input'	=> array( 'label' => 'Custom Label' )
-		) ) );
-	/* */
+	echo '<div class="wrap"><h2>Demonstrating Easy Inputs</h2>';
+		// Create the form:
+		echo $ei->open('dah-form');
+		
+			// Dead-simple input inclusion:
+			echo '<h3>Dead-simple input inclusion</h3>';
+			echo $ei->input( 'my_text_input' );
+			
+			
+			// Now, let's include a value and some HTML attributes:
+			echo '<h3>Now, let\'s include a value and some HTML attributes:</h3>';
+			echo $ei->input( 'another_text_input', array(
+				'value'	=> 'Input Value',
+				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
+				'label' => 'Specify any label you want, man.'
+			) );
+			// Labels Optional:
+			echo '<p>Labels optional:</p>';
+			echo $ei->input( 'another_text_input', array(
+				'value'	=> 'Input Value',
+				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
+				'label' => false
+			) );
+			// Or even separable:
+			echo '<br />';
+			echo $ei->input( 'separate_label', array(
+				'value'	=> '42',
+				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
+				'label' => false
+			) );
+			echo $ei->label( 'Or even separable, if you like', 'separate_label' );
+			
+			
+			
+			// Slightly more complex, but still simple. This version is the simplest way
+			// to include both your input AND an automatically-generated nonce:
+			echo '<h3>Slightly more complex, but still simple.</h3><p>This version is the simplest way to include both your input AND an automatically-generated nonce:</p>';
+			echo $ei->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
+			
+			
+			/* */
+			echo '<h3>Considerably more complex</h3><p>We treat each input as a single call to the input() function, include a fieldset and legend.</p>';
+			echo $ei->group( 'seuss-group', array( 
+				'fieldset'	=> array(
+					'attrs'		=> array( 'class' => 'sneetch' ),
+					'legend'	=> array( 'title' => "Don't cry because it's over, smile because it happened." )
+				),
+				'inputs' => array( 
+					'one-input'		=> array( 'attrs'	=> array( 'class' => 'my-custom-class', 'data-stars' => 'on thars' ) ),
+					'two-input'		=> array( 'value' => 'Cindy-loo Hoo' ),
+					'red-input',
+					'blue-input'	=> array( 'label' => 'Custom Label' )
+				) ) );
+			
+			echo $ei->button('submit', 'Save it!!');
+		
+		// Close the form:
+		echo $ei->close();
+	echo '</div>';
 }
 add_action('admin_menu', 'add_page');
 ?>
