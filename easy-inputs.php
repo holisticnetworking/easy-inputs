@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class EasyInputs {
 	// All of these variables will have their values set in the __construct function:
-	var $name, $action, $method, $nonce_base, $validate;
+	var $name, $action, $method, $nonce_base, $validate, $group;
 	
 	
 	/*
@@ -100,6 +100,15 @@ class EasyInputs {
 		// Close the fieldset:
 		$result	.= !empty( $fieldset ) ? $this->fieldset_close() : '';
 		return $result;
+	}
+	
+	
+	/*
+	 * set_group:		Sets the pointer for the current group
+	 */
+	public function set_group( $group ) {
+		$this->group	= $group;
+		return true;
 	}
 	
 	
@@ -238,6 +247,7 @@ class EasyInputs {
 	 */
 	public function field_name( $field=null, $group=null ) {
 		if( !$field ) return;
+		$group	= empty( $group ) ? $this->group : $group;
 		$group	= !empty( $group ) ? sprintf( '[%s]', $group ) : '';
 		return sprintf( '%s%s[%s]', $this->name, $group, $field);
 	}
@@ -285,7 +295,8 @@ class EasyInputs {
 		$this->method		= empty( $method ) ? 'post' : $method;
 		$this->nonce_base	= empty( $nonce_base ) ? plugin_basename( __FILE__ ) : $nonce_base;
 		$this->validate		= empty( $validate ) ? array( $this, 'validate' ) : $validate;
-		// Check for Easy Inputs on save:
-		add_action( 'save_post', 'EasyInputs::save' );
+		$this->group		= empty( $group ) ? null : $group;
+		// Register a WordPress setting:
+		register_setting( $name . '_options', $name );
 	}
 }

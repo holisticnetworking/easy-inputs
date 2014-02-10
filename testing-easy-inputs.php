@@ -25,17 +25,23 @@ Author URI: http://holisticnetworking.net
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-function add_page() {
-	add_options_page( 'Testing Easy Inputs', 'Easy Inputs', 'publish_posts', 'easy-inputs', 'options_page');
-}
-
-function options_page() {
+function register_ei() {
 	// First, instantiate the class, checking to make sure no other plugin or theme
 	// has already included the file:
 	if( !class_exists( 'EasyInputs' ) ) {
 		include_once( plugin_dir_path( __FILE__ ) . '../easy-inputs/easy-inputs.php' );
 	}
+	// Spare yourself the trouble of declaring twice:
+	global $ei;
 	$ei	= new EasyInputs();
+}
+
+function add_page() {
+	add_options_page( 'Testing Easy Inputs', 'Easy Inputs', 'publish_posts', 'easy-inputs', 'options_page');
+}
+
+function options_page() {
+	global $ei;
 	
 	echo '<div class="wrap"><h2>Demonstrating Easy Inputs</h2>';
 		// Create the form:
@@ -45,6 +51,8 @@ function options_page() {
 			echo '<h3>Dead-simple input inclusion</h3>';
 			echo $ei->input( 'my_text_input' );
 			
+			// You can change the global group at any time:
+			$ei->set_group('grinch-group');
 			
 			// Now, let's include a value and some HTML attributes:
 			echo '<h3>Now, let\'s include a value and some HTML attributes:</h3>';
@@ -98,4 +106,5 @@ function options_page() {
 	echo '</div>';
 }
 add_action('admin_menu', 'add_page');
+add_action('admin_init', 'register_ei');
 ?>
