@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class EasyInputs {
 	// All of these variables will have their values set in the __construct function:
-	var $name, $action, $method, $nonce_base, $validate, $group;
+	var $name, $setting, $action, $method, $nonce_base, $validate, $group;
 	
 	
 	/*
@@ -40,10 +40,16 @@ class EasyInputs {
 		$id		= !empty( $id ) ? $id : $this->name;
 		$action	= $this->action;
 		$method = $this->method;
-		return sprintf('<form id="%s" action="%s" method="%s">', $id, $action, $method);
+		return sprintf('<form id="%s" action="%s" method="%s">', $id, $action, $method) . $this->hidden_fields( $this->setting );
 	}
 	public function close() {
 		return '</form>';
+	}
+	
+	public function hidden_fields( $setting ) {
+		$fields	= sprintf( '<input type="hidden" name="option_page" value="%s" /><input type="hidden" name="action" value="update" />', esc_attr( $setting ) );
+		$fields .= wp_nonce_field("$setting-options");
+		return $fields;
 	}
 	
 	
@@ -54,8 +60,8 @@ class EasyInputs {
 	 * @var str $name:	The name we wish to call the nonce by
 	 */
 	public function nonce( $name=null, $action=null ) {
+		if( !($name) ) return;
 		if( !($action) ) $action = plugin_basename( __FILE__ );
-		if( !($name) ) $name = $this->name;
 		return wp_nonce_field( $action, $name, true, false );
 	}
 	
@@ -81,7 +87,7 @@ class EasyInputs {
 		if( empty( $action ) ) $action = plugin_basename( __FILE__ );
 		
 		// Each group gets its own nonce automatically:
-		$result	= $this->nonce( $action, $name . '_nonce' );
+		$result	= ''; // $this->nonce( $name . '_nonce', $action );
 		
 		// Append our fieldset, if required:
 		$result	.= !empty( $fieldset ) ? $this->fieldset_open( $fieldset ) : '';
@@ -289,14 +295,15 @@ class EasyInputs {
 	 */
 	// Ready, steady, go:
 	public function __construct( $name='EasyInputs', $args=null ) {
-		if( !empty( $args ) ) extract( $args );
 		$this->name			= $name;
-		$this->action		= empty( $action ) ? '' : $action;
+		$this->setting		= $name . '_ei';
+		if( !empty( $args ) ) extract( $args );
+		$this->action		= empty( $action ) ? 'options.php' : $action;
 		$this->method		= empty( $method ) ? 'post' : $method;
 		$this->nonce_base	= empty( $nonce_base ) ? plugin_basename( __FILE__ ) : $nonce_base;
 		$this->validate		= empty( $validate ) ? array( $this, 'validate' ) : $validate;
 		$this->group		= empty( $group ) ? null : $group;
 		// Register a WordPress setting:
-		register_setting( $name . '_options', $name );
+		register_setting( $setting, $name );
 	}
 }

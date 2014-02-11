@@ -33,7 +33,7 @@ function register_ei() {
 	}
 	// Spare yourself the trouble of declaring twice:
 	global $ei;
-	$ei	= new EasyInputs();
+	$ei	= new EasyInputs('testing-easy-inputs');
 }
 
 function add_page() {
@@ -50,7 +50,7 @@ function options_page() {
 			// Dead-simple input inclusion:
 			echo '<h3>Dead-simple input inclusion</h3>';
 			echo $ei->input( 'my_text_input' );
-			
+			/*
 			// You can change the global group at any time:
 			$ei->set_group('grinch-group');
 			
@@ -85,7 +85,7 @@ function options_page() {
 			echo $ei->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
 			
 			
-			/* */
+			
 			echo '<h3>Considerably more complex</h3><p>We treat each input as a single call to the input() function, include a fieldset and legend.</p>';
 			echo $ei->group( 'seuss-group', array( 
 				'fieldset'	=> array(
@@ -98,7 +98,7 @@ function options_page() {
 					'red-input',
 					'blue-input'	=> array( 'label' => 'Custom Label' )
 				) ) );
-			
+			*/
 			echo $ei->button('submit', 'Save it!!');
 		
 		// Close the form:
