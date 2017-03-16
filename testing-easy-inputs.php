@@ -33,7 +33,7 @@ function register_ei() {
 	}
 	// Spare yourself the trouble of declaring twice:
 	global $ei;
-	$ei	= new EasyInputs('testing-easy-inputs');
+	$ei	= new EasyInputs( 'testing-easy-inputs' );
 }
 
 function add_page() {
@@ -44,26 +44,29 @@ function options_page() {
 	global $ei;
 	
 	echo '<div class="wrap"><h2>Demonstrating Easy Inputs</h2>';
+		echo '<p>Below you will see the output from the sample plugin\'s inputs. Go to the plugin file to see the function calls.</p>';
 		// Create the form:
 		echo $ei->open('dah-form');
 		
 			// Dead-simple input inclusion:
 			echo '<h3>Dead-simple input inclusion</h3>';
 			echo $ei->input( 'my_text_input' );
-			/*
+			
 			// You can change the global group at any time:
-			$ei->set_group('grinch-group');
+			// $ei->set_group('grinch-group');
 			
 			// Now, let's include a value and some HTML attributes:
 			echo '<h3>Now, let\'s include a value and some HTML attributes:</h3>';
+			echo '<p>Please see the README.md file for the proper parameters and values for these. in general, all HTML5-valid attributes are available, including data attributes.</p>';
 			echo $ei->input( 'another_text_input', array(
 				'value'	=> 'Input Value',
-				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
-				'label' => 'Specify any label you want, man.'
+				'attrs'	=> array('class' => 'custom classes', 'data-nana-nana' => 'boo-boo'),
+				'label' => 'Specify any label you want.'
 			) );
+			
 			// Labels Optional:
 			echo '<p>Labels optional:</p>';
-			echo $ei->input( 'another_text_input', array(
+			echo $ei->input( 'still_another_text_input', array(
 				'value'	=> 'Input Value',
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
 				'label' => false
@@ -75,7 +78,7 @@ function options_page() {
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
 				'label' => false
 			) );
-			echo $ei->label( 'Or even separable, if you like', 'separate_label' );
+			echo $ei->label( 'Or even created separately, if you like.', 'separate_label' );
 			
 			
 			
@@ -98,7 +101,6 @@ function options_page() {
 					'red-input',
 					'blue-input'	=> array( 'label' => 'Custom Label' )
 				) ) );
-			*/
 			echo $ei->button('submit', 'Save it!!');
 		
 		// Close the form:
