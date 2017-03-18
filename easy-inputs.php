@@ -180,9 +180,9 @@ class EasyInputs {
 		// Handle creating a label:
 		$html_label	= '';
 		if( !isset( $label ) ) :
-			$html_label = $this->label( $field, $field );
+			$html_label = $this->label( $field );
 		elseif( is_string( $label ) ) :
-			$html_label = $this->label( $label, $field );
+			$html_label = $this->label( $field, $label );
 		endif;
 		
 		return sprintf(
@@ -199,6 +199,9 @@ class EasyInputs {
 	
 	/*
 	 * label:			Create an HTML label
+	 * @var str $for:	The ID of the input this label is for.
+	 * @var str $text:	Optional. Label text. The ID will be used if this value is left empty.
+	 * $var arr $attrs:	HTML attributes. 
 	 */
 	public function label( $for=null, $text=null, $attrs=null ) {
 		// Bounce bad requests.
@@ -214,10 +217,11 @@ class EasyInputs {
 	
 	/*
 	 * button:			Create an HTML button
+	 * @var str $type:	The HTML button type.
+	 * @var str $val:	The value on the button.
+	 * @var arr $attrs:	HTML attributes. 
 	 */
-	public function button( $type='submit', $val="Submit", $args=null ) {
-		if( is_array( $args ) ) extract( $args );
-		$group	= !empty( $group ) ? $group : null;
+	public function button( $type='submit', $val="Submit", $attrs=null ) {
 		$attr	= !empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '';
 		$value	= !empty( $val ) ? $val : '';
 		$type	= !empty( $type ) ? $type : 'text';
