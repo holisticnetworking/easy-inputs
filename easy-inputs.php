@@ -12,43 +12,44 @@ Author URI: http://belknap.biz
 License: GPLv2 or later
 */
 
-/*
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-*/
-
 class EasyInputs {
 	// All of these variables will have their values set in the __construct function:
-	var $name, $setting, $action, $method, $nonce_base, $validate, $group;
+	private $name;
+	private $setting;
+	private $action;
+	private $method;
+	private $nonce_base;
+	private $validate;
+	private $group;
 	
 	
 	/*
-	 * open:			Begin at the beginning
+	 * open/close:			Create new form and close it.
+	 * @var str $id:		An identifier for the input. (default: $this->name)
 	 */
 	public function open( $id=null ) {
-		$id		= !empty( $id ) ? $id : $this->name;
-		$action	= $this->action;
-		$method = $this->method;
-		return sprintf('<form id="%s" action="%s" method="%s">', $id, $action, $method) . $this->hidden_fields( $this->setting );
+		// return sprintf('<form id="%s" action="%s" method="%s">', $id, $action, $method) . $this->hidden_fields( $this->setting );
+		return sprintf(
+			'<form id="%s" action="%s" method="%s">%s',
+			!empty( $id ) ? $id : $this->name,
+			$this->action,
+			$this->method,
+			$this->hidden_fields( $this->setting )
+		);
 	}
 	public function close() {
 		return '</form>';
 	}
 	
+	
+	/*
+	 * hidden_fields:		For the Settings API, provide the required nonce fields.
+	 * @var str $setting:	The Settings API setting
+	 */
 	public function hidden_fields( $setting ) {
+		if( empty( $setting ) ) return;
 		$fields	= sprintf( '<input type="hidden" name="option_page" value="%s" /><input type="hidden" name="action" value="update" />', esc_attr( $setting ) );
-		$fields .= wp_nonce_field("$setting-options");
+		$fields	.= $this->nonce();
 		return $fields;
 	}
 	
@@ -60,29 +61,28 @@ class EasyInputs {
 	 * @var str $name:	The name we wish to call the nonce by
 	 */
 	public function nonce( $name=null, $action=null ) {
-		if( !($name) ) return;
-		if( !($action) ) $action = plugin_basename( __FILE__ );
-		return wp_nonce_field( $action, $name, true, false );
+		return wp_nonce_field( $this->action, $this->name, true, false );
 	}
 	
 	
 	/*
-	 * group:			Defines a group of inputs, both logically and physically.
-	 * 					Logically, this group is associated with a single nonce to
-	 * 					which it is bound. Physically, all elements of a group will
-	 * 					be displayed together, in a fieldset, if requested.
-	 * @var arr $args:	Our array of arguments, see below.
+	 * group:				Defines a group of inputs, both logically and physically.
+	 * 						Logically, this group is associated with a single nonce to
+	 * 						which it is bound. Physically, all elements of a group will
+	 * 						be displayed together, in a fieldset, if requested.
+	 * @var str $name:		The name of our group.
+	 * @var arr $inputs:	An array of input declarations.
+	 * @var arr $args:		Our array of arguments, see below.
+	 *
+	 * ARGUMENT FORMAT
 	 * $args	= array(
-	 * 		'fieldset'	=> array(
-	 * 							'legend'	=> array(),
-	 * 							'disabled' 	=> false,
-	 * 							'name'		=> null
-	 * 						),
-	 * 		'inputs'	=> array()
+	 * 	  'legend'	=> array(),
+	 * 	  'disabled' 	=> false,
+	 * 	  'name'		=> null
 	 * )
 	 */
-	public function group( $name=null, $args=array() ) {
-		if( !$name or empty( $args ) ) return;
+	public function group( $name=null, $inputs=null, $args=array() ) {
+		if( empty( $name ) or empty( $inputs ) or empty( $args ) ) return;
 		extract( $args );
 		if( empty( $action ) ) $action = plugin_basename( __FILE__ );
 		
@@ -124,9 +124,11 @@ class EasyInputs {
 	 */
 	public function fieldset_open( $args ) {
 		extract( $args );
-		$attr	= empty( $attr ) ? '' : $this->attrs_to_str( $attrs );
-		$legend	= empty( $legend ) ? '' : $this->legend( $legend );
-		return sprintf( '<fieldset %s>%s', $attr, $legend );
+		return sprintf( 
+			'<fieldset %s>%s', 
+			empty( $attr ) ? '' : $this->attrs_to_str( $attrs ), 
+			empty( $legend ) ? '' : $this->legend( $legend );
+		);
 	}
 	public function fieldset_close() {
 		return '</fieldset>';
@@ -139,11 +141,11 @@ class EasyInputs {
 	 */
 	public function legend( $args ) {
 		extract( $args );
-		if( empty( $title ) ) :
-			return null;
-		endif;
-		$attr	= empty( $attr ) ? '' : $this->attrs_to_str( $attrs );
-		return sprintf( '<legend %s>%s</legend>', $attr, $title );
+		return sprintf(
+			'<legend %s>%s</legend>', 
+			$attr	= empty( $attr ) ? '' : $this->attrs_to_str( $attrs ),
+			!empty( $title ) && is_string( $title ) ? $title : ucfirst( preg_replace( '|-_|', ' ', $this->group ) ) // Convert group ID
+		);
 	}
 	
 	
@@ -152,9 +154,11 @@ class EasyInputs {
 	 */
 	
 	/*
-	 * input:			The default and also the model for all inputs structure
+	 * input:			The default and also the model for all inputs structure.
 	 * @var str $field:	The field name.
-	 * @var str $args:	A collection of additional arguments, formatted below
+	 * @var str $args:	A collection of additional arguments, formatted below.
+	 *
+	 * ARGUMENTS FORMAT
 	 * $args	= array(
 	 * 		$attrs	= arr, <-- HTML attributes
 	 * 		$value	= str, <-- The value of the field, defaults to blank
@@ -164,9 +168,9 @@ class EasyInputs {
 	 * 		$group	= str  <-- The group to which this element belongs. 
 	 * );
 	 */
-	public function input( $field=null, $args=array(), $group=null ) {
+	public function input( $field=null, $args=array() ) {
 		if( !$field ) return;
-		if( is_array( $args ) ) extract( $args );
+		extract( $args );
 		$group	= !empty( $group ) ? $group : null;
 		$attr	= !empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '';
 		$value	= !empty( $value ) ? $value : '';
@@ -196,11 +200,16 @@ class EasyInputs {
 	/*
 	 * label:			Create an HTML label
 	 */
-	public function label( $str=null, $for=null, $attrs=null ) {
-		$str	= ucwords( implode( ' ', explode( '_', $str ) ) );
-		$is_for	= !empty( $for ) ? sprintf( 'for="%s"', $for ) : '';
-		$attr	= is_array( $attrs ) ? $this->attrs_to_str( $attrs ) : '';
-		return sprintf( '<label %s %s>%s</label>', $is_for, $attr, $str );
+	public function label( $for=null, $text=null, $attrs=null ) {
+		// Bounce bad requests.
+		if( empty( $for ) ) return;
+		
+		return sprintf(
+			'<label %s %s>%s</label>', 
+			!empty( $for ) ? sprintf( 'for="%s"', $for ) : '', 
+			is_array( $attrs ) ? $this->attrs_to_str( $attrs ) : '', 
+			!empty( $text ) && is_string( $text ) ? $text : ucfirst( preg_replace( '|-_|', ' ', $for ) ) // Convert fieldname
+		);
 	}
 	
 	/*
@@ -261,6 +270,7 @@ class EasyInputs {
 	
 	/*
 	 * SAVING THE DATA
+	 * this function is not ready for showtime. Disregard
 	 */
 	public function save( $data ) {
 		$add	= 'add_' . $this->type;
@@ -288,9 +298,12 @@ class EasyInputs {
 	/*
 	 * Our Constructor Function
 	 * $args = array(
-	 * 		'action', <-- The action our form will call, if we're creating a full form
-	 * 		'nonce_base', <-- The base string to form our nonce from
-	 * 		'validate' <-- Function to which we pass our form data for validation 
+	 * 		'name', <-- 
+	 * 		'action', <-- The WordPress "action" that forms created with this instance will call.
+	 * 		'nonce_base', <-- The base string from which to form our nonce.
+	 * 		'validate', <-- Function to which we pass our form data for validation.
+	 * 		'setting', <-- For data saved to a WordPress Settings API setting, this will be the name.
+	 *		'group' <-- If you wish to save your data into an array, this is the base name of the array.
 	 * );
 	 */
 	// Ready, steady, go:
@@ -298,7 +311,7 @@ class EasyInputs {
 		$this->name			= $name;
 		$this->setting		= $name . '_ei';
 		if( !empty( $args ) ) extract( $args );
-		$this->action		= empty( $action ) ? 'options.php' : $action;
+		$this->action		= empty( $action ) ? null : $action;
 		$this->method		= empty( $method ) ? 'post' : $method;
 		$this->nonce_base	= empty( $nonce_base ) ? plugin_basename( __FILE__ ) : $nonce_base;
 		$this->validate		= empty( $validate ) ? array( $this, 'validate' ) : $validate;
