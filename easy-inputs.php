@@ -1,7 +1,8 @@
 <?php
 /**
- * @package Easy Inputs
+ * @package EasyInputs
  */
+
 /*
 Plugin Name: Easy Inputs
 Plugin URI: 
@@ -13,7 +14,15 @@ License: GPLv2 or later
 */
 
 class EasyInputs {
-	// All of these variables will have their values set in the __construct function:
+	/**
+	 * @var string $name			The name of the Easy Inputs instance.
+	 * @var string $setting		The affected Settings API setting.
+	 * @var string $action		The action to send the form data to.
+	 * @var string $method		GET, POST, etc.
+	 * @var string $nonce_base	The value we will use to base our nonces on.
+	 * @var string $validate		Callable validation function.
+	 * @var string $group			For data saved as an array, the group name.
+	 */
 	private $name;
 	private $setting;
 	private $action;
@@ -53,9 +62,13 @@ class EasyInputs {
 	}
 	
 	
-	/*
-	 * hidden_fields:		For the Settings API, provide the required nonce fields.
-	 * @var str $setting:	The Settings API setting
+	
+	/**
+	 * For the Settings API, provide the required nonce fields.
+	 *
+	 * @param string $setting The Settings API setting to which this control belongs.
+	 *
+	 * @return string Nonce fields.
 	 */
 	public function hidden_fields( $setting ) {
 		if( empty( $setting ) ) return;
@@ -65,32 +78,37 @@ class EasyInputs {
 	}
 	
 	
-	/*
-	 * nonce:			Don't overthink it. Just let WordPress handle creating the nonce.
-	 * 					This function returns, rather than outputs, the nonce, in case we
-	 * 					need to do something further before output.
-	 * @var str $name:	The name we wish to call the nonce by
+	/**
+	 * Return a WP Settings API nonce field.
+	 *
+	 * Don't overthink it. Just let WordPress handle creating the nonce.
+	 * This function returns, rather than outputs, the nonce, in case we
+	 * need to do something further before output.
+	 *
+	 * @param string $name A name from which to create our nonce.
+	 * @param string $action The action requiring our nonce.
+	 *
+	 * @return string the opening tag for the form element.
 	 */
 	public function nonce( $name=null, $action=null ) {
 		return wp_nonce_field( $this->action, $this->name, true, false );
 	}
 	
 	
-	/*
-	 * group:				Defines a group of inputs, both logically and physically.
-	 * 						Logically, this group is associated with a single nonce to
-	 * 						which it is bound. Physically, all elements of a group will
-	 * 						be displayed together, in a fieldset, if requested.
-	 * @var str $name:		The name of our group.
-	 * @var arr $inputs:	An array of input declarations.
-	 * @var arr $args:		Our array of arguments, see below.
+	/**
+	 * Display a group of inputs
 	 *
-	 * ARGUMENT FORMAT
-	 * $args	= array(
-	 * 	  'legend'	=> array(),
-	 * 	  'disabled' 	=> false,
-	 * 	  'name'		=> null
-	 * )
+	 * Defines a group of inputs, both logically and physically.
+	 * Logically, this group is associated with a single nonce to
+	 * which it is bound. Physically, all elements of a group will
+	 * be displayed together, in a fieldset, if requested.
+	 *
+	 * @param string $name The name of our group.
+	 * @param array $inputs Array of input arrays.
+	 * @param array $args Arguments and attributes to be applied to the group 
+	 * container
+	 *
+	 * @return string A string of HTML including all inputs from $inputs.
 	 */
 	public function group( $name=null, $inputs=null, $args=array() ) {
 		if( empty( $name ) or empty( $inputs ) or empty( $args ) ) return;
