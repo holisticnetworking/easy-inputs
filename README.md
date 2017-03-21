@@ -1,9 +1,11 @@
 Easy Inputs
 ===========
 
-A hypothetical WordPress Forms API.
+A generic WordPress Forms API.
 
-Rather than aiming to simply rewrite the Settings API, this drop-in plugin is aimed at providing a generalized set of form elements with support for nonces. Because the forms are abstracted, they can be used for front end and back end forms to support themes or plugins with a consistent data format.
+This plugin does not seek to replace the Settings API, the Customizer or meta generation in WordPress. It seeks simply to create a unified Forms API that provides universal control to form elements. This acheives the end of allowing developers to create beautiful, intuitive interfaces for their plugins and themes without the hassle of generating compatible forms and inputs.
+
+Easy Inputs is intended to be used for post metadata, Settings or Customizer forms. As it sits right now, it's basically a pile of HTML form inputs, opening and closing functions for forms and fieldsets. It also includes a function for creating nonces.
 
 Installation
 ============
