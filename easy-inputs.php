@@ -23,12 +23,18 @@ class EasyInputs {
 	private $group;
 	
 	
-	/*
-	 * open/close:			Create new form and close it.
-	 * @var str $id:		An identifier for the input. (default: $this->name)
+	/**
+	 * Open a form element
+	 *
+	 * This function will allow you to create the opening <form> tag with attributes.
+	 * It should be used in combination with the close() function. This form will also
+	 * optionally include WordPress nonce fields, created using the $id param.
+	 *
+	 * @param string|null $id The name of the form. Also serves as the HTML id tag. Optional
+	 *
+	 * @return string the opening tag for the form element.
 	 */
 	public function open( $id=null ) {
-		// return sprintf('<form id="%s" action="%s" method="%s">', $id, $action, $method) . $this->hidden_fields( $this->setting );
 		return sprintf(
 			'<form id="%s" action="%s" method="%s">%s',
 			!empty( $id ) ? $id : $this->name,
@@ -37,6 +43,11 @@ class EasyInputs {
 			$this->hidden_fields( $this->setting )
 		);
 	}
+	/**
+	 * Close a form element
+	 *
+	 * @return string the closing tag for the form element.
+	 */
 	public function close() {
 		return '</form>';
 	}
@@ -350,18 +361,16 @@ class EasyInputs {
 	
 	
 	
-	/*
-	 * Our Constructor Function
-	 * $args = array(
-	 * 		'name', <-- 
-	 * 		'action', <-- The WordPress "action" that forms created with this instance will call.
-	 * 		'nonce_base', <-- The base string from which to form our nonce.
-	 * 		'validate', <-- Function to which we pass our form data for validation.
-	 * 		'setting', <-- For data saved to a WordPress Settings API setting, this will be the name.
-	 *		'group' <-- If you wish to save your data into an array, this is the base name of the array.
-	 * );
+	/**
+	 * Giddyup.
+	 *
+	 * Sets defaults.
+	 * 
+	 * @param array|null $name Required name for the instance.
+	 * @param array|null $args Optional arguments.
+	 *
+	 * @return void
 	 */
-	// Ready, steady, go:
 	public function __construct( $name='EasyInputs', $args=null ) {
 		$this->name			= $name;
 		$this->setting		= $name . '_ei';
