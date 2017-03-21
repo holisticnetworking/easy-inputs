@@ -43,20 +43,20 @@ function add_page() {
 function options_page() {
 	global $ei;
 	
-	echo '<div class="wrap"><h2>Demonstrating Easy Inputs</h2>';
+	echo '<div class="wrap"><h1>Demonstrating Easy Inputs</h1>';
 		echo '<p>Below you will see the output from the sample plugin\'s inputs. Go to the plugin file to see the function calls.</p>';
 		// Create the form:
 		echo $ei->open('dah-form');
 		
 			// Dead-simple input inclusion:
-			echo '<h3>Dead-simple input inclusion</h3>';
+			echo '<h2>Dead-simple input inclusion</h2>';
 			echo $ei->input( 'my_text_input' );
 			
 			// You can change the global group at any time:
 			// $ei->set_group('grinch-group');
 			
 			// Now, let's include a value and some HTML attributes:
-			echo '<h3>Now, let\'s include a value and some HTML attributes:</h3>';
+			echo '<h2>Now, let\'s include a value and some HTML attributes:</h2>';
 			echo '<p>Please see the README.md file for the proper parameters and values for these. in general, all HTML5-valid attributes are available, including data attributes.</p>';
 			echo $ei->input( 'another_text_input', array(
 				'value'	=> 'Input Value',
@@ -65,20 +65,39 @@ function options_page() {
 			) );
 			
 			// Labels Optional:
-			echo '<p>Labels optional:</p>';
+			echo '<h2>Labels are always optional</h2>';
 			echo $ei->input( 'still_another_text_input', array(
 				'value'	=> 'Input Value',
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
 				'label' => false
 			) );
-			// Or even separable:
-			echo '<br />';
+			// Or separable:
+			echo '<p>';
 			echo $ei->input( 'separate_label', array(
 				'value'	=> '42',
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
 				'label' => false
 			) );
-			echo $ei->label( 'Or even created separately, if you like.', 'separate_label' );
+			echo $ei->label( 'separate_label', 'Or can even be created separately, if you like.' );
+			
+			// Radio buttons
+			echo '<h2>Let\'s add some radio buttons and selects.</h2>';
+			echo '<p>Radio buttons require the "options" element in $args be set with a $key=>$value array.</p>';
+			echo $ei->input( 'radio_buttons', [ 'type' => 'radio', 'options' => [ 'y' => 'Yes', 'n' => 'No' ] ] );
+			echo $ei->input( 'color_select', [ 'type' => 'select', 'options' => [ 
+				'gr' => 'Green', 
+				'bl' => 'Blue',
+				'yl' => 'Yellow',
+				'rd' => 'Red',
+				'or' => 'Orange' 
+			] ] );
+			echo $ei->input( 'color_checkbox', [ 'type' => 'checkbox', 'options' => [ 
+				'gr' => 'Green', 
+				'bl' => 'Blue',
+				'yl' => 'Yellow',
+				'rd' => 'Red',
+				'or' => 'Orange' 
+			] ] );
 			
 			
 			

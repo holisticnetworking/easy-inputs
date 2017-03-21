@@ -127,7 +127,7 @@ class EasyInputs {
 		return sprintf( 
 			'<fieldset %s>%s', 
 			empty( $attr ) ? '' : $this->attrs_to_str( $attrs ), 
-			empty( $legend ) ? '' : $this->legend( $legend );
+			empty( $legend ) ? '' : $this->legend( $legend )
 		);
 	}
 	public function fieldset_close() {
@@ -160,40 +160,85 @@ class EasyInputs {
 	 *
 	 * ARGUMENTS FORMAT
 	 * $args	= array(
-	 * 		$attrs	= arr, <-- HTML attributes
-	 * 		$value	= str, <-- The value of the field, defaults to blank
-	 * 		$type	= str, <-- The HTML Field type (text, checkbox, etc). 
+	 * 		$attrs		= arr, <-- HTML attributes
+	 * 		$value		= str, <-- The value of the field, defaults to blank
+	 * 		$type		= str, <-- The HTML Field type (text, checkbox, etc). 
 	 * 						   Defaults to 'text'
-	 * 		$name	= str, <-- The fully-qualified name attribute, if desired.
-	 * 		$group	= str  <-- The group to which this element belongs. 
+	 * 		$name		= str, <-- The fully-qualified name attribute, if desired.
+	 * 		$group		= str, <-- The group to which this element belongs. 
+	 *		$options	= str  <-- For radio/checkbox inputs.
 	 * );
 	 */
 	public function input( $field=null, $args=array() ) {
 		if( !$field ) return;
-		extract( $args );
-		$group	= !empty( $group ) ? $group : null;
-		$attr	= !empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '';
-		$value	= !empty( $value ) ? $value : '';
-		$type	= !empty( $type ) ? $type : 'text';
-		$name	= !empty( $name ) ? $name : $this->field_name( $field, $group );
+		// If a public method exists, then we're dealing with a form element:
+		if( !empty( $args['type'] ) && is_callable( [ $this, $args['type'] ] ) ) :
+			return $this->{$args['type']}( $field, $args );
+		// Generic text input.
+		else :
+			extract( $args );
 		
-		// Handle creating a label:
-		$html_label	= '';
-		if( !isset( $label ) ) :
-			$html_label = $this->label( $field );
-		elseif( is_string( $label ) ) :
-			$html_label = $this->label( $field, $label );
+			return sprintf(
+				'%s<input id="%s" type="text" name="%s" %s value="%s" />',
+				$this->label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
+				$field,
+				!empty( $name ) ? $name : $this->field_name( $field, !empty( $group ) ? $group : $this->group ),
+				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
+				!empty( $value ) ? $value : ''
+			);
 		endif;
-		
+	}
+	
+	public function radio( $field, $args ) {
+		if( empty( $args['options'] ) ) return;
+		$radios	= '';
+		foreach( $args['options'] as $key=>$value ) :
+			$radios	.= sprintf(
+				'<input type="radio" value="%1$s" %2$s>%3$s</input>',
+				$key,
+				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
+				$value
+			);
+		endforeach;
+		return $radios;
+	}
+	
+	
+	public function select( $field, $args ) {
+		if( empty( $args['options'] ) ) return;
+		$select		= '';
+		$options	= '';
+		foreach( $args['options'] as $value=>$label ) :
+			$selected	= ( !empty( $args->value ) && $value == $args->value ) ? ' selected="selected" ' : '';
+			$options	.= sprintf(
+				'<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
+				$value,
+				$selected,
+				$label
+			);
+		endforeach; 
 		return sprintf(
-			'%s<input id="%s" type="%s" name="%s" %s value="%s" />',
-			$html_label,
+			'<select id="%1$s" %2$sname="%3$s">%4$s</select>',
 			$field,
-			$type,
-			$name,
-			$attr,
-			$value
+			!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
+			!empty( $name ) ? $name : $this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
+			$options
 		);
+	}
+	
+	public function checkbox( $field, $args ) {
+		if( empty( $args['options'] ) ) return;
+		$boxes	= '';
+		foreach( $args['options'] as $key=>$value ) :
+			$boxes	.= sprintf(
+				'<input name="%4$s" type="checkbox" value="%1$s" %2$s>%3$s</input>',
+				$key,
+				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
+				$value,
+				!empty( $name ) ? $name : $this->field_name( $field, !empty( $this->group ) ? $this->group : null )
+			);
+		endforeach;
+		return $boxes;
 	}
 	
 	
@@ -211,7 +256,7 @@ class EasyInputs {
 			'<label %s %s>%s</label>', 
 			!empty( $for ) ? sprintf( 'for="%s"', $for ) : '', 
 			is_array( $attrs ) ? $this->attrs_to_str( $attrs ) : '', 
-			!empty( $text ) && is_string( $text ) ? $text : ucfirst( preg_replace( '|-_|', ' ', $for ) ) // Convert fieldname
+			!empty( $text ) && is_string( $text ) ? $text : ucfirst( preg_replace( '/[_\-]/', ' ', $for ) ) // Convert fieldname
 		);
 	}
 	
@@ -222,19 +267,13 @@ class EasyInputs {
 	 * @var arr $attrs:	HTML attributes. 
 	 */
 	public function button( $type='submit', $val="Submit", $attrs=null ) {
-		$attr	= !empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '';
-		$value	= !empty( $val ) ? $val : '';
-		$type	= !empty( $type ) ? $type : 'text';
-		$name	= !empty( $name ) ? $name : $this->field_name( $type, $group );
-		
 		return sprintf(
-			'<button id="%s" type="%s" name="%s" %s value="%s">%s</button>',
-			$type,
-			$type,
-			$name,
-			$attr,
-			$value,
-			$value
+			'<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
+			!empty( $name ) ? $name : '',
+			!empty( $type ) ? $type : 'submit',
+			!empty( $name ) ? $name : $this->field_name( $type, $this->group ),
+			!empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '',
+			!empty( $val ) ? $val : ''
 		);
 	}
 	
@@ -264,11 +303,9 @@ class EasyInputs {
 	 * field_name:			Assigns a valid field name for the given input args
 	 * @var str $field:		The field-specific name.
 	 */
-	public function field_name( $field=null, $group=null ) {
+	public function field_name( $field=nulll ) {
 		if( !$field ) return;
-		$group	= empty( $group ) ? $this->group : $group;
-		$group	= !empty( $group ) ? sprintf( '[%s]', $group ) : '';
-		return sprintf( '%s%s[%s]', $this->name, $group, $field);
+		return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
 	}
 	
 	
@@ -321,6 +358,6 @@ class EasyInputs {
 		$this->validate		= empty( $validate ) ? array( $this, 'validate' ) : $validate;
 		$this->group		= empty( $group ) ? null : $group;
 		// Register a WordPress setting:
-		register_setting( $setting, $name );
+		register_setting( $this->setting, $name );
 	}
 }
