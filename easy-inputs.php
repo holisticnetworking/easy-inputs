@@ -171,22 +171,27 @@ class EasyInputs {
 	 */
 	public function input( $field=null, $args=array() ) {
 		if( !$field ) return;
+		$type	= !empty( $args['type'] ) ? $args['type'] : 'text';
+		
 		// If a public method exists, then we're dealing with a form element:
-		if( !empty( $args['type'] ) && is_callable( [ $this, $args['type'] ] ) ) :
-			return $this->{$args['type']}( $field, $args );
+		if( !empty( $type ) && is_callable( [ $this, $type ] ) ) :
+			$input	= $this->{$args['type']}( $field, $args );
 		// Generic text input.
 		else :
-			extract( $args );
-		
-			return sprintf(
-				'%s<input id="%s" type="text" name="%s" %s value="%s" />',
-				$this->label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
+			$input	= sprintf(
+				'<input id="%s" type="text" name="%s" %s value="%s" />',
 				$field,
 				!empty( $name ) ? $name : $this->field_name( $field, !empty( $group ) ? $group : $this->group ),
 				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
 				!empty( $value ) ? $value : ''
 			);
 		endif;
+		return sprintf(
+			'<div class="input %s">%s%s</div>',
+			$type,
+			$this->label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
+			$input
+		);
 	}
 	
 	public function radio( $field, $args ) {
@@ -239,6 +244,15 @@ class EasyInputs {
 			);
 		endforeach;
 		return $boxes;
+	}
+	
+	public function textarea( $field, $args ) {
+		return sprintf(
+			'<textarea name="%s" %s>%s</textarea>',
+			$this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
+			!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
+			!empty( $args->value ) ? $args->value : null
+		);
 	}
 	
 	

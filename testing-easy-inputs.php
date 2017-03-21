@@ -99,6 +99,10 @@ function options_page() {
 				'or' => 'Orange' 
 			] ] );
 			
+			// Textarea
+			echo '<h2>Now for a textarea</h2>';
+			echo $ei->input( 'big_area_of_text', [ 'type' => 'textarea', 'attrs' => [ 'cols' => 20, 'rows' => 8 ] ] );
+			
 			
 			
 			// Slightly more complex, but still simple. This version is the simplest way
