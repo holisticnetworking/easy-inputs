@@ -139,7 +139,14 @@ class EasyInputs {
 	
 	
 	/*
-	 * set_group:		Sets the pointer for the current group
+	 * set_group:		
+	 */
+	/**
+	 * Display a group of inputs
+	 *
+	 * @param string $group The name of our group.
+	 *
+	 * @return bool true
 	 */
 	public function set_group( $group ) {
 		$this->group	= $group;
@@ -147,9 +154,16 @@ class EasyInputs {
 	}
 	
 	
-	/*
-	 * fieldset_open/close:		Creates a fieldset with optional legend
-	 * @var arr $args:			'attrs' array and optional legend info
+	
+	/**
+	 * Creates a fieldset opening tag with optional legend
+	 *
+	 * The legend key of the $args array is identical to the legend() function. The
+	 * attrs array contains the same array of HTML attributes as always.
+	 *
+	 * @param array $args 'attrs' array and optional legend info
+	 *
+	 * @return string HTML containing the opening tag for a fieldset with optional legend.
 	 */
 	public function fieldset_open( $args ) {
 		extract( $args );
@@ -159,14 +173,23 @@ class EasyInputs {
 			empty( $legend ) ? '' : $this->legend( $legend )
 		);
 	}
+	/**
+	 * Creates a fieldset closing tag
+	 *
+	 * @return string HTML containing the closing tag for a fieldset.
+	 */
 	public function fieldset_close() {
 		return '</fieldset>';
 	}
 	
 	
-	/*
-	 * legend:			Outputs an HTML legend
-	 * @var arr @args:	A title and optional 'attr' list
+	
+	/**
+	 * Outputs an HTML legend
+	 *
+	 * @param array $args 'attrs' array and 'title' keys.
+	 *
+	 * @return string HTML containing a legend.
 	 */
 	public function legend( $args ) {
 		extract( $args );
@@ -178,8 +201,10 @@ class EasyInputs {
 	}
 	
 	
-	/*
-	 * THE FIELDS
+	/**
+	 * Input Fields
+	 * From here out, these functions create inputs, buttons and textareas. All functions
+	 * 
 	 */
 	
 	/*
@@ -374,6 +399,25 @@ class EasyInputs {
 	}
 	
 	
+	/**
+	 *
+	 * Our method for including and registering our classes.
+	 *
+	 * @param string $class The class we are including.
+	 * @param object $obj The Object into which we will include our new class.
+	 *
+	 */
+	public function registerClass( $class=null, $args=null, $obj=null ) {
+		if( empty( $class ) || empty( $obj ) ) return false;
+		$name	= ucwords( $class );
+		$path	= plugin_dir_path(__FILE__) . sprintf( 'lib/%s.class.php', $class );
+		if( file_exists( $path ) ) :
+			include_once( $path );
+		endif;
+		$obj->{$name}	= new $name( $args );
+		return $obj;
+	}
+	
 	
 	
 	
@@ -390,15 +434,7 @@ class EasyInputs {
 	 * @return void
 	 */
 	public function __construct( $name='EasyInputs', $args=null ) {
-		$this->name			= $name;
-		$this->setting		= $name . '_ei';
-		if( !empty( $args ) ) extract( $args );
-		$this->action		= empty( $action ) ? null : $action;
-		$this->method		= empty( $method ) ? 'post' : $method;
-		$this->nonce_base	= empty( $nonce_base ) ? plugin_basename( __FILE__ ) : $nonce_base;
-		$this->validate		= empty( $validate ) ? array( $this, 'validate' ) : $validate;
-		$this->group		= empty( $group ) ? null : $group;
-		// Register a WordPress setting:
-		register_setting( $this->setting, $name );
+		$this->registerClass( 'form', $args, $this );
+		die( '<pre>'. print_r( $this, true ) . '</pre>' );
 	}
 }
