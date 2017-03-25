@@ -24,16 +24,16 @@ Author URI: http://holisticnetworking.net
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+include_once( plugin_dir_path( __FILE__ ) . '../easy-inputs/easy-inputs.php' );
+use EasyInputs\EasyInputs;
 
 function register_ei() {
-	// First, instantiate the class, checking to make sure no other plugin or theme
-	// has already included the file:
-	if( !class_exists( 'EasyInputs' ) ) {
-		include_once( plugin_dir_path( __FILE__ ) . '../easy-inputs/easy-inputs.php' );
-	}
 	// Spare yourself the trouble of declaring twice:
 	global $ei;
-	$ei	= new EasyInputs( 'testing-easy-inputs' );
+	$ei	= new EasyInputs([ 
+		'name' => 'testing-easy-inputs', 
+		'type' => 'setting' 
+	]);
 }
 
 function add_page() {
@@ -46,16 +46,13 @@ function options_page() {
 	echo '<div class="wrap"><h1>Demonstrating Easy Inputs</h1>';
 		echo '<p>Below you will see the output from the sample plugin\'s inputs. Go to the plugin file to see the function calls.</p>';
 		// Create the form:
-		echo $ei->open('dah-form');
+		echo $ei->Form->open();
 		
 			// Dead-simple input inclusion:
 			echo '<h2>Dead-simple input inclusion</h2>';
-			echo $ei->input( 'my_text_input' );
+			echo $ei->Form->input( 'my_text_input' );
 			
-			// You can change the global group at any time:
-			// $ei->set_group('grinch-group');
-			
-			// Now, let's include a value and some HTML attributes:
+			/* Now, let's include a value and some HTML attributes:
 			echo '<h2>Now, let\'s include a value and some HTML attributes:</h2>';
 			echo '<p>Please see the README.md file for the proper parameters and values for these. in general, all HTML5-valid attributes are available, including data attributes.</p>';
 			echo $ei->input( 'another_text_input', array(
@@ -124,7 +121,7 @@ function options_page() {
 					'red-input',
 					'blue-input'	=> array( 'label' => 'Custom Label' )
 				) ) );
-			echo $ei->button('submit', 'Save it!!');
+			echo $ei->button('submit', 'Save it!!'); */
 		
 		// Close the form:
 		echo $ei->close();

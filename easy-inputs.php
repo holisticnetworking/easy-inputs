@@ -1,7 +1,11 @@
 <?php
-/**
- * @package EasyInputs
- */
+namespace EasyInputs;
+
+// Include our other classes:
+include_once( plugin_dir_path( __FILE__ ) . 'lib/form.class.php' );
+include_once( plugin_dir_path( __FILE__ ) . 'lib/input.class.php' );
+use EasyInputs\Form;
+use EasyInputs\Form\Input;
 
 /*
 Plugin Name: Easy Inputs
@@ -15,51 +19,7 @@ License: GPLv2 or later
 
 class EasyInputs {
 	/**
-	 * @var string $name			The name of the Easy Inputs instance.
-	 * @var string $setting		The affected Settings API setting.
-	 * @var string $action		The action to send the form data to.
-	 * @var string $method		GET, POST, etc.
-	 * @var string $nonce_base	The value we will use to base our nonces on.
-	 * @var string $validate		Callable validation function.
-	 * @var string $group			For data saved as an array, the group name.
-	 */
-	private $name;
-	private $setting;
-	private $action;
-	private $method;
-	private $nonce_base;
-	private $validate;
-	private $group;
-	
-	
-	/**
-	 * Open a form element
-	 *
-	 * This function will allow you to create the opening <form> tag with attributes.
-	 * It should be used in combination with the close() function. This form will also
-	 * optionally include WordPress nonce fields, created using the $id param.
-	 *
-	 * @param string|null $id The name of the form. Also serves as the HTML id tag. Optional
-	 *
-	 * @return string the opening tag for the form element.
-	 */
-	public function open( $id=null ) {
-		return sprintf(
-			'<form id="%s" action="%s" method="%s">%s',
-			!empty( $id ) ? $id : $this->name,
-			$this->action,
-			$this->method,
-			$this->hidden_fields( $this->setting )
-		);
-	}
-	/**
-	 * Close a form element
-	 *
-	 * @return string the closing tag for the form element.
-	 */
-	public function close() {
-		return '</form>';
-	}
+	 **/
 	
 	
 	
@@ -184,169 +144,6 @@ class EasyInputs {
 	
 	
 	
-	/**
-	 * Outputs an HTML legend
-	 *
-	 * @param array $args 'attrs' array and 'title' keys.
-	 *
-	 * @return string HTML containing a legend.
-	 */
-	public function legend( $args ) {
-		extract( $args );
-		return sprintf(
-			'<legend %s>%s</legend>', 
-			$attr	= empty( $attr ) ? '' : $this->attrs_to_str( $attrs ),
-			!empty( $title ) && is_string( $title ) ? $title : ucfirst( preg_replace( '|-_|', ' ', $this->group ) ) // Convert group ID
-		);
-	}
-	
-	
-	/**
-	 * Input Fields
-	 * From here out, these functions create inputs, buttons and textareas. All functions
-	 * 
-	 */
-	
-	/*
-	 * input:			The default and also the model for all inputs structure.
-	 * @var str $field:	The field name.
-	 * @var str $args:	A collection of additional arguments, formatted below.
-	 *
-	 * ARGUMENTS FORMAT
-	 * $args	= array(
-	 * 		$attrs		= arr, <-- HTML attributes
-	 * 		$value		= str, <-- The value of the field, defaults to blank
-	 * 		$type		= str, <-- The HTML Field type (text, checkbox, etc). 
-	 * 						   Defaults to 'text'
-	 * 		$name		= str, <-- The fully-qualified name attribute, if desired.
-	 * 		$group		= str, <-- The group to which this element belongs. 
-	 *		$options	= str  <-- For radio/checkbox inputs.
-	 * );
-	 */
-	public function input( $field=null, $args=array() ) {
-		if( !$field ) return;
-		$type	= !empty( $args['type'] ) ? $args['type'] : 'text';
-		
-		// If a public method exists, then we're dealing with a form element:
-		if( !empty( $type ) && is_callable( [ $this, $type ] ) ) :
-			$input	= $this->{$args['type']}( $field, $args );
-		// Generic text input.
-		else :
-			$input	= sprintf(
-				'<input id="%s" type="text" name="%s" %s value="%s" />',
-				$field,
-				!empty( $name ) ? $name : $this->field_name( $field, !empty( $group ) ? $group : $this->group ),
-				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-				!empty( $value ) ? $value : ''
-			);
-		endif;
-		return sprintf(
-			'<div class="input %s">%s%s</div>',
-			$type,
-			$this->label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
-			$input
-		);
-	}
-	
-	public function radio( $field, $args ) {
-		if( empty( $args['options'] ) ) return;
-		$radios	= '';
-		foreach( $args['options'] as $key=>$value ) :
-			$radios	.= sprintf(
-				'<input type="radio" value="%1$s" %2$s>%3$s</input>',
-				$key,
-				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-				$value
-			);
-		endforeach;
-		return $radios;
-	}
-	
-	
-	public function select( $field, $args ) {
-		if( empty( $args['options'] ) ) return;
-		$select		= '';
-		$options	= '';
-		foreach( $args['options'] as $value=>$label ) :
-			$selected	= ( !empty( $args->value ) && $value == $args->value ) ? ' selected="selected" ' : '';
-			$options	.= sprintf(
-				'<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
-				$value,
-				$selected,
-				$label
-			);
-		endforeach; 
-		return sprintf(
-			'<select id="%1$s" %2$sname="%3$s">%4$s</select>',
-			$field,
-			!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-			!empty( $name ) ? $name : $this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
-			$options
-		);
-	}
-	
-	public function checkbox( $field, $args ) {
-		if( empty( $args['options'] ) ) return;
-		$boxes	= '';
-		foreach( $args['options'] as $key=>$value ) :
-			$boxes	.= sprintf(
-				'<input name="%4$s" type="checkbox" value="%1$s" %2$s>%3$s</input>',
-				$key,
-				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-				$value,
-				!empty( $name ) ? $name : $this->field_name( $field, !empty( $this->group ) ? $this->group : null )
-			);
-		endforeach;
-		return $boxes;
-	}
-	
-	public function textarea( $field, $args ) {
-		return sprintf(
-			'<textarea name="%s" %s>%s</textarea>',
-			$this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
-			!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-			!empty( $args->value ) ? $args->value : null
-		);
-	}
-	
-	
-	/*
-	 * label:			Create an HTML label
-	 * @var str $for:	The ID of the input this label is for.
-	 * @var str $text:	Optional. Label text. The ID will be used if this value is left empty.
-	 * $var arr $attrs:	HTML attributes. 
-	 */
-	public function label( $for=null, $text=null, $attrs=null ) {
-		// Bounce bad requests.
-		if( empty( $for ) ) return;
-		
-		return sprintf(
-			'<label %s %s>%s</label>', 
-			!empty( $for ) ? sprintf( 'for="%s"', $for ) : '', 
-			is_array( $attrs ) ? $this->attrs_to_str( $attrs ) : '', 
-			!empty( $text ) && is_string( $text ) ? $text : ucfirst( preg_replace( '/[_\-]/', ' ', $for ) ) // Convert fieldname
-		);
-	}
-	
-	/*
-	 * button:			Create an HTML button
-	 * @var str $type:	The HTML button type.
-	 * @var str $val:	The value on the button.
-	 * @var arr $attrs:	HTML attributes. 
-	 */
-	public function button( $type='submit', $val="Submit", $attrs=null ) {
-		return sprintf(
-			'<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
-			!empty( $name ) ? $name : '',
-			!empty( $type ) ? $type : 'submit',
-			!empty( $name ) ? $name : $this->field_name( $type, $this->group ),
-			!empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '',
-			!empty( $val ) ? $val : ''
-		);
-	}
-	
-	
-	
 	/*
 	 * Utility functions
 	 */
@@ -377,28 +174,6 @@ class EasyInputs {
 	}
 	
 	
-	/*
-	 * SAVING THE DATA
-	 * this function is not ready for showtime. Disregard
-	 */
-	public function save( $data ) {
-		$add	= 'add_' . $this->type;
-		$update	= 'update_' . $this->type;
-		// Look for our EasyInputs variable name, else move on:
-		if( !empty( $data[$this->name] ) ) :
-			foreach( $data[$this->name] as $key=>$vals ) :	
-				// For our first pass, we're just assuming we're getting groups of data.
-				// Nonce check:
-				if ( !isset( $data[$key . '_nonce'] ) || !wp_verify_nonce( $data[$key . '_nonce'], $this->nonce_base ) ) return;
-				foreach( $vals as $k=>$v ) :
-					if( !$add( $key, $value ) ) : $update( $key, $value ); endif;
-				endforeach;
-			endforeach;
-		endif;
-		return $data;
-	}
-	
-	
 	/**
 	 *
 	 * Our method for including and registering our classes.
@@ -406,7 +181,7 @@ class EasyInputs {
 	 * @param string $class The class we are including.
 	 * @param object $obj The Object into which we will include our new class.
 	 *
-	 */
+	
 	public function registerClass( $class=null, $args=null, $obj=null ) {
 		if( empty( $class ) || empty( $obj ) ) return false;
 		$name	= ucwords( $class );
@@ -414,10 +189,10 @@ class EasyInputs {
 		if( file_exists( $path ) ) :
 			include_once( $path );
 		endif;
-		$obj->{$name}	= new $name( $args );
+		$obj->{$name}	= new \EasyInputs\{$name}( $args, $obj );
 		return $obj;
 	}
-	
+	 */
 	
 	
 	
@@ -428,13 +203,11 @@ class EasyInputs {
 	 *
 	 * Sets defaults.
 	 * 
-	 * @param array|null $name Required name for the instance.
-	 * @param array|null $args Optional arguments.
+	 * @param array|string|null $args Either 
 	 *
 	 * @return void
 	 */
-	public function __construct( $name='EasyInputs', $args=null ) {
-		$this->registerClass( 'form', $args, $this );
-		die( '<pre>'. print_r( $this, true ) . '</pre>' );
+	public function __construct( $args=null ) {
+		$this->form		= new Form( $args, $this );
 	}
 }
