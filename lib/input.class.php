@@ -17,11 +17,11 @@ namespace EasyInputs\Form;
  * @param string $validate Callable validation function.
  */
 class Input {
-	private static $name, $type, $value, $attrs, $options, $nonce_base, $group, $validate;
+	public $name, $type, $value, $attrs, $options, $nonce_base, $group, $validate;
 	
 	
 	/*
-	 * input:			The default and also the model for all inputs structure.
+	 * The default function to create an Input.
 	 * @var str $field:	The field name.
 	 * @var str $args:	A collection of additional arguments, formatted below.
 	 *
@@ -36,12 +36,12 @@ class Input {
 	 *		$options	= str  <-- For radio/checkbox inputs.
 	 * );
 	 */
-	public function input( $field=null, $args=array() ) {
+	public function create( $field=null, $args=array() ) {
 		if( !$field ) return;
 		$type	= !empty( $args['type'] ) ? $args['type'] : 'text';
 		
 		// If a public method exists, then we're dealing with a form element:
-		if( !empty( $type ) && is_callable( [ $this, $type ] ) ) :
+		if( !empty( $type ) && is_callable( __NAMESPACE__ . 'Input' ) ) :
 			$input	= $this->{$args['type']}( $field, $args );
 		// Generic text input.
 		else :
@@ -56,7 +56,7 @@ class Input {
 		return sprintf(
 			'<div class="input %s">%s%s</div>',
 			$type,
-			$this->label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
+			Form::label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
 			$input
 		);
 	}
@@ -122,25 +122,6 @@ class Input {
 		);
 	}
 	
-	
-	/*
-	 * label:			Create an HTML label
-	 * @var str $for:	The ID of the input this label is for.
-	 * @var str $text:	Optional. Label text. The ID will be used if this value is left empty.
-	 * $var arr $attrs:	HTML attributes. 
-	 */
-	public function label( $for=null, $text=null, $attrs=null ) {
-		// Bounce bad requests.
-		if( empty( $for ) ) return;
-		
-		return sprintf(
-			'<label %s %s>%s</label>', 
-			!empty( $for ) ? sprintf( 'for="%s"', $for ) : '', 
-			is_array( $attrs ) ? $this->attrs_to_str( $attrs ) : '', 
-			!empty( $text ) && is_string( $text ) ? $text : ucfirst( preg_replace( '/[_\-]/', ' ', $for ) ) // Convert fieldname
-		);
-	}
-	
 	/*
 	 * button:			Create an HTML button
 	 * @var str $type:	The HTML button type.
@@ -157,6 +138,17 @@ class Input {
 			!empty( $val ) ? $val : ''
 		);
 	}
+	
+	/*
+	 * field_name:			Assigns a valid field name for the given input args
+	 * @var str $field:		The field-specific name.
+	 */
+	public function field_name( $field=nulll ) {
+		if( !$field ) return;
+		return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
+	}
+	
+	
 	
 	/**
 	 * Construct our Object

@@ -52,10 +52,10 @@ function options_page() {
 			echo '<h2>Dead-simple input inclusion</h2>';
 			echo $ei->Form->input( 'my_text_input' );
 			
-			/* Now, let's include a value and some HTML attributes:
+			// Now, let's include a value and some HTML attributes:
 			echo '<h2>Now, let\'s include a value and some HTML attributes:</h2>';
 			echo '<p>Please see the README.md file for the proper parameters and values for these. in general, all HTML5-valid attributes are available, including data attributes.</p>';
-			echo $ei->input( 'another_text_input', array(
+			echo $ei->Form->input( 'another_text_input', array(
 				'value'	=> 'Input Value',
 				'attrs'	=> array('class' => 'custom classes', 'data-nana-nana' => 'boo-boo'),
 				'label' => 'Specify any label you want.'
@@ -63,32 +63,32 @@ function options_page() {
 			
 			// Labels Optional:
 			echo '<h2>Labels are always optional</h2>';
-			echo $ei->input( 'still_another_text_input', array(
+			echo $ei->Form->input( 'still_another_text_input', array(
 				'value'	=> 'Input Value',
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
 				'label' => false
 			) );
 			// Or separable:
 			echo '<p>';
-			echo $ei->input( 'separate_label', array(
+			echo $ei->Form->input( 'separate_label', array(
 				'value'	=> '42',
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
 				'label' => false
 			) );
-			echo $ei->label( 'separate_label', 'Or can even be created separately, if you like.' );
+			echo $ei->Form->label( 'separate_label', 'Or can even be created separately, if you like.' );
 			
 			// Radio buttons
 			echo '<h2>Let\'s add some radio buttons and selects.</h2>';
 			echo '<p>Radio buttons require the "options" element in $args be set with a $key=>$value array.</p>';
-			echo $ei->input( 'radio_buttons', [ 'type' => 'radio', 'options' => [ 'y' => 'Yes', 'n' => 'No' ] ] );
-			echo $ei->input( 'color_select', [ 'type' => 'select', 'options' => [ 
+			echo $ei->Form->input( 'radio_buttons', [ 'type' => 'radio', 'options' => [ 'y' => 'Yes', 'n' => 'No' ] ] );
+			echo $ei->Form->input( 'color_select', [ 'type' => 'select', 'options' => [ 
 				'gr' => 'Green', 
 				'bl' => 'Blue',
 				'yl' => 'Yellow',
 				'rd' => 'Red',
 				'or' => 'Orange' 
 			] ] );
-			echo $ei->input( 'color_checkbox', [ 'type' => 'checkbox', 'options' => [ 
+			echo $ei->Form->input( 'color_checkbox', [ 'type' => 'checkbox', 'options' => [ 
 				'gr' => 'Green', 
 				'bl' => 'Blue',
 				'yl' => 'Yellow',
@@ -98,19 +98,19 @@ function options_page() {
 			
 			// Textarea
 			echo '<h2>Now for a textarea</h2>';
-			echo $ei->input( 'big_area_of_text', [ 'type' => 'textarea', 'attrs' => [ 'cols' => 20, 'rows' => 8 ] ] );
+			echo $ei->Form->input( 'big_area_of_text', [ 'type' => 'textarea', 'attrs' => [ 'cols' => 20, 'rows' => 8 ] ] );
 			
 			
 			
 			// Slightly more complex, but still simple. This version is the simplest way
 			// to include both your input AND an automatically-generated nonce:
-			echo '<h3>Slightly more complex, but still simple.</h3><p>This version is the simplest way to include both your input AND an automatically-generated nonce:</p>';
-			echo $ei->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
+			// echo '<h3>Slightly more complex, but still simple.</h3><p>This version is the simplest way to include both your input AND an automatically-generated nonce:</p>';
+			// echo $ei->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
 			
 			
 			
 			echo '<h3>Considerably more complex</h3><p>We treat each input as a single call to the input() function, include a fieldset and legend.</p>';
-			echo $ei->group( 'seuss-group', array( 
+			/* echo $ei->group( 'seuss-group', array( 
 				'fieldset'	=> array(
 					'attrs'		=> array( 'class' => 'sneetch' ),
 					'legend'	=> array( 'title' => "Don't cry because it's over, smile because it happened." )
@@ -120,11 +120,11 @@ function options_page() {
 					'two-input'		=> array( 'value' => 'Cindy-loo Hoo' ),
 					'red-input',
 					'blue-input'	=> array( 'label' => 'Custom Label' )
-				) ) );
-			echo $ei->button('submit', 'Save it!!'); */
+				) ) ); */
+			echo $ei->Form->button('submit', 'Save it!!');
 		
 		// Close the form:
-		echo $ei->close();
+		echo $ei->Form->close();
 	echo '</div>';
 }
 add_action('admin_menu', 'add_page');

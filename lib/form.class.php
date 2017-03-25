@@ -1,5 +1,6 @@
 <?php
 namespace EasyInputs;
+use EasyInputs\Form\Input;
 
 /**
  * This class defines an HTML form.
@@ -25,7 +26,7 @@ class Form {
 	 * @param string $attrs HTML attributes.
 	 * @param string $group For data saved as an array, the group name.
 	 */
-	private static $name, $type, $action, $method, $attrs, $group, $nonce_base;
+	public $name, $type, $action, $method, $attrs, $group, $nonce_base;
 	
 	
 	/**
@@ -78,6 +79,25 @@ class Form {
 	}
 	
 	
+	/*
+	 * label:			Create an HTML label
+	 * @var str $for:	The ID of the input this label is for.
+	 * @var str $text:	Optional. Label text. The ID will be used if this value is left empty.
+	 * $var arr $attrs:	HTML attributes. 
+	 */
+	public function label( $for=null, $text=null, $attrs=null ) {
+		// Bounce bad requests.
+		if( empty( $for ) ) return;
+		
+		return sprintf(
+			'<label %s %s>%s</label>', 
+			!empty( $for ) ? sprintf( 'for="%s"', $for ) : '', 
+			is_array( $attrs ) ? $this->attrs_to_str( $attrs ) : '', 
+			!empty( $text ) && is_string( $text ) ? $text : ucfirst( preg_replace( '/[_\-]/', ' ', $for ) ) // Convert fieldname
+		);
+	}
+	
+	
 	/**
 	 * Create an input.
 	 * This function creates an instance of Input, supplying it all the required arguments.
@@ -85,8 +105,9 @@ class Form {
 	 *
 	 * @return null
 	 */
-	public function input( $name, $attrs, $options ) {
-		$input	= new \EasyInputs\Form\Input( $name );
+	public function input( $name, $attrs=[], $options=[] ) {
+		$input	= new Input( $name, $this );
+		return $input->create( $name, $attrs );
 	}
 	
 	

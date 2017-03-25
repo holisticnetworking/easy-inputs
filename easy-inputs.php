@@ -164,36 +164,6 @@ class EasyInputs {
 		return implode( ' ', $to_string );
 	}
 	
-	/*
-	 * field_name:			Assigns a valid field name for the given input args
-	 * @var str $field:		The field-specific name.
-	 */
-	public function field_name( $field=nulll ) {
-		if( !$field ) return;
-		return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
-	}
-	
-	
-	/**
-	 *
-	 * Our method for including and registering our classes.
-	 *
-	 * @param string $class The class we are including.
-	 * @param object $obj The Object into which we will include our new class.
-	 *
-	
-	public function registerClass( $class=null, $args=null, $obj=null ) {
-		if( empty( $class ) || empty( $obj ) ) return false;
-		$name	= ucwords( $class );
-		$path	= plugin_dir_path(__FILE__) . sprintf( 'lib/%s.class.php', $class );
-		if( file_exists( $path ) ) :
-			include_once( $path );
-		endif;
-		$obj->{$name}	= new \EasyInputs\{$name}( $args, $obj );
-		return $obj;
-	}
-	 */
-	
 	
 	
 	
@@ -208,6 +178,6 @@ class EasyInputs {
 	 * @return void
 	 */
 	public function __construct( $args=null ) {
-		$this->form		= new Form( $args, $this );
+		$this->Form		= new Form( $args, $this );
 	}
 }
