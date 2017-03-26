@@ -1,5 +1,5 @@
 <?php
-namespace EasyInputs\Form;
+namespace EasyInputs;
 
 /**
  * This class defines an HTML input.
@@ -36,13 +36,13 @@ class Input {
 	 *		$options	= str  <-- For radio/checkbox inputs.
 	 * );
 	 */
-	public function create( $field=null, $args=array() ) {
+	public function create( $field=null, $args=[], $options=[] ) {
 		if( !$field ) return;
 		$type	= !empty( $args['type'] ) ? $args['type'] : 'text';
 		
 		// If a public method exists, then we're dealing with a form element:
-		if( !empty( $type ) && is_callable( __NAMESPACE__ . 'Input' ) ) :
-			$input	= $this->{$args['type']}( $field, $args );
+		if( !empty( $type ) && is_callable( __NAMESPACE__ . '\Input::' . $type ) ) :
+			$input	= $this->{$type}( $field, $args, $options );
 		// Generic text input.
 		else :
 			$input	= sprintf(

@@ -121,7 +121,13 @@ function options_page() {
 					'red-input',
 					'blue-input'	=> array( 'label' => 'Custom Label' )
 				) ) ); */
-			echo $ei->Form->button('submit', 'Save it!!');
+			echo $ei->Form->input( 'form_submit', [
+				'type'	=> 'button',
+				'value'	=> 'Save It!',
+				'attrs'	=> [
+					'class' => 'button'
+				]
+			]);
 		
 		// Close the form:
 		echo $ei->Form->close();

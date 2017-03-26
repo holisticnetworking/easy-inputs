@@ -1,6 +1,5 @@
 <?php
 namespace EasyInputs;
-use EasyInputs\Form\Input;
 
 /**
  * This class defines an HTML form.
@@ -107,7 +106,7 @@ class Form {
 	 */
 	public function input( $name, $attrs=[], $options=[] ) {
 		$input	= new Input( $name, $this );
-		return $input->create( $name, $attrs );
+		return $input->create( $name, $attrs, $options );
 	}
 	
 	
