@@ -8,23 +8,16 @@ namespace EasyInputs;
  * a form is created by EasyInputs, the Form class holds all the relevant form information
  * to which any Input class will need to refer.
  * 
- * @property string $name (required) The name of our instance, also used as the ID unless
- * 		otherwise specified by the $attrs['id'] index.
- * @property string $type (required) WP form type. Values include post_meta, setting.
- * @property string $action The HTML action attribute.
- * @property string $method 
- * @property array $attrs HTML attributes, applicable to the form itself. Used to produce
+ * @param string $name The name of the Easy Inputs instance.
+ * @param string $type Post meta, setting, etc.
+ * @param string $action The action to send the form data to.
+ * @param string $method GET, POST, etc.
+ * @param string $attrs HTML attributes.
+ * @param string $group For data saved as an array, the group name.
+ * @param string $group For data saved as an array, the group name.
  *		 
  */
 class Form {
-	/**
-	 * @param string $name The name of the Easy Inputs instance.
-	 * @param string $type Post meta, setting, etc.
-	 * @param string $action The action to send the form data to.
-	 * @param string $method GET, POST, etc.
-	 * @param string $attrs HTML attributes.
-	 * @param string $group For data saved as an array, the group name.
-	 */
 	public $name, $type, $action, $method, $attrs, $group, $nonce_base;
 	
 	
@@ -41,10 +34,11 @@ class Form {
 	 */
 	public function open( $id=null ) {
 		return sprintf(
-			'<form id="%s" action="%s" method="%s">',
+			'<form id="%s" action="%s" method="%s" %s>',
 			!empty( $id ) ? $id : $this->name,
 			$this->action,
-			$this->method
+			$this->method,
+			EasyInputs::attrs_to_str( $this->attrs )
 		);
 	}
 	/**
@@ -105,8 +99,71 @@ class Form {
 	 * @return null
 	 */
 	public function input( $name, $attrs=[], $options=[] ) {
-		$input	= new Input( $name, $this );
-		return $input->create( $name, $attrs, $options );
+		return ( new Input( $name, $this ) )->create( 
+				$name, 
+				$attrs, 
+				$options
+			);
+	}
+	
+	
+	/**
+	 * Display a group of inputs
+	 *
+	 * Defines a group of inputs, both logically and physically.
+	 * Logically, this group is associated with a single nonce to
+	 * which it is bound. Physically, all elements of a group will
+	 * be displayed together, in a fieldset, if requested.
+	 *
+	 * @param string $name The name of our group.
+	 * @param array $inputs Array of input arrays.
+	 * @param array $args Arguments and attributes to be applied to the group 
+	 * container
+	 *
+	 * @return string A string of HTML including all inputs from $inputs.
+	 */
+	public function group( $name=null, $inputs=null, $args=array() ) {
+		if( empty( $name ) or empty( $inputs ) or empty( $args ) ) return;
+		extract( $args );
+		if( empty( $action ) ) $action = plugin_basename( __FILE__ );
+		
+		// Each group gets its own nonce automatically:
+		$result	= ''; // $this->nonce( $name . '_nonce', $action );
+		
+		// Append our fieldset, if required:
+		$result	.= !empty( $fieldset ) ? $this->fieldset_open( $fieldset ) : '';
+		// Append each input per it's own function, else the generic input function:
+		foreach( $inputs as $key=>$input ) :
+			if( is_array( $input ) ) :
+				if( !empty( $input['type'] ) && method_exists( 'EasyInputs', $input['type'] ) ) :
+					$result	.= $this->$input['type']( $key, $input, $name );
+				else :
+					$result .= $this->input( $key, $input, $name );
+				endif;
+			else :
+				$result	.= $this->input( $input, null, $name );
+			endif;
+		endforeach;
+		// Close the fieldset:
+		$result	.= !empty( $fieldset ) ? $this->fieldset_close() : '';
+		return $result;
+	}
+	
+	
+	/**
+	 * Return a WP Settings API nonce field.
+	 *
+	 * Don't overthink it. Just let WordPress handle creating the nonce.
+	 * This function returns, rather than outputs, the nonce, in case we
+	 * need to do something further before output.
+	 *
+	 * @param string $name A name from which to create our nonce.
+	 * @param string $action The action requiring our nonce.
+	 *
+	 * @return string the opening tag for the form element.
+	 */
+	public function nonce( $name=null, $action=null ) {
+		return wp_nonce_field( $this->action, $this->name, true, false );
 	}
 	
 	

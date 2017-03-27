@@ -38,66 +38,6 @@ class EasyInputs {
 	}
 	
 	
-	/**
-	 * Return a WP Settings API nonce field.
-	 *
-	 * Don't overthink it. Just let WordPress handle creating the nonce.
-	 * This function returns, rather than outputs, the nonce, in case we
-	 * need to do something further before output.
-	 *
-	 * @param string $name A name from which to create our nonce.
-	 * @param string $action The action requiring our nonce.
-	 *
-	 * @return string the opening tag for the form element.
-	 */
-	public function nonce( $name=null, $action=null ) {
-		return wp_nonce_field( $this->action, $this->name, true, false );
-	}
-	
-	
-	/**
-	 * Display a group of inputs
-	 *
-	 * Defines a group of inputs, both logically and physically.
-	 * Logically, this group is associated with a single nonce to
-	 * which it is bound. Physically, all elements of a group will
-	 * be displayed together, in a fieldset, if requested.
-	 *
-	 * @param string $name The name of our group.
-	 * @param array $inputs Array of input arrays.
-	 * @param array $args Arguments and attributes to be applied to the group 
-	 * container
-	 *
-	 * @return string A string of HTML including all inputs from $inputs.
-	 */
-	public function group( $name=null, $inputs=null, $args=array() ) {
-		if( empty( $name ) or empty( $inputs ) or empty( $args ) ) return;
-		extract( $args );
-		if( empty( $action ) ) $action = plugin_basename( __FILE__ );
-		
-		// Each group gets its own nonce automatically:
-		$result	= ''; // $this->nonce( $name . '_nonce', $action );
-		
-		// Append our fieldset, if required:
-		$result	.= !empty( $fieldset ) ? $this->fieldset_open( $fieldset ) : '';
-		// Append each input per it's own function, else the generic input function:
-		foreach( $inputs as $key=>$input ) :
-			if( is_array( $input ) ) :
-				if( !empty( $input['type'] ) && method_exists( 'EasyInputs', $input['type'] ) ) :
-					$result	.= $this->$input['type']( $key, $input, $name );
-				else :
-					$result .= $this->input( $key, $input, $name );
-				endif;
-			else :
-				$result	.= $this->input( $input, null, $name );
-			endif;
-		endforeach;
-		// Close the fieldset:
-		$result	.= !empty( $fieldset ) ? $this->fieldset_close() : '';
-		return $result;
-	}
-	
-	
 	/*
 	 * set_group:		
 	 */

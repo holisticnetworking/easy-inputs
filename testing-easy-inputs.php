@@ -32,7 +32,7 @@ function register_ei() {
 	global $ei;
 	$ei	= new EasyInputs([ 
 		'name' => 'testing-easy-inputs', 
-		'type' => 'setting' 
+		'type' => 'setting'
 	]);
 }
 
@@ -66,7 +66,7 @@ function options_page() {
 			echo $ei->Form->input( 'still_another_text_input', array(
 				'value'	=> 'Input Value',
 				'attrs'	=> array('class' => 'custom classes', 'data-value' => 'Nana, nana, boo-boo'),
-				'label' => false
+				'label' => 'You can create your own label'
 			) );
 			// Or separable:
 			echo '<p>';
@@ -104,12 +104,12 @@ function options_page() {
 			
 			// Slightly more complex, but still simple. This version is the simplest way
 			// to include both your input AND an automatically-generated nonce:
-			// echo '<h3>Slightly more complex, but still simple.</h3><p>This version is the simplest way to include both your input AND an automatically-generated nonce:</p>';
-			// echo $ei->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
+			echo '<h3>Slightly more complex, but still simple.</h3><p>This version is the simplest way to include both your input AND an automatically-generated nonce:</p>';
+			echo $ei->Form->group( 'mygroup', array( 'inputs' => array( 'my_input' ) ) );
 			
 			
 			
-			echo '<h3>Considerably more complex</h3><p>We treat each input as a single call to the input() function, include a fieldset and legend.</p>';
+			// echo '<h3>Considerably more complex</h3><p>We treat each input as a single call to the input() function, include a fieldset and legend.</p>';
 			/* echo $ei->group( 'seuss-group', array( 
 				'fieldset'	=> array(
 					'attrs'		=> array( 'class' => 'sneetch' ),

@@ -53,10 +53,16 @@ class Input {
 				!empty( $value ) ? $value : ''
 			);
 		endif;
+		// If label is set to false, do not create a label. Otherwise, use the tag or convert the field name.
+		if( isset( $args['label'] ) ) :
+			$label	= !empty( $args['label'] ) ? Form::label( $field, $args['label'] ) : null;
+		else :
+			$label	= Form::label( $field, null );
+		endif;
 		return sprintf(
 			'<div class="input %s">%s%s</div>',
 			$type,
-			Form::label( $field, !empty( $args['label'] ) ? $args['label'] : null ),
+			$label,
 			$input
 		);
 	}
@@ -143,7 +149,7 @@ class Input {
 	 * field_name:			Assigns a valid field name for the given input args
 	 * @var str $field:		The field-specific name.
 	 */
-	public function field_name( $field=nulll ) {
+	public function field_name( $field=null ) {
 		if( !$field ) return;
 		return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
 	}
