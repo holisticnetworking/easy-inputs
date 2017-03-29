@@ -8,7 +8,7 @@ namespace EasyInputs;
  * 
  * @param string $name The name of the input.
  * @param string $type The HTML Field type (text, checkbox, etc). 
- * 		Defaults to 'text'
+ *      Defaults to 'text'
  * @param string $value The value of the field, defaults to blank.
  * @param array $attrs HTML attributes.
  * @param array $options For radio/checkbox inputs.
@@ -18,193 +18,166 @@ namespace EasyInputs;
  */
 class Input 
 {
-	public $name, $type, $value, $attrs, $options, $nonce_base, $group, $validate;
-	
-	
-	/*
-	 * The default function to create an Input.
-	 * @var str $field:	The field name.
-	 * @var str $args:	A collection of additional arguments, formatted below.
-	 *
-	 * ARGUMENTS FORMAT
-	 * $args	= array(
-	 * 		$attrs		= arr, <-- HTML attributes
-	 * 		$value		= str, <-- The value of the field, defaults to blank
-	 * 		$type		= str, <-- The HTML Field type (text, checkbox, etc). 
-	 * 						   Defaults to 'text'
-	 * 		$name		= str, <-- The fully-qualified name attribute, if desired.
-	 * 		$group		= str, <-- The group to which this element belongs. 
-	 *		$options	= str  <-- For radio/checkbox inputs.
-	 * );
-	 */
-	public function create( $field=null, $args=[], $options=[] ) 
-	{
-		if( !$field ) return;
-		$type	= !empty( $args['type'] ) ? $args['type'] : 'text';
-		
-		// If a public method exists, then we're dealing with a form element:
-		if( !empty( $type ) && is_callable( __NAMESPACE__ . '\Input::' . $type ) ) :
-			$input	= $this->{$type}( $field, $args, $options );
-		// Generic text input.
-		else :
-			$input	= sprintf(
-				'<input id="%s" type="text" name="%s" %s value="%s" />',
-				$field,
-				!empty( $name ) ? $name : $this->field_name( $field, !empty( $group ) ? $group : $this->group ),
-				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-				!empty( $value ) ? $value : ''
-			);
-		endif;
-		// If label is set to false, do not create a label. Otherwise, use the tag or convert the field name.
-		if( isset( $args['label'] ) ) :
-			$label	= !empty( $args['label'] ) ? Form::label( $field, $args['label'] ) : null;
-		else :
-			$label	= Form::label( $field, null );
-		endif;
-		return sprintf(
-			'<div class="input %s">%s%s</div>',
-			$type,
-			$label,
-			$input
-		);
-	}
-	
-	public function radio( $field, $args ) 
-	{
-		if( empty( $args['options'] ) ) return;
-		$radios	= '';
-		foreach( $args['options'] as $key=>$value ) :
-			$radios	.= sprintf(
-				'<input type="radio" value="%1$s" %2$s>%3$s</input>',
-				$key,
-				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-				$value
-			);
-		endforeach;
-		return $radios;
-	}
-	
-	
-	public function select( $field, $args ) 
-	{
-		if( empty( $args['options'] ) ) return;
-		$select		= '';
-		$options	= '';
-		foreach( $args['options'] as $value=>$label ) :
-			$selected	= ( !empty( $args->value ) && $value == $args->value ) ? ' selected="selected" ' : '';
-			$options	.= sprintf(
-				'<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
-				$value,
-				$selected,
-				$label
-			);
-		endforeach; 
-		return sprintf(
-			'<select id="%1$s" %2$sname="%3$s">%4$s</select>',
-			$field,
-			!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-			!empty( $name ) ? $name : $this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
-			$options
-		);
-	}
-	
-	public function checkbox( $field, $args ) 
-	{
-		if( empty( $args['options'] ) ) return;
-		$boxes	= '';
-		foreach( $args['options'] as $key=>$value ) :
-			$boxes	.= sprintf(
-				'<input name="%4$s" type="checkbox" value="%1$s" %2$s>%3$s</input>',
-				$key,
-				!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-				$value,
-				!empty( $name ) ? $name : $this->field_name( $field, !empty( $this->group ) ? $this->group : null )
-			);
-		endforeach;
-		return $boxes;
-	}
-	
-	/*
-	 * Create an HTML textarea element.
-	 * @param str $field The name of the output element.
-	 * @param str $val The value on the button.
-	 * @param arr $attrs HTML attributes. 
-	 * 
-	 * @return string An HTML button tag.
-	 */
-	public function textarea( $field, $args ) 
-	{
-		return sprintf(
-			'<textarea name="%s" %s>%s</textarea>',
-			$this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
-			!empty( $attr ) ? $this->attrs_to_str( $attr ) : null,
-			!empty( $args->value ) ? $args->value : null
-		);
-	}
-	
-	/*
-	 * Create an HTML button
-	 * @param str $type The HTML button type.
-	 * @param str $val The value on the button.
-	 * @param arr $attrs HTML attributes. 
-	 * 
-	 * @return string An HTML button tag.
-	 */
-	public function button( $type='submit', $val="Submit", $attrs=null ) 
-	{
-		return sprintf(
-			'<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
-			!empty( $name ) ? $name : '',
-			!empty( $type ) ? $type : 'submit',
-			!empty( $name ) ? $name : $this->field_name( $type, $this->group ),
-			!empty( $attrs ) ? $this->attrs_to_str( $attrs ) : '',
-			!empty( $val ) ? $val : ''
-		);
-	}
-	
-	/*
-	 * Assigns a valid field name for the given input args
-	 * @param str $field The field-specific name.
-	 *
-	 * @return string an HTML string containing the closing fieldset tag.
-	 */
-	public function field_name( $field=null ) 
-	{
-		if( !$field ) return;
-		return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
-	}
-	
-	
-	
-	/**
-	 * Construct our Object
-	 * 
-	 * The $args array includes all the required values to construct an HTML element.
-	 *
-	 * @param string|array $args Either a string for the name of the field, or else an
-	 * 		array of input arguments containing the above static values.
-	 *
-	 * @return string HTML containing a legend.
-	 */
-	public function __construct( $args, &$form ) 
-	{
-		if( is_array( $args ) ) : 
-			$this->name			= !empty( $args['name'] ) ? $args['name'] : 'text';
-			$this->type			= !empty( $args['type'] ) ? $args['type'] : 'text';
-			$this->attrs		= !empty( $args['attrs'] ) ? $args['attrs'] : [];
-			$this->value		= !empty( $args['value'] ) ? $args['value'] : null;
-			$this->options		= !empty( $args['options'] ) ? $args['options'] : null;
-			$this->group		= !empty( $args['group'] ) ? $args['group'] : null;
-			$this->validate		= !empty( $args['validate'] ) ? $args['validate'] : null;
-		else :
-			$this->name			= $args;
-			$this->type			= 'text';
-			$this->nonce_base	= $form->name;
-			$this->attrs		= [];
-			$this->value		= null;
-			$this->options		= null;
-			$this->group		= null;
-			$this->validate		= null;
-		endif;
-	}
+    public $name, $type, $value, $attrs, $options, $nonce_base, $group, $validate;
+    
+    
+    /*
+     * This function creates the HTML for the required input element.
+     */
+    public function create() 
+    {
+        // If a public method exists, then we're dealing with a form element:
+        if( is_callable( __NAMESPACE__ . '\Input::' . $this->type ) ) :
+            $input  = $this->{$this->type}();
+        // Generic text input.
+        else :
+            $input  = sprintf(
+                '<input id="%s" type="text" name="%s" %s value="%s" />',
+                $this->name,
+                $this->field_name(),
+                EasyInputs::attrs_to_str( $this->attrs ),
+                $this->value
+            );
+        endif;
+        // If label is set to false, do not create a label. Otherwise, use the tag or convert the field name.
+        if( isset( $this->args['label'] ) ) :
+            $label  = !empty( $args['label'] ) ? Form::label( $field, $args['label'] ) : null;
+        else :
+            $label  = Form::label( $this->name, null );
+        endif;
+        return sprintf(
+            '<div class="input %s">%s%s</div>',
+            $this->type,
+            $label,
+            $input
+        );
+    }
+    
+    public function radio() 
+    {
+        if( empty( $this->options ) ) return;
+        $radios = '';
+        foreach( $this->options as $key=>$value ) :
+            $radios .= sprintf(
+                '<input type="radio" value="%1$s" %2$s>%3$s</input>',
+                $key,
+                EasyInputs::attrs_to_str( $this->attr ),
+                $this->value
+            );
+        endforeach;
+        return $radios;
+    }
+    
+    
+    public function select() 
+    {
+        if( empty( $this->options ) ) return;
+        $select     = '';
+        $options    = '';
+        foreach( $this->options as $value=>$label ) :
+            $selected   = ( !empty( $this->value ) && $value == $this->value ) ? ' selected="selected" ' : '';
+            $options    .= sprintf(
+                '<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
+                $value,
+                $selected,
+                $label
+            );
+        endforeach; 
+        return sprintf(
+            '<select id="%1$s" %2$sname="%3$s">%4$s</select>',
+            $field,
+            EasyInputs::attrs_to_str( $this->attr ),
+            $this->field_name( $this->name, !empty( $this->group ) ? $this->group : null ),
+            $options
+        );
+    }
+    
+    public function checkbox() 
+    {
+        if( empty( $this->options ) ) return;
+        $boxes  = '';
+        foreach( $this->options as $key=>$value ) :
+            $boxes  .= sprintf(
+                '<input name="%4$s" type="checkbox" value="%1$s">%3$s</input>',
+                $key,
+                $value,
+                $this->field_name( $this->name, !empty( $this->group ) ? $this->group : null )
+            );
+        endforeach;
+        return $boxes;
+    }
+    
+    /*
+     * Create an HTML textarea element.
+     * @param str $field The name of the output element.
+     * @param str $val The value on the button.
+     * @param arr $attrs HTML attributes. 
+     * 
+     * @return string An HTML button tag.
+     */
+    public function textarea() 
+    {
+        return sprintf(
+            '<textarea name="%s" %s>%s</textarea>',
+            $this->field_name( $this->name, !empty( $this->group ) ? $this->group : null ),
+            EasyInputs::attrs_to_str( $this->attr ),
+            $this->value
+        );
+    }
+    
+    /*
+     * Create an HTML button
+     * @param str $type The HTML button type.
+     * @param str $val The value on the button.
+     * @param arr $attrs HTML attributes. 
+     * 
+     * @return string An HTML button tag.
+     */
+    public function button() 
+    {
+        return sprintf(
+            '<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
+            $this->name,
+            $this->type,
+            $this->field_name( $this->name, $this->group ),
+            EasyInputs::attrs_to_str( $this->attrs ),
+            $this->val
+        );
+    }
+    
+    /*
+     * Assigns a valid field name for the given input args
+     * @param str $field The field-specific name.
+     *
+     * @return string an HTML string containing the closing fieldset tag.
+     */
+    public function field_name( $field=null ) 
+    {
+        if( !$field ) return;
+        return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
+    }
+    
+    
+    
+    /**
+     * Construct our Object
+     * 
+     * The $args array includes all the required values to construct an HTML element.
+     *
+     * @param string|array $args Either a string for the name of the field, or else an
+     *      array of input arguments containing the above static values.
+     *
+     * @return string HTML containing a legend.
+     */
+    public function __construct( string $name=null, array $attrs=[], array $options=[], Form &$form ) 
+    {
+        if( empty( $name ) ) return;
+        $this->name         = $name;
+        $this->attrs        = $attrs;
+        $this->options      = $options;
+        $this->type         = !empty( $args['type'] ) ? $args['type'] : 'text';
+        $this->value        = !empty( $args['value'] ) ? $args['value'] : null;
+        $this->group        = !empty( $args['group'] ) ? $args['group'] : null;
+        $this->validate     = !empty( $args['validate'] ) ? $args['validate'] : null;
+    }
 }

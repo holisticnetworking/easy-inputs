@@ -11,4 +11,11 @@
         <file>./testing-easy-inputs.php</file>
         <directory>./lib</directory>
     </files>
+    <transformer>
+        <target>docs/api</target>
+        <external-class-documentation>
+            <prefix>EasyInputs</prefix>
+            <uri>http://holisticnetworking.net/easy-inputs-wordpress/</uri>
+        </external-class-documentation>
+    </transformer>
 </phpdoc>

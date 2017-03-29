@@ -36,99 +36,93 @@ use EasyInputs\Form\Input;
  */
 class EasyInputs 
 {
-	/**
-	 * For the Settings API, provide the required nonce fields.
-	 *
-	 * @param string $setting The Settings API setting to which this control belongs.
-	 *
-	 * @return string Nonce fields.
-	 */
-	public function hidden_fields( $setting ) 
-	{
-		if( empty( $setting ) ) return;
-		$fields	= sprintf( '<input type="hidden" name="option_page" value="%s" /><input type="hidden" name="action" value="update" />', esc_attr( $setting ) );
-		$fields	.= $this->nonce();
-		return $fields;
+    /**
+     * For the Settings API, provide the required nonce fields.
+     *
+     * @param string $setting The Settings API setting to which this control belongs.
+     *
+     * @return string Nonce fields.
+     */
+    public function hidden_fields( string $setting ) 
+    {
+        if( empty( $setting ) ) return;
+        $fields = sprintf( '<input type="hidden" name="option_page" value="%s" /><input type="hidden" name="action" value="update" />', esc_attr( $setting ) );
+        $fields .= $this->nonce();
+        return $fields;
     }
     
     
-	/**
-	 * Display a group of inputs
-	 *
-	 * @param string $group The name of our group.
-	 *
-	 * @return bool true
-	 */
-	public function set_group( $group ) 
-	{
-		$this->group	= $group;
-		return true;
-	}
-	
-	
-	
-	/**
-	 * Creates a fieldset opening tag with optional legend
-	 *
-	 * The legend key of the $args array is identical to the legend() function. The
-	 * attrs array contains the same array of HTML attributes as always.
-	 *
-	 * @param array $args 'attrs' array and optional legend info
-	 *
-	 * @return string HTML containing the opening tag for a fieldset with optional legend.
-	 */
-	public function fieldset_open( $args ) 
-	{
-		extract( $args );
-		return sprintf( 
-			'<fieldset %s>%s', 
-			empty( $attr ) ? '' : $this->attrs_to_str( $attrs ), 
-			empty( $legend ) ? '' : $this->legend( $legend )
-		);
-	}
-	/**
-	 * Creates a fieldset closing tag
-	 *
-	 * @return string HTML containing the closing tag for a fieldset.
-	 */
-	public function fieldset_close() 
-	{
-		return '</fieldset>';
-	}
-	
-	
-	
-	/**
-	 * Utility functions
-	 */
-	
-	/**
-	 * Convert HTML attributes
-	 * @param array|null $attrs An array of HTML-compatible attribute/value pairs.
-	 * 
-	 */
-	public function attrs_to_str( $attrs=null ) 
-	{
-		if( !is_array( $attrs ) ) return;
-		$to_string	= array();
-		foreach( $attrs as $key=>$val ) :
-			$to_string[]	= sprintf( '%s="%s"', $key, htmlspecialchars( $val ) );
-		endforeach;
-		return implode( ' ', $to_string );
-	}
-	
-	
-	/**
-	 * Giddyup.
-	 *
-	 * Sets defaults.
-	 * 
-	 * @param array|string|null $args Either 
-	 *
-	 * @return void
-	 */
-	public function __construct( $args=null ) 
-	{
-		$this->Form		= new Form( $args, $this );
-	}
+    
+    /**
+     * Creates a fieldset opening tag with optional legend
+     *
+     * The legend key of the $args array is identical to the legend() function. The
+     * attrs array contains the same array of HTML attributes as always.
+     *
+     * @param array $args 'attrs' array and optional legend info
+     *
+     * @return string HTML containing the opening tag for a fieldset with optional legend.
+     */
+    public function fieldset_open( array $args ) 
+    {
+        extract( $args );
+        return sprintf( 
+            '<fieldset %s>%s', 
+            empty( $attr ) ? '' : $this->attrs_to_str( $attrs ), 
+            empty( $legend ) ? '' : $this->legend( $legend )
+        );
+    }
+    /**
+     * Creates a fieldset closing tag
+     *
+     * @return string HTML containing the closing tag for a fieldset.
+     */
+    public function fieldset_close() 
+    {
+        return '</fieldset>';
+    }
+    
+    
+    
+    /**
+     * Convert HTML attributes
+     * Passed an indexed array of attribute/value pairs, this function will return them
+     *      as valid HTML attributes in a string.
+     * @param array $attrs An array of HTML-compatible attribute/value pairs.
+     *
+     * @return string The attributes as a string.
+     */
+    public static function attrs_to_str( array $attrs ) 
+    {
+        if( empty( $attrs ) ) return;
+        $to_string  = array();
+        foreach( $attrs as $key=>$val ) :
+            $to_string[]    = sprintf( '%s="%s"', $key, htmlspecialchars( $val ) );
+        endforeach;
+        return implode( ' ', $to_string );
+    }
+    
+    
+    /**
+     * Giddyup.
+     * This function constructs our EasyInputs class for use in WordPress. Each time a new
+     *      instance of EasyInputs is created, a new Form class is created. While not all
+     *      WordPress forms require actual <form> tags, the Form class acts as our model
+     *      for internal representation of the form two which our EasyInputs class is
+     *      being applied.
+     * 
+     * @param array $args An array of arguments that instantiates the Form class.
+     *      Minimally, this array needs to include a 'name', and preferably also a 'type' 
+     *      value. The name is intended to be HTML compatible and is used for certain  
+     *      values unless overridden. The type must be either post_meta, setting or  
+     *      custom, correlating to the types of supported form elements. 
+     *
+     * @return void
+     */
+    public function __construct( array $args ) 
+    {
+        // Bounce incomplete requests:
+        if( empty( $args ) || empty( $args['name'] ) ) return;
+        $this->Form     = new Form( $args, $this );
+    }
 }
