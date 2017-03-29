@@ -16,7 +16,8 @@ namespace EasyInputs;
  * @param string $group The group to which this element belongs. 
  * @param string $validate Callable validation function.
  */
-class Input {
+class Input 
+{
 	public $name, $type, $value, $attrs, $options, $nonce_base, $group, $validate;
 	
 	
@@ -36,7 +37,8 @@ class Input {
 	 *		$options	= str  <-- For radio/checkbox inputs.
 	 * );
 	 */
-	public function create( $field=null, $args=[], $options=[] ) {
+	public function create( $field=null, $args=[], $options=[] ) 
+	{
 		if( !$field ) return;
 		$type	= !empty( $args['type'] ) ? $args['type'] : 'text';
 		
@@ -67,7 +69,8 @@ class Input {
 		);
 	}
 	
-	public function radio( $field, $args ) {
+	public function radio( $field, $args ) 
+	{
 		if( empty( $args['options'] ) ) return;
 		$radios	= '';
 		foreach( $args['options'] as $key=>$value ) :
@@ -82,7 +85,8 @@ class Input {
 	}
 	
 	
-	public function select( $field, $args ) {
+	public function select( $field, $args ) 
+	{
 		if( empty( $args['options'] ) ) return;
 		$select		= '';
 		$options	= '';
@@ -104,7 +108,8 @@ class Input {
 		);
 	}
 	
-	public function checkbox( $field, $args ) {
+	public function checkbox( $field, $args ) 
+	{
 		if( empty( $args['options'] ) ) return;
 		$boxes	= '';
 		foreach( $args['options'] as $key=>$value ) :
@@ -119,7 +124,16 @@ class Input {
 		return $boxes;
 	}
 	
-	public function textarea( $field, $args ) {
+	/*
+	 * Create an HTML textarea element.
+	 * @param str $field The name of the output element.
+	 * @param str $val The value on the button.
+	 * @param arr $attrs HTML attributes. 
+	 * 
+	 * @return string An HTML button tag.
+	 */
+	public function textarea( $field, $args ) 
+	{
 		return sprintf(
 			'<textarea name="%s" %s>%s</textarea>',
 			$this->field_name( $field, !empty( $this->group ) ? $this->group : null ),
@@ -129,12 +143,15 @@ class Input {
 	}
 	
 	/*
-	 * button:			Create an HTML button
-	 * @var str $type:	The HTML button type.
-	 * @var str $val:	The value on the button.
-	 * @var arr $attrs:	HTML attributes. 
+	 * Create an HTML button
+	 * @param str $type The HTML button type.
+	 * @param str $val The value on the button.
+	 * @param arr $attrs HTML attributes. 
+	 * 
+	 * @return string An HTML button tag.
 	 */
-	public function button( $type='submit', $val="Submit", $attrs=null ) {
+	public function button( $type='submit', $val="Submit", $attrs=null ) 
+	{
 		return sprintf(
 			'<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
 			!empty( $name ) ? $name : '',
@@ -146,10 +163,13 @@ class Input {
 	}
 	
 	/*
-	 * field_name:			Assigns a valid field name for the given input args
-	 * @var str $field:		The field-specific name.
+	 * Assigns a valid field name for the given input args
+	 * @param str $field The field-specific name.
+	 *
+	 * @return string an HTML string containing the closing fieldset tag.
 	 */
-	public function field_name( $field=null ) {
+	public function field_name( $field=null ) 
+	{
 		if( !$field ) return;
 		return sprintf( '%s%s[%s]', $this->name, $this->group, $field);
 	}
@@ -166,7 +186,8 @@ class Input {
 	 *
 	 * @return string HTML containing a legend.
 	 */
-	public function __construct( $args, &$form ) {
+	public function __construct( $args, &$form ) 
+	{
 		if( is_array( $args ) ) : 
 			$this->name			= !empty( $args['name'] ) ? $args['name'] : 'text';
 			$this->type			= !empty( $args['type'] ) ? $args['type'] : 'text';

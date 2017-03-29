@@ -17,7 +17,8 @@ namespace EasyInputs;
  * @param string $group For data saved as an array, the group name.
  *		 
  */
-class Form {
+class Form 
+{
 	public $name, $type, $action, $method, $attrs, $group, $nonce_base;
 	
 	
@@ -32,7 +33,8 @@ class Form {
 	 *
 	 * @return string the opening tag for the form element.
 	 */
-	public function open( $id=null ) {
+	public function open( $id=null ) 
+	{
 		return sprintf(
 			'<form id="%s" action="%s" method="%s" %s>',
 			!empty( $id ) ? $id : $this->name,
@@ -46,7 +48,8 @@ class Form {
 	 *
 	 * @return string the closing tag for the form element.
 	 */
-	public function close() {
+	public function close() 
+	{
 		return '</form>';
 	}
 	
@@ -58,7 +61,8 @@ class Form {
 	 *
 	 * @return string HTML containing a legend.
 	 */
-	public function legend( $args=[] ) {
+	public function legend( $args=[] ) 
+	{
 		$title	= '';
 		$attrs	= [];
 		if( is_array( $args ) ) :
@@ -78,7 +82,8 @@ class Form {
 	 * @var str $text:	Optional. Label text. The ID will be used if this value is left empty.
 	 * $var arr $attrs:	HTML attributes. 
 	 */
-	public function label( $for=null, $text=null, $attrs=null ) {
+	public function label( $for=null, $text=null, $attrs=null ) 
+	{
 		// Bounce bad requests.
 		if( empty( $for ) ) return;
 		
@@ -98,7 +103,8 @@ class Form {
 	 *
 	 * @return null
 	 */
-	public function input( $name, $attrs=[], $options=[] ) {
+	public function input( $name, $attrs=[], $options=[] ) 
+	{
 		return ( new Input( $name, $this ) )->create( 
 				$name, 
 				$attrs, 
@@ -122,7 +128,8 @@ class Form {
 	 *
 	 * @return string A string of HTML including all inputs from $inputs.
 	 */
-	public function group( $name=null, $inputs=null, $args=array() ) {
+	public function group( $name=null, $inputs=null, $args=array() ) 
+	{
 		if( empty( $name ) or empty( $inputs ) or empty( $args ) ) return;
 		extract( $args );
 		if( empty( $action ) ) $action = plugin_basename( __FILE__ );
@@ -162,7 +169,8 @@ class Form {
 	 *
 	 * @return string the opening tag for the form element.
 	 */
-	public function nonce( $name=null, $action=null ) {
+	public function nonce( $name=null, $action=null ) 
+	{
 		return wp_nonce_field( $this->action, $this->name, true, false );
 	}
 	
@@ -172,7 +180,8 @@ class Form {
 	 *
 	 * @return null
 	 */
-	public function setType( $type ) {
+	public function setType( $type ) 
+	{
 		$this->action	= 'options.php';
 		$this->method	= 'POST';
 	}
@@ -185,7 +194,8 @@ class Form {
 	 *
 	 * @return null
 	 */
-	public function __construct( $args ) {
+	public function __construct( $args ) 
+	{
 		// Bounce incomplete requests:
 		if( empty( $args ) || empty( $args['name'] ) ) return;
 		$this->name			= $args['name'];

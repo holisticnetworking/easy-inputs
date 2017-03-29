@@ -7,6 +7,14 @@ Version: 0.1-beta
 Author: Thomas J. Belknap
 Author URI: http://holisticnetworking.net
 */
+/**
+* Plugin Name: Testing Easy Inputs
+* Plugin URI: https://github.com/holisticnetworking/easy-inputs
+* Description: Testing and demonstrating Easy Inputs.
+* Version: 0.1-beta
+* Author: Thomas J. Belknap
+* Author URI: http://holisticnetworking.net
+*/
 
 /*  Copyright 2013  Thomas J Belknap  (email : tbelknap@holisticnetworking.net)
 
@@ -27,7 +35,14 @@ Author URI: http://holisticnetworking.net
 include_once( plugin_dir_path( __FILE__ ) . '../easy-inputs/easy-inputs.php' );
 use EasyInputs\EasyInputs;
 
-function register_ei() {
+
+/**
+ * Register an instance of EasyInputs and save it in the global scope.
+ * It isn't necessary to do this step in a more focused plugin. But in this
+ * case, we do this to make the object available elsewhere.
+ */
+function register_ei() 
+{
 	// Spare yourself the trouble of declaring twice:
 	global $ei;
 	$ei	= new EasyInputs([ 
@@ -36,11 +51,22 @@ function register_ei() {
 	]);
 }
 
-function add_page() {
+
+/**
+ * Add an options page to demonstrate the plugin.
+ */
+function add_page() 
+{
 	add_options_page( 'Testing Easy Inputs', 'Easy Inputs', 'publish_posts', 'easy-inputs', 'options_page');
 }
 
-function options_page() {
+
+
+/**
+ * The actual options page.
+ */
+function options_page() 
+{
 	global $ei;
 	
 	echo '<div class="wrap"><h1>Demonstrating Easy Inputs</h1>';
@@ -133,6 +159,7 @@ function options_page() {
 		echo $ei->Form->close();
 	echo '</div>';
 }
+
 add_action('admin_menu', 'add_page');
 add_action('admin_init', 'register_ei');
 ?>
