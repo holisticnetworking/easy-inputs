@@ -2,7 +2,6 @@
 /**
  * The Form Class of EasyInputs
  *
- * @category Wordpress
  * @package  EasyInputs
  * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
  * @license  GPLv2 or later

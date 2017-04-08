@@ -8,13 +8,13 @@ Author: Thomas J. Belknap
 Author URI: http://holisticnetworking.net
 */
 /**
-* Plugin Name: Testing Easy Inputs
-* Plugin URI: https://github.com/holisticnetworking/easy-inputs
-* Description: Testing and demonstrating Easy Inputs.
-* Version: 0.1-beta
-* Author: Thomas J. Belknap
-* Author URI: http://holisticnetworking.net
-*/
+ * Test Plugin for EasyInputs
+ *
+ * @package  EasyInputs
+ * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
+ * @license  GPLv2 or later
+ * @link     http://holisticnetworking.net/easy-inputs-wordpress/
+ */
 
 /*  Copyright 2013  Thomas J Belknap  (email : tbelknap@holisticnetworking.net)
 
