@@ -46,8 +46,9 @@ function register_ei()
     // Spare yourself the trouble of declaring twice:
     global $ei;
     $ei = new EasyInputs([ 
-        'name' => 'testing-easy-inputs', 
-        'type' => 'setting'
+        'name'  => 'testing-easy-inputs', 
+        'type'  => 'setting',
+        'group' => '[FormGroup]'
     ]);
 }
 
@@ -100,7 +101,6 @@ function options_page()
                 'value' => 'Input Value',
                 'attrs' => array(
                     'class' => 'custom classes', 
-                    'data-value' => 'Nana, nana, boo-boo'
                 ),
                 'label' => 'You can create your own label'
             ) );
@@ -110,7 +110,6 @@ function options_page()
                 'value' => '42',
                 'attrs' => array(
                     'class' => 'custom classes', 
-                    'data-value' => 'Nana, nana, boo-boo'
                 ),
                 'label' => false
             ) );
@@ -170,6 +169,18 @@ function options_page()
                     ]
                 ]
             );
+            
+            // Group setting:
+            echo '<h2>Set groups for arrays of data</h2>';
+            echo '<p>Need to group your data by arrays? Set the group for'
+            . ' one input:</p>';
+            echo $ei->Form->input( 'group_input', array(
+                'value' => '42',
+                'attrs' => array(
+                    'class' => 'custom classes', 
+                ),
+                'group' => '[TheGroup]'
+            ) );
             
             
             

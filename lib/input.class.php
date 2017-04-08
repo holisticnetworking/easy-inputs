@@ -1,6 +1,6 @@
 <?php
 /**
- * The Form Class of EasyInputs
+ * The Input Class of EasyInputs
  *
  * @package  EasyInputs
  * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
@@ -50,7 +50,7 @@ class Input
             $input  = sprintf(
                 '<input id="%s" type="text" name="%s" %s value="%s" />',
                 $this->name,
-                $this->field_name(),
+                $this->fieldName( $this->name ),
                 EasyInputs::attrsToString($this->attrs),
                 $this->value
             );
@@ -107,7 +107,7 @@ class Input
             '<select id="%1$s" %2$sname="%3$s">%4$s</select>',
             $this->name,
             EasyInputs::attrsToString($this->attrs),
-            $this->field_name($this->name, !empty($this->group) ? $this->group : null),
+            $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
             $options
         );
     }
@@ -124,7 +124,7 @@ class Input
                 '<input name="%3$s" type="checkbox" value="%1$s">%2$s</input>',
                 $key,
                 $value,
-                $this->field_name($fieldname)
+                $this->fieldName($fieldname)
             );
         endforeach;
         return $boxes;
@@ -142,7 +142,7 @@ class Input
     {
         return sprintf(
             '<textarea name="%s" %s>%s</textarea>',
-            $this->field_name($this->name, !empty($this->group) ? $this->group : null),
+            $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
             EasyInputs::attrsToString($this->attrs),
             $this->value
         );
@@ -162,10 +162,19 @@ class Input
             '<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
             $this->name,
             $this->type,
-            $this->field_name($this->name, $this->group),
+            $this->fieldName($this->name, $this->group),
             EasyInputs::attrsToString($this->attrs),
             $this->value
         );
+    }
+    
+    /*
+     * Wrapper for wp_editor
+     * 
+     * @return string An HTML button tag.
+     */
+    public function editor() {
+        return wp_editor( $this->value, $this->name, $options );
     }
     
     /*
@@ -179,7 +188,19 @@ class Input
         if (!$field) {
             return;
         }
-        return sprintf('%s%s[%s]', $this->name, $this->group, $field);
+        $group  = implode( '', array_walk( 
+            $this->group,
+            function( &$value, &$key ) {
+                return sprintf( '[%s]', $value );
+            }
+        ) );
+        
+        return sprintf(
+            '%s%s[%s]',
+            $this->Form->name,
+            $group,
+            $field
+        );
     }
     
     
@@ -199,12 +220,13 @@ class Input
         if (empty($name)) {
             return;
         }
+        $this->Form         = $form;
         $this->name         = $name;
         $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : array();
         $this->options      = !empty($args['options']) ? $args['options'] : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
-        $this->group        = !empty($args['group']) ? $args['group'] : null;
+        $this->group        = !empty($args['group']) ? $args['group'] : $this->Form->group;
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
     }
 }

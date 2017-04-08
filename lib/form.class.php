@@ -22,7 +22,8 @@ namespace EasyInputs;
  * @param string $action The action to send the form data to.
  * @param string $method GET, POST, etc.
  * @param string $attrs HTML attributes.
- * @param string $group For data saved as an array, the group name.
+ * @param string|array $group For data saved as an array, the group name or array of
+ *      subgroup names, in order of appearance.
  * @param string $nonce_base May or may not be useful.
  */
 class Form
@@ -229,6 +230,15 @@ class Form
         $this->group    = $group;
         return true;
     }
+    
+    /**
+     * Ensures a consistent format for group names.
+     *
+     */
+    public function splitGroup( $group )
+    {
+        $this->group    = explode( ',', $group );
+    }
 
 
     /**
@@ -248,6 +258,7 @@ class Form
         $this->type         = !empty($args['type']) ? $args['type'] : 'post_meta';
         $this->nonce_base   = !empty($args['nonce_base']) ? $args['nonce_base'] : $this->name;
         $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : [];
+        $this->group        = !empty($args['group']) ? $this->splitGroup( $args['group'] ) : null;
         $this->setType($this->type);
     }
 }
