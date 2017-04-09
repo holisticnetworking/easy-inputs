@@ -50,7 +50,7 @@ class Input
             $input  = sprintf(
                 '<input id="%s" type="text" name="%s" %s value="%s" />',
                 $this->name,
-                $this->fieldName( $this->name ),
+                $this->fieldName(),
                 EasyInputs::attrsToString($this->attrs),
                 $this->value
             );
@@ -173,8 +173,9 @@ class Input
      * 
      * @return string An HTML button tag.
      */
-    public function editor() {
-        return wp_editor( $this->value, $this->name, $options );
+    public function editor()
+    {
+        return wp_editor( $this->value, $this->name, $this->args );
     }
     
     /*
@@ -183,23 +184,19 @@ class Input
      *
      * @return string an HTML string containing the closing fieldset tag.
      */
-    public function fieldName($field = null)
+    public function fieldName()
     {
-        if (!$field) {
-            return;
-        }
-        $group  = implode( '', array_walk( 
-            $this->group,
-            function( &$value, &$key ) {
+        $group  = implode( '', array_map( 
+            function( &$value ) {
                 return sprintf( '[%s]', $value );
-            }
+            },
+            $this->group
         ) );
-        
         return sprintf(
             '%s%s[%s]',
             $this->Form->name,
             $group,
-            $field
+            $this->name
         );
     }
     
@@ -226,7 +223,7 @@ class Input
         $this->options      = !empty($args['options']) ? $args['options'] : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
-        $this->group        = !empty($args['group']) ? $args['group'] : $this->Form->group;
+        $this->group        = !empty($args['group']) ? $this->Form->splitGroup( $args['group'] ) : $this->Form->group;
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
     }
 }

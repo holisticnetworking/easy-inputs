@@ -48,7 +48,7 @@ function register_ei()
     $ei = new EasyInputs([ 
         'name'  => 'testing-easy-inputs', 
         'type'  => 'setting',
-        'group' => '[FormGroup]'
+        'group' => 'FormGroup,Subgroup,Evensubbergroup'
     ]);
 }
 
@@ -179,8 +179,22 @@ function options_page()
                 'attrs' => array(
                     'class' => 'custom classes', 
                 ),
-                'group' => '[TheGroup]'
+                'group' => 'TheGroup'
             ) );
+            echo '<p>Or set the group setting, for all future inputs:</p>';
+            $ei->Form->setGroup( 'Nested,like,Russian,tea,dolls' );
+            echo $ei->Form->input( 'an_input' );
+            echo $ei->Form->input( 'another_input' );
+            echo $ei->Form->input( 'still_another_input' );
+            
+            
+            // WordPress Editor:
+            echo '<h2>Whoa! Looka that! A WordPress Editor!</h2>';
+            echo '<p>EasyInputs wraps the editor functionality into'
+                . ' itself for convenience!';
+            echo $ei->Form->editor(
+                'i-edit-content'
+            );
             
             
             

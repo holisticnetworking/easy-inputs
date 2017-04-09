@@ -125,9 +125,7 @@ class Form
      *                        "name" attribute, but does get used to create it. If grouping
      *                        is requested, this argument will be rolled into the combined
      *                        HTML name of the group.
-     * @param array  $attrs   An optional array of HTML attributes.
-     * @param array  $options For select and other elements with options, their key/value
-     *                        pairs are stored here.
+     * @param array $args     The args. 
      *
      * @return string The HTML string for this input.
      */
@@ -213,8 +211,20 @@ class Form
      */
     public function setType(string $type = null)
     {
-        $this->action   = 'options.php';
-        $this->method   = 'POST';
+        switch( $type ) :
+            case 'setting' :
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                break;
+            case 'meta' :
+                $this->action   = 'post.php';
+                $this->method   = 'POST';
+                break;
+            default :
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                break;
+        endswitch;
     }
 
 
@@ -227,7 +237,7 @@ class Form
      */
     public function setGroup(string $group)
     {
-        $this->group    = $group;
+        $this->group    = $this->splitGroup( $group );
         return true;
     }
     
@@ -237,7 +247,26 @@ class Form
      */
     public function splitGroup( $group )
     {
-        $this->group    = explode( ',', $group );
+        return explode( ',', $group );
+    }
+    
+    /**
+     * Call the correct function if it exists.
+     */
+    public function __call( $name, $settings ) {
+        if( method_exists( 'EasyInputs\Input', $name ) ) :
+            $input_name             = $settings[0];
+            $input_args             = isset( $settings[1] ) ? $settings[1] : array();
+            $input_args['type']     = $name;
+            return ( new Input($input_name, $input_args, $this) )->create();
+        else :
+            $message    = sprintf( 
+                'Sorry. Invalid function, %s, called.',
+                $name
+            );
+            return $message;
+            error_log( $message );
+        endif;
     }
 
 
