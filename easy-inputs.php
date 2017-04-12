@@ -2,10 +2,10 @@
 /**
  * A WordPress Forms template engine.
  * 
- * @package  EasyInputs
- * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
- * @license  GPLv2 or later
- * @link     http://holisticnetworking.net/easy-inputs-wordpress/
+ * @package EasyInputs
+ * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
+ * @license GPLv2 or later
+ * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
 /*
 Plugin Name: Easy Inputs
@@ -62,38 +62,6 @@ class EasyInputs
         );
         $fields .= $this->nonce();
         return $fields;
-    }
-   
-   
-   
-    /**
-     * Creates a fieldset opening tag with optional legend
-     *
-     * The legend key of the $args array is identical to the legend() function.
-     * The attrs array contains the same array of HTML attributes as always.
-     *
-     * @param array $args 'attrs' array and optional legend info
-     *
-     * @return string HTML containing the opening tag for a fieldset with
-     * optional legend.
-     */
-    public function fieldsetOpen(array $args)
-    {
-        extract($args);
-        return sprintf(
-            '<fieldset %s>%s',
-            empty($attr) ? '' : $this->attrs_to_str($attrs),
-            empty($legend) ? '' : $this->legend($legend)
-        );
-    }
-    /**
-     * Creates a fieldset closing tag
-     *
-     * @return string HTML containing the closing tag for a fieldset.
-     */
-    public function fieldsetClose()
-    {
-        return '</fieldset>';
     }
    
    

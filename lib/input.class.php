@@ -2,10 +2,10 @@
 /**
  * The Input Class of EasyInputs
  *
- * @package  EasyInputs
- * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
- * @license  GPLv2 or later
- * @link     http://holisticnetworking.net/easy-inputs-wordpress/
+ * @package EasyInputs
+ * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
+ * @license GPLv2 or later
+ * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
  
 namespace EasyInputs;
@@ -75,12 +75,13 @@ class Input
             return;
         }
         $radios = '';
-        foreach ($this->options as $key => $value) :
+        foreach ($this->options as $value => $label) :
             $radios .= sprintf(
-                '<input type="radio" value="%1$s" %2$s>%3$s</input>',
-                $key,
+                '<input name="%4$s" type="radio" value="%1$s" %2$s>%3$s</input>',
+                $value,
                 EasyInputs::attrsToString($this->attrs),
-                $value
+                $label,
+                $this->fieldName()
             );
         endforeach;
         return $radios;
@@ -124,7 +125,7 @@ class Input
                 '<input name="%3$s" type="checkbox" value="%1$s">%2$s</input>',
                 $key,
                 $value,
-                $this->fieldName($fieldname)
+                $this->fieldName() . '[]'
             );
         endforeach;
         return $boxes;
@@ -175,7 +176,7 @@ class Input
      */
     public function editor()
     {
-        return wp_editor( $this->value, $this->name, $this->args );
+        return wp_editor($this->value, $this->name);
     }
     
     /*
@@ -186,12 +187,14 @@ class Input
      */
     public function fieldName()
     {
-        $group  = implode( '', array_map( 
-            function( &$value ) {
-                return sprintf( '[%s]', $value );
-            },
-            $this->group
-        ) );
+        $group  = implode(
+            '', array_map( 
+                function ( &$value ) {
+                        return sprintf('[%s]', $value);
+                },
+                $this->group
+            ) 
+        );
         return sprintf(
             '%s%s[%s]',
             $this->Form->name,
@@ -223,7 +226,7 @@ class Input
         $this->options      = !empty($args['options']) ? $args['options'] : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
-        $this->group        = !empty($args['group']) ? $this->Form->splitGroup( $args['group'] ) : $this->Form->group;
+        $this->group        = !empty($args['group']) ? $this->Form->splitGroup($args['group']) : $this->Form->group;
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
     }
 }

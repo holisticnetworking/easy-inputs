@@ -10,10 +10,10 @@ Author URI: http://holisticnetworking.net
 /**
  * Test Plugin for EasyInputs
  *
- * @package  EasyInputs
- * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
- * @license  GPLv2 or later
- * @link     http://holisticnetworking.net/easy-inputs-wordpress/
+ * @package EasyInputs
+ * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
+ * @license GPLv2 or later
+ * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
 
 /*  Copyright 2013  Thomas J Belknap  (email : tbelknap@holisticnetworking.net)
@@ -32,7 +32,7 @@ Author URI: http://holisticnetworking.net
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-include_once( plugin_dir_path( __FILE__ ) . '../easy-inputs/easy-inputs.php' );
+require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
 use EasyInputs\EasyInputs;
 
 
@@ -45,11 +45,13 @@ function register_ei()
 {
     // Spare yourself the trouble of declaring twice:
     global $ei;
-    $ei = new EasyInputs([ 
+    $ei = new EasyInputs(
+        [ 
         'name'  => 'testing-easy-inputs', 
         'type'  => 'setting',
         'group' => 'FormGroup,Subgroup,Evensubbergroup'
-    ]);
+        ]
+    );
 }
 
 
@@ -58,7 +60,7 @@ function register_ei()
  */
 function add_page() 
 {
-    add_options_page( 'Testing Easy Inputs', 'Easy Inputs', 'publish_posts', 'easy-inputs', 'options_page');
+    add_options_page('Testing Easy Inputs', 'Easy Inputs', 'publish_posts', 'easy-inputs', 'options_page');
 }
 
 
@@ -78,7 +80,7 @@ function options_page()
         
             // Dead-simple input inclusion:
             echo '<h2>Dead-simple input inclusion</h2>';
-            echo $ei->Form->input( 'my_text_input' );
+            echo $ei->Form->input('my_text_input');
             
             // Now, let's include a value and some HTML attributes:
             echo '<h2>Now, let\'s include a value and some HTML'
@@ -86,33 +88,39 @@ function options_page()
             echo '<p>Please see the README.md file for the proper parameters'
             . ' and values for these. in general, all HTML5-valid attributes' 
             . 'are available, including data attributes.</p>';
-            echo $ei->Form->input( 'another_text_input', array(
+            echo $ei->Form->input(
+                'another_text_input', array(
                 'value' => 'Input Value',
                 'attrs' => array(
                     'class' => 'custom classes', 
                     'data-nana-nana' => 'boo-boo'
-                ),
-                'label' => 'Specify any label you want.'
-            ) );
+                 ),
+                 'label' => 'Specify any label you want.'
+                ) 
+            );
             
             // Labels Optional:
             echo '<h2>Labels are always optional</h2>';
-            echo $ei->Form->input( 'still_another_text_input', array(
+            echo $ei->Form->input(
+                'still_another_text_input', array(
                 'value' => 'Input Value',
                 'attrs' => array(
                     'class' => 'custom classes', 
-                ),
-                'label' => 'You can create your own label'
-            ) );
+                 ),
+                 'label' => 'You can create your own label'
+                ) 
+            );
             // Or separable:
             echo '<p>';
-            echo $ei->Form->input( 'separate_label', array(
+            echo $ei->Form->input(
+                'separate_label', array(
                 'value' => '42',
                 'attrs' => array(
                     'class' => 'custom classes', 
-                ),
-                'label' => false
-            ) );
+                 ),
+                 'label' => false
+                ) 
+            );
             echo $ei->Form->label( 
                 'separate_label', 
                 'Or can even be created separately, if you like.' 
@@ -131,7 +139,7 @@ function options_page()
             );
             echo $ei->Form->input( 
                 'color_select', 
-                    [ 
+                [ 
                         'type' => 'select', 
                         'options' => [
                             'gr' => 'Green',
@@ -141,10 +149,10 @@ function options_page()
                             'or' => 'Orange'
                         ] 
                     ] 
-                );
+            );
             echo $ei->Form->input( 
                 'color_checkbox', 
-                    [ 
+                [ 
                         'type' => 'checkbox', 
                         'options' => [
                             'gr' => 'Green',
@@ -154,7 +162,7 @@ function options_page()
                             'or' => 'Orange'
                         ]
                     ]
-                );
+            );
             
             // Textarea
             echo '<h2>Now for a textarea</h2>';
@@ -174,18 +182,20 @@ function options_page()
             echo '<h2>Set groups for arrays of data</h2>';
             echo '<p>Need to group your data by arrays? Set the group for'
             . ' one input:</p>';
-            echo $ei->Form->input( 'group_input', array(
+            echo $ei->Form->input(
+                'group_input', array(
                 'value' => '42',
                 'attrs' => array(
                     'class' => 'custom classes', 
-                ),
-                'group' => 'TheGroup'
-            ) );
+                 ),
+                 'group' => 'TheGroup'
+                ) 
+            );
             echo '<p>Or set the group setting, for all future inputs:</p>';
-            $ei->Form->setGroup( 'Nested,like,Russian,tea,dolls' );
-            echo $ei->Form->input( 'an_input' );
-            echo $ei->Form->input( 'another_input' );
-            echo $ei->Form->input( 'still_another_input' );
+            $ei->Form->setGroup('Nested,like,Russian,tea,dolls');
+            echo $ei->Form->input('an_input');
+            echo $ei->Form->input('another_input');
+            echo $ei->Form->input('still_another_input');
             
             
             // WordPress Editor:
@@ -202,44 +212,21 @@ function options_page()
             // simplest way to include both your input AND an
             // automatically-generated nonce:
             echo '<h3>Slightly more complex, but still simple.</h3><p>This'
-            . 'version is the simplest way to include both your input AND an'
+            . ' version is the simplest way to include both your input AND an'
             . 'automatically-generated nonce:</p>';
-            echo $ei->Form->group( 
-                'mygroup', 
+            echo $ei->Form->inputs(
                 [
-                    'inputs' => 
-                    [
-                        'my_input'
-                    ]
+                'a-group-input'     => [
+                    'type' => 'checkbox',
+                    'options' => [ 'yes' => 'Yes', 'no' => 'No']
+                ],
+                'a-radio-button'    => [
+                    'type' => 'radio',
+                    'options' => [ 'yes' => 'Da', 'no' => 'Niet']
+                ],
+                'an-input'          => []
                 ]
             );
-            
-            
-            
-            // echo '<h3>Considerably more complex</h3><p>We treat each input'
-            // . 'as a single call to the input() function, include a fieldset'
-            // . '  and legend.</p>';
-            /* echo $ei->group( 'seuss-group',
-                [
-                    'fieldset'  => [
-                        'attrs'     => [ 'class' => 'sneetch' ],
-                        'legend'    => [ 'title' => "Don't cry because"
-                            . " it's over, smile because it happened." ]
-                    ],
-                    'inputs' => 
-                        [
-                            'one-input'     => [
-                                'attrs'   => [
-                                    'class' => 'my-custom-class',
-                                    'data-stars' => 'on thars'
-                                ]
-                            ],
-                            'two-input'     => [ 'value' => 'Cindy-loo Hoo' ],
-                            'red-input',
-                            'blue-input'    => [ 'label' => 'Custom Label' ]
-                        ]
-                    ]
-                ); */
                 
                 
             echo $ei->Form->input( 

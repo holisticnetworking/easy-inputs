@@ -2,10 +2,10 @@
 /**
  * The Form Class of EasyInputs
  *
- * @package  EasyInputs
- * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
- * @license  GPLv2 or later
- * @link     http://holisticnetworking.net/easy-inputs-wordpress/
+ * @package EasyInputs
+ * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
+ * @license GPLv2 or later
+ * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
 
 namespace EasyInputs;
@@ -67,6 +67,37 @@ class Form
     {
         return '</form>';
     }
+    
+    
+    /**
+     * Creates a fieldset opening tag with optional legend
+     *
+     * The legend key of the $args array is identical to the legend() function.
+     * The attrs array contains the same array of HTML attributes as always.
+     *
+     * @param array $args 'attrs' array and optional legend info
+     *
+     * @return string HTML containing the opening tag for a fieldset with
+     * optional legend.
+     */
+    public function fieldsetOpen(array $args)
+    {
+        extract($args);
+        return sprintf(
+            '<fieldset %s>%s',
+            empty($attr) ? '' : $this->attrs_to_str($attrs),
+            empty($legend) ? '' : $this->legend($legend)
+        );
+    }
+    /**
+     * Creates a fieldset closing tag
+     *
+     * @return string HTML containing the closing tag for a fieldset.
+     */
+    public function fieldsetClose()
+    {
+        return '</fieldset>';
+    }
 
     /**
      * Outputs an HTML legend
@@ -121,11 +152,11 @@ class Form
      * This function creates an instance of Input, supplying it all the required arguments.
      * Input will return
      *
-     * @param string $name    The name of the input element. Note that this is not the HTML
-     *                        "name" attribute, but does get used to create it. If grouping
-     *                        is requested, this argument will be rolled into the combined
-     *                        HTML name of the group.
-     * @param array $args     The args. 
+     * @param string $name The name of the input element. Note that this is not the HTML
+     *                     "name" attribute, but does get used to create it. If grouping
+     *                     is requested, this argument will be rolled into the combined
+     *                     HTML name of the group.
+     * @param array  $args The args. 
      *
      * @return string The HTML string for this input.
      */
@@ -143,43 +174,48 @@ class Form
      * which it is bound. Physically, all elements of a group will
      * be displayed together, in a fieldset, if requested.
      *
-     * @param string $name   The name of our group.
-     * @param array  $inputs Array of input arrays.
-     * @param array  $args   Arguments and attributes to be applied to the group
-     *                       container
+     * @param array $inputs Array of input arrays. Formatted with the name
+     *                      of the input as the key and the $args as the
+     *                      content.
+     * @param array $args   Arguments meant to be applied to either all inputs
+     *                      or to the container element.
      *
      * @return string A string of HTML including all inputs from $inputs.
      */
-    public function group(string $name = null, array $inputs = [], array $args = [])
+    public function inputs(array $inputs = [], array $args = [])
     {
-        if (empty($name) or empty($inputs) or empty($args)) {
-            return;
-        }
-        extract($args);
-        if (empty($action)) {
-            $action = plugin_basename(__FILE__);
-        }
-
-        // Each group gets its own nonce automatically:
-        $result = ''; // $this->nonce( $name . '_nonce', $action );
-
-        // Append our fieldset, if required:
-        $result .= !empty($fieldset) ? $this->fieldset_open($fieldset) : '';
-        // Append each input per it's own function, else the generic input function:
-        foreach ($inputs as $key => $input) :
-            if (is_array($input)) :
-                if (!empty($input['type']) && method_exists('EasyInputs', $input['type'])) :
-                    $result .= $this->$input['type']( $key, $input, $name );
-                else :
-                    $result .= $this->input($key, $input, $name);
-                endif;
-            else :
-                $result .= $this->input($input, null, $name);
-            endif;
+        $args   = $this->setFieldsetDefaults($args);
+        $output = '';
+        $open   = is_array($args) && $args['fieldset'] ? $this->fieldsetOpen($args) : '';
+        $close  = is_array($args) && $args['fieldset'] ? $this->fieldsetClose() : '';
+        foreach( $inputs as $name=>$args ) :
+            $output .= $this->input($name, $args);
         endforeach;
-        // Close the fieldset:
-        $result .= !empty($fieldset) ? $this->fieldset_close() : '';
-        return $result;
+        return sprintf(
+            '%1$s%2$s%3$s',
+            $open,
+            $output,
+            $close
+        );
+        return $output;
+    }
+    
+    /**
+     * Set defaults for fieldsets.
+     *
+     * @param array $args Arguments meant to be applied to either all inputs
+     *      or to the container element.
+     *
+     * @return string A string of HTML including all inputs from $inputs.
+     */
+    public function setFieldsetDefaults(array $args = [])
+    {
+        $defaults   = [
+            'fieldset'  => true,
+            'legend'    => ucfirst(preg_replace('/[_\-]/', ' ', $this->name)),
+            'attrs'     => []
+        ];
+        return array_merge($defaults, $args);
     }
 
 
@@ -212,18 +248,18 @@ class Form
     public function setType(string $type = null)
     {
         switch( $type ) :
-            case 'setting' :
-                $this->action   = 'options.php';
-                $this->method   = 'POST';
-                break;
-            case 'meta' :
-                $this->action   = 'post.php';
-                $this->method   = 'POST';
-                break;
-            default :
-                $this->action   = 'options.php';
-                $this->method   = 'POST';
-                break;
+        case 'setting' :
+            $this->action   = 'options.php';
+            $this->method   = 'POST';
+            break;
+        case 'meta' :
+            $this->action   = 'post.php';
+            $this->method   = 'POST';
+            break;
+        default :
+            $this->action   = 'options.php';
+            $this->method   = 'POST';
+            break;
         endswitch;
     }
 
@@ -237,26 +273,26 @@ class Form
      */
     public function setGroup(string $group)
     {
-        $this->group    = $this->splitGroup( $group );
+        $this->group    = $this->splitGroup($group);
         return true;
     }
     
     /**
      * Ensures a consistent format for group names.
-     *
      */
     public function splitGroup( $group )
     {
-        return explode( ',', $group );
+        return explode(',', $group);
     }
     
     /**
      * Call the correct function if it exists.
      */
-    public function __call( $name, $settings ) {
-        if( method_exists( 'EasyInputs\Input', $name ) ) :
+    public function __call( $name, $settings ) 
+    {
+        if(method_exists('EasyInputs\Input', $name) ) :
             $input_name             = $settings[0];
-            $input_args             = isset( $settings[1] ) ? $settings[1] : array();
+            $input_args             = isset($settings[1]) ? $settings[1] : array();
             $input_args['type']     = $name;
             return ( new Input($input_name, $input_args, $this) )->create();
         else :
@@ -265,7 +301,7 @@ class Form
                 $name
             );
             return $message;
-            error_log( $message );
+            error_log($message);
         endif;
     }
 
@@ -287,7 +323,7 @@ class Form
         $this->type         = !empty($args['type']) ? $args['type'] : 'post_meta';
         $this->nonce_base   = !empty($args['nonce_base']) ? $args['nonce_base'] : $this->name;
         $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : [];
-        $this->group        = !empty($args['group']) ? $this->splitGroup( $args['group'] ) : null;
+        $this->group        = !empty($args['group']) ? $this->splitGroup($args['group']) : null;
         $this->setType($this->type);
     }
 }
