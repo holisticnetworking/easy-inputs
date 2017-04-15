@@ -37,7 +37,7 @@ class Input
     public $validate;
     
     
-    /*
+    /**
      * This function creates the HTML for the required input element.
      */
     public function create()
@@ -66,6 +66,18 @@ class Input
             $this->type,
             $label,
             $input
+        );
+    }
+    
+    /**
+     * Create a WordPress nonce field
+     */
+    public static function nonce($name='', $action='', $referer=true, $echo=false) {
+        return wp_nonce_field(
+            $name,
+            $action,
+            $referer,
+            $echo
         );
     }
     

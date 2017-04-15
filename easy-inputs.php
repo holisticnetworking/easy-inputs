@@ -60,7 +60,7 @@ class EasyInputs
             <input type="hidden" name="action" value="update" />',
             esc_attr($setting)
         );
-        $fields .= $this->nonce();
+        $fields .= \EasyInputs\Input::nonce($setting);
         return $fields;
     }
    
