@@ -60,7 +60,8 @@ function register_ei()
  */
 function add_page() 
 {
-    add_options_page('Testing Easy Inputs', 'Easy Inputs', 'publish_posts', 'easy-inputs', 'options_page');
+    add_options_page('Testing Easy Inputs', 'Easy Inputs', 'publish_posts',
+        'easy-inputs', 'options_page');
 }
 
 

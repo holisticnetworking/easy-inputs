@@ -15,21 +15,10 @@ Usage
 =====
 
 ```
-if( !class_exists( 'EasyInputs' ) ) {
-	include_once( plugins_url( 'easy-inputs.php' ) );
-}
-$ea	= new EasyInputs;
-```
-Please see the included "plugin" file, testing-easy-inputs.php, for an in-place example of how to use the Easy Inputs API.
+require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
+use EasyInputs\EasyInputs;
 
-Note also that EasyInputs takes two optional arguments, the first of which specifies the name of the object once instantiated. If you would prefer not to use EasyInputs as the name, you can set it here. The name of the object will define the base POST variable like so:
-```
-EasyInputs[your-group-name][your-data-field]
-```
-
-An example of how to call with a custom name:
-```
-$mi	= new EasyInputs('MyForm');
+$mf	= new EasyInputs('MyForm');
 ```
 
 Additional options can be set by the second argument, the $args array. Check the __construct() function for additional details.
