@@ -19,9 +19,6 @@ License: GPLv2 or later
 
 namespace EasyInputs;
 
-// Include our other classes:
-require_once plugin_dir_path(__FILE__) . 'lib/form.class.php';
-require_once plugin_dir_path(__FILE__) . 'lib/input.class.php';
 use EasyInputs\Form;
 use EasyInputs\Form\Input;
 
@@ -107,6 +104,10 @@ class EasyInputs
      */
     public function __construct(array $args)
     {
+        // Include our other classes:
+        require_once plugin_dir_path(__FILE__) . 'lib/form.class.php';
+        require_once plugin_dir_path(__FILE__) . 'lib/input.class.php';
+        
         // Bounce incomplete requests:
         if (empty($args) || empty($args['name'])) {
             return;
