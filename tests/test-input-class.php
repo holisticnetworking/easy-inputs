@@ -1,14 +1,15 @@
 <?php
 /**
- * Class SampleTest
+ * Class InputClassTest
  *
- * @package Easy_Inputs
+ * @package EasyInputs
  */
+namespace EasyInputs;
 
 /**
- * Sample test case.
+ * Test cases for the input.class.php file.
  */
-class SampleTest extends WP_UnitTestCase {
+class InputClassTest extends \WP_UnitTestCase {
 
 	/**
 	 * A single example test.

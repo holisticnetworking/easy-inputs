@@ -141,7 +141,7 @@ class Form
         return sprintf(
             '<label %s %s>%s</label>',
             !empty($for) ? sprintf('for="%s"', $for) : '',
-            is_array($attrs) ? $this->attrsToString($attrs) : '',
+            is_array($attrs) ? EasyInputs::attrsToString($attrs) : '',
             !empty($text) && is_string($text) ? $text : ucfirst(preg_replace('/[_\-]/', ' ', $for)) // Convert fieldname
         );
     }

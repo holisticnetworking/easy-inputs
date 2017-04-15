@@ -78,7 +78,7 @@ class EasyInputs
     public static function attrsToString(array $attrs)
     {
         if (empty($attrs)) {
-            return;
+            return null;
         }
         $to_string  = array();
         foreach ($attrs as $key => $val) :
