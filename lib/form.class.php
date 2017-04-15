@@ -102,23 +102,23 @@ class Form
     /**
      * Outputs an HTML legend
      *
-     * @param array $args Contains 'title' and optional 'attrs' keys. 'attrs' includes
+     * @param array|string $args Contains 'title' and optional 'attrs' keys. 'attrs' includes
      *      HTML attributes for the legend.
      *
      * @return string HTML containing a legend.
      */
-    public function legend(array $args = [])
+    public function legend($args = [])
     {
-        $title  = '';
-        $attrs  = [];
+        $title      = '';
+        $attr_str   = '';
         if (is_array($args)) :
             extract($args);
-            $title  = !empty($title) ? $title : null;
-            $attrs  = !empty($attrs) ? $attrs : [];
+            $title      = !empty($title) ? $title : null;
+            $attr_str   = !empty($attrs) ? EasyInputs::attrsToString($attrs) : $attr_str;
         else :
             $title  = $args;
         endif;
-        return sprintf('<legend %s>%s</legend>', $attrs, $title);
+        return sprintf('<legend %s>%s</legend>', $attr_str, $title);
     }
 
 
@@ -220,24 +220,6 @@ class Form
 
 
     /**
-     * Return a WP Settings API nonce field.
-     *
-     * Don't overthink it. Just let WordPress handle creating the nonce.
-     * This function returns, rather than outputs, the nonce, in case we
-     * need to do something further before output.
-     *
-     * @param string $name   A name from which to create our nonce.
-     * @param string $action The action requiring our nonce.
-     *
-     * @return string the opening tag for the form element.
-     */
-    public function nonce(string $name = null, string $action = null)
-    {
-        return wp_nonce_field($this->action, $this->name, true, false);
-    }
-
-
-    /**
      * Based on the passed type property, set the action and method values of our ojbect.
      *
      * @param string $type The WordPress-compatible form type.
@@ -282,6 +264,8 @@ class Form
      */
     public function splitGroup($group)
     {
+        if(is_array($group))
+            return $group;
         return explode(',', $group);
     }
     

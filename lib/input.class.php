@@ -70,7 +70,18 @@ class Input
     }
     
     /**
-     * Create a WordPress nonce field
+     * Return a WP Settings API nonce field.
+     *
+     * Don't overthink it. Just let WordPress handle creating the nonce.
+     * This function returns, rather than outputs, the nonce, in case we
+     * need to do something further before output.
+     *
+     * @param string $name   A name from which to create our nonce.
+     * @param string $action The action requiring our nonce.
+     * @param bool $referer Whether to include a referer input as well.
+     * @param bool $echo Whether to echo or return as a value.
+     *
+     * @return string the opening tag for the form element.
      */
     public static function nonce($name = '', $action = '', $referer = true, $echo = false)
     {
