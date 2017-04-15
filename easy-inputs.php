@@ -1,7 +1,7 @@
 <?php
 /**
  * A WordPress Forms template engine.
- * 
+ *
  * @package EasyInputs
  * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
  * @license GPLv2 or later

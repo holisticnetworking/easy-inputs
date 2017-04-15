@@ -156,7 +156,7 @@ class Form
      *                     "name" attribute, but does get used to create it. If grouping
      *                     is requested, this argument will be rolled into the combined
      *                     HTML name of the group.
-     * @param array  $args The args. 
+     * @param array  $args The args.
      *
      * @return string The HTML string for this input.
      */
@@ -188,7 +188,7 @@ class Form
         $output = '';
         $open   = is_array($args) && $args['fieldset'] ? $this->fieldsetOpen($args) : '';
         $close  = is_array($args) && $args['fieldset'] ? $this->fieldsetClose() : '';
-        foreach( $inputs as $name=>$args ) :
+        foreach ($inputs as $name => $args) :
             $output .= $this->input($name, $args);
         endforeach;
         return sprintf(
@@ -247,19 +247,19 @@ class Form
      */
     public function setType(string $type = null)
     {
-        switch( $type ) :
-        case 'setting' :
-            $this->action   = 'options.php';
-            $this->method   = 'POST';
-            break;
-        case 'meta' :
-            $this->action   = 'post.php';
-            $this->method   = 'POST';
-            break;
-        default :
-            $this->action   = 'options.php';
-            $this->method   = 'POST';
-            break;
+        switch ($type) :
+            case 'setting':
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                break;
+            case 'meta':
+                $this->action   = 'post.php';
+                $this->method   = 'POST';
+                break;
+            default:
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                break;
         endswitch;
     }
 
@@ -280,7 +280,7 @@ class Form
     /**
      * Ensures a consistent format for group names.
      */
-    public function splitGroup( $group )
+    public function splitGroup($group)
     {
         return explode(',', $group);
     }
@@ -288,15 +288,15 @@ class Form
     /**
      * Call the correct function if it exists.
      */
-    public function __call( $name, $settings ) 
+    public function __call($name, $settings)
     {
-        if(method_exists('EasyInputs\Input', $name) ) :
+        if (method_exists('EasyInputs\Input', $name)) :
             $input_name             = $settings[0];
             $input_args             = isset($settings[1]) ? $settings[1] : array();
             $input_args['type']     = $name;
             return ( new Input($input_name, $input_args, $this) )->create();
         else :
-            $message    = sprintf( 
+            $message    = sprintf(
                 'Sorry. Invalid function, %s, called.',
                 $name
             );

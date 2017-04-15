@@ -72,7 +72,8 @@ class Input
     /**
      * Create a WordPress nonce field
      */
-    public static function nonce($name='', $action='', $referer=true, $echo=false) {
+    public static function nonce($name = '', $action = '', $referer = true, $echo = false)
+    {
         return wp_nonce_field(
             $name,
             $action,
@@ -200,12 +201,13 @@ class Input
     public function fieldName()
     {
         $group  = implode(
-            '', array_map( 
-                function ( &$value ) {
+            '',
+            array_map(
+                function (&$value) {
                         return sprintf('[%s]', $value);
                 },
                 $this->group
-            ) 
+            )
         );
         return sprintf(
             '%s%s[%s]',

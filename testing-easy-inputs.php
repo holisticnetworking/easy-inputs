@@ -35,19 +35,18 @@ Author URI: http://holisticnetworking.net
 require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
 use EasyInputs\EasyInputs;
 
-
 /**
  * Register an instance of EasyInputs and save it in the global scope.
  * It isn't necessary to do this step in a more focused plugin. But in this
  * case, we do this to make the object available elsewhere.
  */
-function register_ei() 
+function register_ei()
 {
     // Spare yourself the trouble of declaring twice:
     global $ei;
     $ei = new EasyInputs(
-        [ 
-        'name'  => 'testing-easy-inputs', 
+        [
+        'name'  => 'testing-easy-inputs',
         'type'  => 'setting',
         'group' => 'FormGroup,Subgroup,Evensubbergroup'
         ]
@@ -58,10 +57,15 @@ function register_ei()
 /**
  * Add an options page to demonstrate the plugin.
  */
-function add_page() 
+function add_page()
 {
-    add_options_page('Testing Easy Inputs', 'Easy Inputs', 'publish_posts',
-        'easy-inputs', 'options_page');
+    add_options_page(
+        'Testing Easy Inputs',
+        'Easy Inputs',
+        'publish_posts',
+        'easy-inputs',
+        'options_page'
+    );
 }
 
 
@@ -69,7 +73,7 @@ function add_page()
 /**
  * The actual options page.
  */
-function options_page() 
+function options_page()
 {
     global $ei;
     
@@ -87,74 +91,77 @@ function options_page()
             echo '<h2>Now, let\'s include a value and some HTML'
             . 'attributes:</h2>';
             echo '<p>Please see the README.md file for the proper parameters'
-            . ' and values for these. in general, all HTML5-valid attributes' 
+            . ' and values for these. in general, all HTML5-valid attributes'
             . 'are available, including data attributes.</p>';
             echo $ei->Form->input(
-                'another_text_input', array(
+                'another_text_input',
+                array(
                 'value' => 'Input Value',
                 'attrs' => array(
-                    'class' => 'custom classes', 
+                    'class' => 'custom classes',
                     'data-nana-nana' => 'boo-boo'
                  ),
                  'label' => 'Specify any label you want.'
-                ) 
+                )
             );
             
             // Labels Optional:
             echo '<h2>Labels are always optional</h2>';
             echo $ei->Form->input(
-                'still_another_text_input', array(
+                'still_another_text_input',
+                array(
                 'value' => 'Input Value',
                 'attrs' => array(
-                    'class' => 'custom classes', 
+                    'class' => 'custom classes',
                  ),
                  'label' => 'You can create your own label'
-                ) 
+                )
             );
             // Or separable:
             echo '<p>';
             echo $ei->Form->input(
-                'separate_label', array(
+                'separate_label',
+                array(
                 'value' => '42',
                 'attrs' => array(
-                    'class' => 'custom classes', 
+                    'class' => 'custom classes',
                  ),
                  'label' => false
-                ) 
+                )
             );
-            echo $ei->Form->label( 
-                'separate_label', 
-                'Or can even be created separately, if you like.' 
+            echo $ei->Form->label(
+                'separate_label',
+                'Or can even be created separately, if you like.'
             );
             
             // Radio buttons
             echo '<h2>Let\'s add some radio buttons and selects.</h2>';
             echo '<p>Radio buttons require the "options" element in $args be'
             . ' set with a $key=>$value array.</p>';
-            echo $ei->Form->input( 
-                'radio_buttons', 
-                [ 
-                    'type' => 'radio', 
-                    'options' => [ 'y' => 'Yes', 'n' => 'No' ] 
+            echo $ei->Form->input(
+                'radio_buttons',
+                [
+                    'type' => 'radio',
+                    'options' => [ 'y' => 'Yes', 'n' => 'No' ]
                 ]
             );
-            echo $ei->Form->input( 
-                'color_select', 
-                [ 
-                        'type' => 'select', 
+            echo $ei->Form->input(
+                'color_select',
+                [
+                        'type' => 'select',
                         'options' => [
                             'gr' => 'Green',
                             'bl' => 'Blue',
                             'yl' => 'Yellow',
                             'rd' => 'Red',
                             'or' => 'Orange'
-                        ] 
-                    ] 
+                        ]
+                    ]
             );
-            echo $ei->Form->input( 
-                'color_checkbox', 
-                [ 
-                        'type' => 'checkbox', 
+            echo $ei->Form->input(
+                'color_checkbox',
+                [
+                        'type' => 'checkbox',
                         'options' => [
                             'gr' => 'Green',
                             'bl' => 'Blue',
@@ -167,13 +174,13 @@ function options_page()
             
             // Textarea
             echo '<h2>Now for a textarea</h2>';
-            echo $ei->Form->input( 
-                'big_area_of_text', 
-                [ 
-                    'type' => 'textarea', 
-                    'attrs' => 
-                    [ 
-                        'cols' => 20, 
+            echo $ei->Form->input(
+                'big_area_of_text',
+                [
+                    'type' => 'textarea',
+                    'attrs' =>
+                    [
+                        'cols' => 20,
                         'rows' => 8
                     ]
                 ]
@@ -184,13 +191,14 @@ function options_page()
             echo '<p>Need to group your data by arrays? Set the group for'
             . ' one input:</p>';
             echo $ei->Form->input(
-                'group_input', array(
+                'group_input',
+                array(
                 'value' => '42',
                 'attrs' => array(
-                    'class' => 'custom classes', 
+                    'class' => 'custom classes',
                  ),
                  'group' => 'TheGroup'
-                ) 
+                )
             );
             echo '<p>Or set the group setting, for all future inputs:</p>';
             $ei->Form->setGroup('Nested,like,Russian,tea,dolls');
@@ -209,7 +217,7 @@ function options_page()
             
             
             
-            // Slightly more complex, but still simple. This version is the 
+            // Slightly more complex, but still simple. This version is the
             // simplest way to include both your input AND an
             // automatically-generated nonce:
             echo '<h3>Slightly more complex, but still simple.</h3><p>This'
@@ -230,8 +238,9 @@ function options_page()
             );
                 
                 
-            echo $ei->Form->input( 
-                'form_submit', [
+            echo $ei->Form->input(
+                'form_submit',
+                [
                     'type'  => 'button',
                     'value' => 'Save It!',
                     'attrs' => [
