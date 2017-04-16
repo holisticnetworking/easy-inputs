@@ -264,8 +264,9 @@ class Form
      */
     public function splitGroup($group)
     {
-        if(is_array($group))
+        if (is_array($group)) {
             return $group;
+        }
         return explode(',', $group);
     }
     
