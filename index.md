@@ -4,7 +4,7 @@ This plugin introduces a new Forms API that facilitates and speeds the creation 
 
 ![alt text][screenshot]
 
-[screenshot]: https://github.com/holisticnetworking/easy-inputs/blob/gh-pages/img/bad-screenshot.png "Be kind: sprintf() at a minimum."
+[screenshot]: img/bad-screenshot.png "Be kind: sprintf() at a minimum."
 
 Instead, this API borrows heavily from CakePHP's FormHelper to provide a uniform set of methods that will create form fields including WordPress editor windows.
 To install this plugin, download the repository
