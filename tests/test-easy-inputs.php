@@ -25,7 +25,7 @@ class EasyInputsTest extends \WP_UnitTestCase
     /**
      * Make sure we always get a string back.
      */
-    function testAttrsToString()
+    public function testAttrsToString()
     {
         $attributes = $this->ei->attrsToString(['class' => 'bubblebutt']);
         $this->assertTrue(is_string($attributes), "Attributes returned a " . gettype($attributes)
@@ -35,7 +35,7 @@ class EasyInputsTest extends \WP_UnitTestCase
     /**
      * Make sure we always get a string back.
      */
-    function testHiddenFields()
+    public function testHiddenFields()
     {
         $fields = $this->ei->hiddenFields('TestSetting');
         $this->assertTrue(is_string($fields), "Fields returned a " . gettype($fields)

@@ -15,7 +15,7 @@ class InputClassTest extends \WP_UnitTestCase
     /**
      * A single example test.
      */
-    function test_sample()
+    public function testSample()
     {
         // Replace this with some actual testing code.
         $this->assertTrue(true);

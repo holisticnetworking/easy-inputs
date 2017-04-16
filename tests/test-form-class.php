@@ -22,7 +22,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testOpen()
+    public function testOpen()
     {
         $open   = $this->ei->Form->open();
         $this->assertTrue(is_string($open), 'Open function returned a ' . gettype($open)
@@ -31,7 +31,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testClose()
+    public function testClose()
     {
         $close   = $this->ei->Form->close();
         $this->assertTrue(is_string($close), 'Close function returned a ' . gettype($close)
@@ -42,7 +42,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testFieldsetOpen()
+    public function testFieldsetOpen()
     {
         $fieldset   = $this->ei->Form->fieldsetOpen(['attrs' => ['class' => 'testFieldSet']]);
         $this->assertTrue(is_string($fieldset), 'FieldsetOpen() function returned a ' . gettype($fieldset)
@@ -51,7 +51,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testFieldsetClose()
+    public function testFieldsetClose()
     {
         $fieldset   = $this->ei->Form->fieldsetClose();
         $this->assertTrue(is_string($fieldset), 'FieldsetClose() function returned a ' . gettype($fieldset)
@@ -61,7 +61,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testLegend()
+    public function testLegend()
     {
         $legend   = $this->ei->Form->legend([
             'title' => 'I am Test Legend',
@@ -73,7 +73,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testLegendString()
+    public function testLegendString()
     {
         $legend   = $this->ei->Form->legend('I am Test Legend');
         $this->assertTrue(is_string($legend), 'Legend function returned a ' . gettype($legend)
@@ -83,7 +83,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testLabel()
+    public function testLabel()
     {
         $label   = $this->ei->Form->label('test_label', 'I am Test Label', ['class' => 'testLabel']);
         $this->assertTrue(is_string($label), 'Label function returned a ' . gettype($label)
@@ -96,7 +96,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return an array.
      */
-    function testSetFieldsetDefaultsEmpty()
+    public function testSetFieldsetDefaultsEmpty()
     {
         $defaults   = $this->ei->Form->setFieldsetDefaults();
         $this->assertTrue(is_array($defaults), 'setFieldsetDefaults function returned a ' . gettype($defaults)
@@ -105,7 +105,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return an array.
      */
-    function testSetFieldsetDefaultsArray()
+    public function testSetFieldsetDefaultsArray()
     {
         $defaults   = $this->ei->Form->setFieldsetDefaults(['legend' => 'Default Legend']);
         $this->assertTrue(is_array($defaults), 'setFieldsetDefaults function returned a ' . gettype($defaults)
@@ -115,7 +115,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testSplitGroup()
+    public function testSplitGroup()
     {
         $group   = $this->ei->Form->splitGroup('test,groups');
         $this->assertTrue(is_array($group), 'setFieldsetDefaults function returned a ' . gettype($group)
@@ -124,7 +124,7 @@ class FormClassTest extends \WP_UnitTestCase
     /**
      * Should always return a string.
      */
-    function testSplitGroupArray()
+    public function testSplitGroupArray()
     {
         $group   = $this->ei->Form->splitGroup(['test','groups']);
         $this->assertTrue(is_array($group), 'setFieldsetDefaults function returned a ' . gettype($group)

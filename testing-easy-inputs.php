@@ -33,5 +33,6 @@ Author URI: http://holisticnetworking.net
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 namespace EasyInputs;
+
 require_once plugin_dir_path(__FILE__) . 'testing-easy-inputs.class.php';
 $tei    = new TestingEasyInputs();
