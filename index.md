@@ -24,14 +24,14 @@ $ei = new EasyInputs(
 );
 
 echo $ei->Form->input([
-	'this-input',
+'this-input',
 	[
 		'type'		=> 'text',
 		'label'	=> 'This Input is Awesome!!'
 		'attr'		=> [
-    		'id' 		=> 'MyInput',
-    		'class'	=> 'a series of classes'
-    	],
+			'id' 		=> 'MyInput',
+			'class'	=> 'a series of classes'
+		],
 	]
 ]);
 ```
