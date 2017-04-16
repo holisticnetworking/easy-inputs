@@ -48,11 +48,11 @@ class Form
      *
      * @return string the opening tag for the form element.
      */
-    public function open(string $id = null)
+    public function open()
     {
         return sprintf(
             '<form id="%s" action="%s" method="%s" %s>',
-            !empty($id) ? $id : $this->name,
+            $this->name,
             $this->action,
             $this->method,
             EasyInputs::attrsToString($this->attrs)
