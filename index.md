@@ -1,7 +1,7 @@
 Easy Inputs
 ===========
 
-A generic WordPress Forms Template Engine.
+A generic Forms generator for WordPress
 
 This plugin introduces a template engine to WordPress for the creation of form inputs. 
 
