@@ -2,6 +2,10 @@
 ***
 This plugin introduces a new Forms API that facilitates and speeds the creation of forms within WordPress. As much as a modern WordPress website relies on forms and inputs - for settings, post meta data, user meta data and even front end forms - there is no unified way of creating them in WordPress. The result is buggy, error-prone form creation with sprintf()'s and replacing values.
 
+![alt text][screenshot]
+
+[screenshot]: https://github.com/holisticnetworking/easy-inputs/blob/gh-pages/img/bad-screenshot.png "Be kind: sprintf() at a minimum."
+
 Instead, this API borrows heavily from CakePHP's FormHelper to provide a uniform set of methods that will create form fields including WordPress editor windows.
 To install this plugin, download the repository
 
