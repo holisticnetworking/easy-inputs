@@ -1,35 +1,25 @@
-## Easy Inputs Github Pages
+Easy Inputs
+===========
 
-Hey, man. Like, Easy Inputs is pretty cool, man.
+A generic WordPress Forms Template Engine.
 
-### Markdown
+This plugin introduces a template engine to WordPress for the creation of form inputs. 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Installation
+============
 
-```markdown
-Syntax highlighted code block
+To install this drop-in, simply drop the plugin into the /wp-content/plugins folder and activate it. 
 
-# Header 1
-## Header 2
-### Header 3
 
-- Bulleted
-- List
+Usage
+=====
 
-1. Numbered
-2. List
+```
+require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
+use EasyInputs\EasyInputs;
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+$mf	= new EasyInputs('MyForm');
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Additional options can be set by the second argument, the $args array. Check the __construct() function for additional details.
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/holisticnetworking/easy-inputs/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
