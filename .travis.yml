@@ -44,4 +44,4 @@ before_script:
 
 script:
   - phpcs --standard=PSR2 --ignore=*/tests/*,*/vendor/*,*/docs/* $(find . -name '*.php')
-  - phpunit
+  - ./vendor/bin/phpunit
