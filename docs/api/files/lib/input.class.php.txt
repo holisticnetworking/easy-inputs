@@ -14,20 +14,20 @@ namespace EasyInputs;
  * This class defines an HTML input.
  *
  * The Input class of Easy Inputs is instatiated with every new input created. What is
- * returned is always a string. The create() function is used as the main entry point
- * to the Input class, calling the function specified by the $args element 'type'. As
+ * returned is always a string. The create() function is used as the main entry point 
+ * to the Input class, calling the function specified by the $args element 'type'. As 
  * a default, all Inputs are created as text inputs unless a specfic type is requested
  * in that element.
  */
 class Input
 {
     /**
-     * The name of the instance of EasyInputs\Form\Input
+     * The name of the instance of EasyInputs\Form\Input 
      */
     public $name;
     
     /**
-     * Text, textarea, radio, etc.
+     * Text, textarea, radio, etc. 
      */
     public $type;
     
@@ -47,7 +47,7 @@ class Input
      *
      * For any data-* attributes you may wish to add to the element, this array provides
      * an attribute/value pair. Attribute names need not include "data-" prefix.
-     * @var array
+     * @var array 
      */
     public $data;
     
@@ -62,7 +62,7 @@ class Input
     public $nonce_base;
     
     /**
-     * A comma-separated list of nested groups
+     * A comma-separated list of nested groups 
      */
     public $group;
     
@@ -262,7 +262,7 @@ class Input
      * Construct our Object
      *
      * The $args array includes all the required values to construct an HTML element.
-     *
+     * 
      * @param string $name The name of the field.
      * @param array $args Either a string for the name of the field, or else an
      * array of input arguments containing the above static values.
@@ -285,3 +285,4 @@ class Input
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
     }
 }
+

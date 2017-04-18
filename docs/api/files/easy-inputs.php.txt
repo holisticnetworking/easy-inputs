@@ -38,8 +38,7 @@ use EasyInputs\Form\Input;
  * @link     http://holisticnetworking.net/easy-inputs-wordpress/
  */
 class EasyInputs
-{
-
+{    
     /**
      * Giddyup.
      * This function constructs our EasyInputs class for use in WordPress. Each
@@ -70,3 +69,4 @@ class EasyInputs
         $this->Form     = new Form($args, $this);
     }
 }
+

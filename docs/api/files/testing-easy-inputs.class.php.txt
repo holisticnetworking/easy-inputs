@@ -260,3 +260,4 @@ class TestingEasyInputs
         add_action('admin_init', [ $this, 'registerEi' ]);
     }
 }
+

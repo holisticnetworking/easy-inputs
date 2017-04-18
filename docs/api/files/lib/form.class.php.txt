@@ -23,7 +23,7 @@ class Form
      * The name of the Easy Inputs instance.
      *
      * Unless otherwise specified, this will also be the ID of any output form element.
-     * @var string
+     * @var string 
      */
     public $name;
     
@@ -31,13 +31,13 @@ class Form
      * The type of form being created or simulated.
      *
      * Settings forms, post meta forms or custom forms are all allowed values.
-     * @var string
+     * @var string 
      */
     public $type;
     
     /**
      * The HTML action to send the form data to.
-     * @var string
+     * @var string 
      */
     public $action;
     
@@ -45,7 +45,7 @@ class Form
      * The HTML method of any output forms.
      *
      * GET, POST, PUT, DELETE
-     * @var string
+     * @var string 
      */
     public $method;
     
@@ -53,19 +53,19 @@ class Form
      * HTML attributes.
      *
      * All HTML5-compatible attributes, except for data attributes, are supported.
-     * @var array
+     * @var array 
      */
     public $attrs;
     
     /**
      * For data saved as an array, the array of subgroup names, in order of appearance.
-     * @var array
+     * @var array 
      */
     public $group;
     
     /**
      * May or may not be useful.
-     * @var string
+     * @var string 
      */
     public $nonce_base;
 
@@ -189,7 +189,7 @@ class Form
      * "name" attribute, but does get used to create it. If grouping
      * is requested, this argument will be rolled into the combined
      * HTML name of the group.
-     *
+     * 
      * @param array  $args The args.
      *
      * @return string The HTML string for this input.
@@ -295,7 +295,7 @@ class Form
     
     /**
      * Ensures a consistent format for group names.
-     *
+     * 
      * @param string $group a comma separated list of nesting groups.
      */
     public function splitGroup($group)
@@ -357,7 +357,7 @@ class Form
     
     /**
      * Call the correct function if it exists.
-     *
+     * 
      * @param string $name The function requested.
      * @param array $settings An optional array of arguments.
      */
@@ -400,3 +400,4 @@ class Form
         $this->setType($this->type);
     }
 }
+

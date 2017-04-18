@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project title="API Documentation" version="2.8.5">
+  <partials/>
+  <file path="lib/form.class.php" generated-path="lib.form.class.html" hash="6b2a3774a34b1b5ad3810e754b29d6f2" package="EasyInputs">
+    <docblock line="0">
+      <description>The Form Class of EasyInputs</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="EasyInputs"/>
+      <tag name="author" line="0" description="Thomas J Belknap" link="mailto:tbelknap@holisticnetworking.net"/>
+      <tag name="license" line="0" description="GPLv2 or later"/>
+      <tag name="link" line="0" description="http://holisticnetworking.net/easy-inputs-wordpress/" link="http://holisticnetworking.net/easy-inputs-wordpress/"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="EasyInputs" line="20" package="EasyInputs">
+      <extends/>
+      <name>Form</name>
+      <full_name>\EasyInputs\Form</full_name>
+      <docblock line="20">
+        <description>This class defines an HTML form.</description>
+        <long-description>An instance of class Form is created with every instance of EasyInputs. Whether or not
+a form is created by EasyInputs, the Form class holds all the relevant form information
+to which any Input class will need to refer.</long-description>
+        <tag name="package" line="20" description="EasyInputs"/>
+      </docblock>
+      <property static="false" visibility="public" namespace="EasyInputs" line="26" package="EasyInputs">
+        <name>$name</name>
+        <full_name>\EasyInputs\Form::name</full_name>
+        <default></default>
+        <docblock line="26">
+          <description>The name of the Easy Inputs instance.</description>
+          <long-description></long-description>
+          <tag name="var" line="26" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="32" package="EasyInputs">
+        <name>$type</name>
+        <full_name>\EasyInputs\Form::type</full_name>
+        <default></default>
+        <docblock line="32">
+          <description>Post meta, setting, etc.</description>
+          <long-description></long-description>
+          <tag name="var" line="32" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="38" package="EasyInputs">
+        <name>$action</name>
+        <full_name>\EasyInputs\Form::action</full_name>
+        <default></default>
+        <docblock line="38">
+          <description>The HTML action to send the form data to.</description>
+          <long-description></long-description>
+          <tag name="var" line="38" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="44" package="EasyInputs">
+        <name>$method</name>
+        <full_name>\EasyInputs\Form::method</full_name>
+        <default></default>
+        <docblock line="44">
+          <description>GET, POST, etc.</description>
+          <long-description></long-description>
+          <tag name="var" line="44" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="50" package="EasyInputs">
+        <name>$attrs</name>
+        <full_name>\EasyInputs\Form::attrs</full_name>
+        <default></default>
+        <docblock line="50">
+          <description>HTML attributes.</description>
+          <long-description></long-description>
+          <tag name="var" line="50" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="56" package="EasyInputs">
+        <name>$group</name>
+        <full_name>\EasyInputs\Form::group</full_name>
+        <default></default>
+        <docblock line="56">
+          <description>For data saved as an array, the array of subgroup names, in order of appearance.</description>
+          <long-description></long-description>
+          <tag name="var" line="56" description="" type="array" variable="">
+            <type>array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="62" package="EasyInputs">
+        <name>$nonce_base</name>
+        <full_name>\EasyInputs\Form::nonce_base</full_name>
+        <default></default>
+        <docblock line="62">
+          <description>May or may not be useful.</description>
+          <long-description></long-description>
+          <tag name="var" line="62" description="" type="string" variable="">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="76" package="EasyInputs">
+        <name>open</name>
+        <full_name>\EasyInputs\Form::open()</full_name>
+        <docblock line="76">
+          <description>Open a form element</description>
+          <long-description>This function will allow you to create the opening &lt;form&gt; tag with attributes.
+It should be used in combination with the close() function. This form will also
+optionally include WordPress nonce fields, created using the $id param.</long-description>
+          <tag name="param" line="76" description="&lt;p&gt;The name of the form. Also serves as the HTML id tag. Optional&lt;/p&gt;" type="string" variable="$id|null">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="76" description="the opening tag for the form element." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="91" package="EasyInputs">
+        <name>close</name>
+        <full_name>\EasyInputs\Form::close()</full_name>
+        <docblock line="91">
+          <description>Close a form element</description>
+          <long-description></long-description>
+          <tag name="return" line="91" description="the closing tag for the form element." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="108" package="EasyInputs">
+        <name>fieldsetOpen</name>
+        <full_name>\EasyInputs\Form::fieldsetOpen()</full_name>
+        <docblock line="108">
+          <description>Creates a fieldset opening tag with optional legend</description>
+          <long-description>The legend key of the $args array is identical to the legend() function.
+The attrs array contains the same array of HTML attributes as always.</long-description>
+          <tag name="param" line="108" description="&lt;p&gt;'attrs' array and optional legend info&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="108" description="HTML containing the opening tag for a fieldset with&#10;optional legend." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="122" package="EasyInputs">
+        <name>fieldsetClose</name>
+        <full_name>\EasyInputs\Form::fieldsetClose()</full_name>
+        <docblock line="122">
+          <description>Creates a fieldset closing tag</description>
+          <long-description></long-description>
+          <tag name="return" line="122" description="HTML containing the closing tag for a fieldset." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="135" package="EasyInputs">
+        <name>legend</name>
+        <full_name>\EasyInputs\Form::legend()</full_name>
+        <docblock line="135">
+          <description>Outputs an HTML legend</description>
+          <long-description></long-description>
+          <tag name="param" line="135" description="&lt;p&gt;Contains 'title' and optional 'attrs' keys. 'attrs' includes&#10;HTML attributes for the legend.&lt;/p&gt;" type="array|string" variable="$args">
+            <type>array</type>
+            <type>string</type>
+          </tag>
+          <tag name="return" line="135" description="HTML containing a legend." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default>array()</default>
+          <type>array|string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="EasyInputs" line="159" package="EasyInputs">
+        <name>label</name>
+        <full_name>\EasyInputs\Form::label()</full_name>
+        <docblock line="159">
+          <description>Create an HTML label</description>
+          <long-description></long-description>
+          <tag name="param" line="159" description="&lt;p&gt;The ID of the input this label is for.&lt;/p&gt;" type="string" variable="$for">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="159" description="&lt;p&gt;Optional. Label text. The ID will be used if this value is left empty.&lt;/p&gt;" type="string" variable="$text">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="159" description="&lt;p&gt;HTML attributes.&lt;/p&gt;" type="array" variable="$attrs">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="159" description="The HTML string for this label." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$for</name>
+          <default>null</default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$text</name>
+          <default>null</default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$attrs</name>
+          <default>null</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="189" package="EasyInputs">
+        <name>input</name>
+        <full_name>\EasyInputs\Form::input()</full_name>
+        <docblock line="189">
+          <description>Create an input.</description>
+          <long-description>This function creates an instance of Input, supplying it all the required arguments.
+Input will return</long-description>
+          <tag name="param" line="189" description="&lt;p&gt;The name of the input element. Note that this is not the HTML&#10;&quot;name&quot; attribute, but does get used to create it. If grouping&#10;is requested, this argument will be rolled into the combined&#10;HTML name of the group.&lt;/p&gt;" type="string" variable="$name">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="189" description="&lt;p&gt;The args.&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="189" description="The HTML string for this input." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="211" package="EasyInputs">
+        <name>inputs</name>
+        <full_name>\EasyInputs\Form::inputs()</full_name>
+        <docblock line="211">
+          <description>Display a group of inputs</description>
+          <long-description>Defines a group of inputs, both logically and physically.
+Logically, this group is associated with a single nonce to
+which it is bound. Physically, all elements of a group will
+be displayed together, in a fieldset, if requested.</long-description>
+          <tag name="param" line="211" description="&lt;p&gt;Array of input arrays. Formatted with the name&#10;of the input as the key and the $args as the&#10;content.&lt;/p&gt;" type="array" variable="$inputs">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="211" description="&lt;p&gt;Arguments meant to be applied to either all inputs&#10;                     or to the container element.&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="211" description="A string of HTML including all inputs from $inputs." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$inputs</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="237" package="EasyInputs">
+        <name>setFieldsetDefaults</name>
+        <full_name>\EasyInputs\Form::setFieldsetDefaults()</full_name>
+        <docblock line="237">
+          <description>Set defaults for fieldsets.</description>
+          <long-description></long-description>
+          <tag name="param" line="237" description="&lt;p&gt;Arguments meant to be applied to either all inputs&#10;     or to the container element.&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="237" description="A string of HTML including all inputs from $inputs." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="256" package="EasyInputs">
+        <name>setType</name>
+        <full_name>\EasyInputs\Form::setType()</full_name>
+        <docblock line="256">
+          <description>Based on the passed type property, set the action and method values of our ojbect.</description>
+          <long-description></long-description>
+          <tag name="param" line="256" description="&lt;p&gt;The WordPress-compatible form type.&#10;post_meta, setting, custom&lt;/p&gt;" type="string" variable="$type">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="256" description="" type="null">
+            <type>null</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$type</name>
+          <default>null</default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="282" package="EasyInputs">
+        <name>setGroup</name>
+        <full_name>\EasyInputs\Form::setGroup()</full_name>
+        <docblock line="282">
+          <description>Display a group of inputs</description>
+          <long-description></long-description>
+          <tag name="param" line="282" description="&lt;p&gt;The name of our group.&lt;/p&gt;" type="string" variable="$group">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="282" description="true" type="boolean">
+            <type>boolean</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$group</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="293" package="EasyInputs">
+        <name>splitGroup</name>
+        <full_name>\EasyInputs\Form::splitGroup()</full_name>
+        <docblock line="293">
+          <description>Ensures a consistent format for group names.</description>
+          <long-description></long-description>
+          <tag name="param" line="293" description="&lt;p&gt;a comma separated list of nesting groups.&lt;/p&gt;" type="string" variable="$group">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$group</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="307" package="EasyInputs">
+        <name>__call</name>
+        <full_name>\EasyInputs\Form::__call()</full_name>
+        <docblock line="307">
+          <description>Call the correct function if it exists.</description>
+          <long-description></long-description>
+          <tag name="param" line="307" description="&lt;p&gt;The function requested.&lt;/p&gt;" type="string" variable="$name">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="307" description="&lt;p&gt;An optional array of arguments.&lt;/p&gt;" type="array" variable="$settings">
+            <type>array</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$settings</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="332" package="EasyInputs">
+        <name>__construct</name>
+        <full_name>\EasyInputs\Form::__construct()</full_name>
+        <docblock line="332">
+          <description>Construct the Form object.</description>
+          <long-description></long-description>
+          <tag name="param" line="332" description="&lt;p&gt;Includes all four static properties of our class.&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="332" description="" type="null">
+            <type>null</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+    </class>
+    <source>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</source>
+  </file>
+  <file path="testing-easy-inputs.class.php" generated-path="testing-easy-inputs.class.html" hash="62426b1fe4a720186d98911ab1850552" package="EasyInputs">
+    <docblock line="0">
+      <description>Test Plugin for EasyInputs</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="EasyInputs"/>
+      <tag name="author" line="0" description="Thomas J Belknap" link="mailto:tbelknap@holisticnetworking.net"/>
+      <tag name="license" line="0" description="GPLv2 or later"/>
+      <tag name="link" line="0" description="http://holisticnetworking.net/easy-inputs-wordpress/" link="http://holisticnetworking.net/easy-inputs-wordpress/"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="EasyInputs" line="33" package="EasyInputs">
+      <extends/>
+      <name>TestingEasyInputs</name>
+      <full_name>\EasyInputs\TestingEasyInputs</full_name>
+      <docblock line="33">
+        <description>An example class that utilizes the EasyInputs framework.</description>
+        <long-description></long-description>
+        <tag name="package" line="33" description="EasyInputs"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="38" package="EasyInputs">
+        <name>registerEi</name>
+        <full_name>\EasyInputs\TestingEasyInputs::registerEi()</full_name>
+        <docblock line="38">
+          <description>Register an instance of Easy Inputs</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="56" package="EasyInputs">
+        <name>addPage</name>
+        <full_name>\EasyInputs\TestingEasyInputs::addPage()</full_name>
+        <docblock line="56">
+          <description>Add an options page to demonstrate the plugin.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="72" package="EasyInputs">
+        <name>optionPage</name>
+        <full_name>\EasyInputs\TestingEasyInputs::optionPage()</full_name>
+        <docblock line="72">
+          <description>The actual options page.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="257" package="EasyInputs">
+        <name>__construct</name>
+        <full_name>\EasyInputs\TestingEasyInputs::__construct()</full_name>
+        <docblock line="257">
+          <description>And away we go.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+    </class>
+    <source>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</source>
+  </file>
+  <file path="lib/input.class.php" generated-path="lib.input.class.html" hash="08075851c9327bc651505055ffb5ac0c" package="EasyInputs">
+    <docblock line="0">
+      <description>The Input Class of EasyInputs</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="EasyInputs"/>
+      <tag name="author" line="0" description="Thomas J Belknap" link="mailto:tbelknap@holisticnetworking.net"/>
+      <tag name="license" line="0" description="GPLv2 or later"/>
+      <tag name="link" line="0" description="http://holisticnetworking.net/easy-inputs-wordpress/" link="http://holisticnetworking.net/easy-inputs-wordpress/"/>
+    </docblock>
+    <class final="false" abstract="false" namespace="EasyInputs" line="22" package="EasyInputs">
+      <extends/>
+      <name>Input</name>
+      <full_name>\EasyInputs\Input</full_name>
+      <docblock line="22">
+        <description>This class defines an HTML input.</description>
+        <long-description>The Input class of Easy Inputs is instatiated with every new input created. What is
+returned is always a string. The create() function is used as the main entry point
+to the Input class, calling the function specified by the $args element 'type'. As
+a default, all Inputs are created as text inputs unless a specfic type is requested
+in that element.</long-description>
+        <tag name="package" line="22" description="EasyInputs"/>
+      </docblock>
+      <property static="false" visibility="public" namespace="EasyInputs" line="27" package="EasyInputs">
+        <name>$name</name>
+        <full_name>\EasyInputs\Input::name</full_name>
+        <default></default>
+        <docblock line="27">
+          <description>The name of the instance of EasyInputs\Form\Input</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="32" package="EasyInputs">
+        <name>$type</name>
+        <full_name>\EasyInputs\Input::type</full_name>
+        <default></default>
+        <docblock line="32">
+          <description>Text, textarea, radio, etc.</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="38" package="EasyInputs">
+        <name>$value</name>
+        <full_name>\EasyInputs\Input::value</full_name>
+        <default></default>
+        <docblock line="38">
+          <description>A value to assign the input, or the selected element of a radio, checkbox
+or select.</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="43" package="EasyInputs">
+        <name>$attrs</name>
+        <full_name>\EasyInputs\Input::attrs</full_name>
+        <default></default>
+        <docblock line="43">
+          <description>An optional array of HTML attributes to apply to the element.</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="48" package="EasyInputs">
+        <name>$options</name>
+        <full_name>\EasyInputs\Input::options</full_name>
+        <default></default>
+        <docblock line="48">
+          <description>For elements requiring options, they are held here.</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="53" package="EasyInputs">
+        <name>$nonce_base</name>
+        <full_name>\EasyInputs\Input::nonce_base</full_name>
+        <default></default>
+        <docblock line="53">
+          <description>A basis for a nonce field</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="58" package="EasyInputs">
+        <name>$group</name>
+        <full_name>\EasyInputs\Input::group</full_name>
+        <default></default>
+        <docblock line="58">
+          <description>A comma-separated list of nested groups</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <property static="false" visibility="public" namespace="EasyInputs" line="63" package="EasyInputs">
+        <name>$validate</name>
+        <full_name>\EasyInputs\Input::validate</full_name>
+        <default></default>
+        <docblock line="63">
+          <description>A validating function callback.</description>
+          <long-description></long-description>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="69" package="EasyInputs">
+        <name>create</name>
+        <full_name>\EasyInputs\Input::create()</full_name>
+        <docblock line="69">
+          <description>This function creates the HTML for the required input element.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="EasyInputs" line="112" package="EasyInputs">
+        <name>nonce</name>
+        <full_name>\EasyInputs\Input::nonce()</full_name>
+        <docblock line="112">
+          <description>Return a WP Settings API nonce field.</description>
+          <long-description>Don't overthink it. Just let WordPress handle creating the nonce.
+This function returns, rather than outputs, the nonce, in case we
+need to do something further before output.</long-description>
+          <tag name="param" line="112" description="&lt;p&gt;A name from which to create our nonce.&lt;/p&gt;" type="string" variable="$name">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="112" description="&lt;p&gt;The action requiring our nonce.&lt;/p&gt;" type="string" variable="$action">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="112" description="&lt;p&gt;Whether to include a referer input as well.&lt;/p&gt;" type="boolean" variable="$referer">
+            <type>boolean</type>
+          </tag>
+          <tag name="param" line="112" description="&lt;p&gt;Whether to echo or return as a value.&lt;/p&gt;" type="boolean" variable="$echo">
+            <type>boolean</type>
+          </tag>
+          <tag name="return" line="112" description="the opening tag for the form element." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default>''</default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$action</name>
+          <default>''</default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$referer</name>
+          <default>true</default>
+          <type>boolean</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$echo</name>
+          <default>false</default>
+          <type>boolean</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="125" package="EasyInputs">
+        <name>radio</name>
+        <full_name>\EasyInputs\Input::radio()</full_name>
+        <docblock line="125">
+          <description>An HTML radio button group</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="146" package="EasyInputs">
+        <name>select</name>
+        <full_name>\EasyInputs\Input::select()</full_name>
+        <docblock line="146">
+          <description>Output an HTML select box with inputs</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="174" package="EasyInputs">
+        <name>checkbox</name>
+        <full_name>\EasyInputs\Input::checkbox()</full_name>
+        <docblock line="174">
+          <description>Output a group of related HTML checkboxes</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="195" package="EasyInputs">
+        <name>textarea</name>
+        <full_name>\EasyInputs\Input::textarea()</full_name>
+        <docblock line="195">
+          <description>Return an HTML textarea element.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="208" package="EasyInputs">
+        <name>button</name>
+        <full_name>\EasyInputs\Input::button()</full_name>
+        <docblock line="208">
+          <description>Return an HTML button</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="223" package="EasyInputs">
+        <name>editor</name>
+        <full_name>\EasyInputs\Input::editor()</full_name>
+        <docblock line="223">
+          <description>Wrapper function to return a wp_editor instance</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="231" package="EasyInputs">
+        <name>fieldName</name>
+        <full_name>\EasyInputs\Input::fieldName()</full_name>
+        <docblock line="231">
+          <description>Return a valid field name attribute.</description>
+          <long-description></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="264" package="EasyInputs">
+        <name>__construct</name>
+        <full_name>\EasyInputs\Input::__construct()</full_name>
+        <docblock line="264">
+          <description>Construct our Object</description>
+          <long-description>The $args array includes all the required values to construct an HTML element.</long-description>
+          <tag name="param" line="264" description="&lt;p&gt;The name of the field.&lt;/p&gt;" type="string" variable="$name">
+            <type>string</type>
+          </tag>
+          <tag name="param" line="264" description="&lt;p&gt;Either a string for the name of the field, or else an&#10;array of input arguments containing the above static values.&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="param" line="264" description="&lt;p&gt;An instance of the Easy Inputs form class.&lt;/p&gt;" type="\EasyInputs\EasyInputs\Form" variable="$form">
+            <type>\EasyInputs\EasyInputs\Form</type>
+          </tag>
+          <tag name="return" line="264" description="HTML containing a legend." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$name</name>
+          <default>null</default>
+          <type>string</type>
+        </argument>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default>array()</default>
+          <type>array</type>
+        </argument>
+        <argument line="0" by_reference="true">
+          <name>$form</name>
+          <default>null</default>
+          <type>\EasyInputs\EasyInputs\Form</type>
+        </argument>
+      </method>
+    </class>
+    <source>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</source>
+  </file>
+  <file path="easy-inputs.php" generated-path="easy-inputs.html" hash="a664ee0c5faece932e0bb2a4c22f57a6" package="EasyInputs">
+    <docblock line="0">
+      <description>A WordPress Forms template engine.</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="EasyInputs"/>
+      <tag name="author" line="0" description="Thomas J Belknap" link="mailto:tbelknap@holisticnetworking.net"/>
+      <tag name="license" line="0" description="GPLv2 or later"/>
+      <tag name="link" line="0" description="http://holisticnetworking.net/easy-inputs-wordpress/" link="http://holisticnetworking.net/easy-inputs-wordpress/"/>
+    </docblock>
+    <namespace-alias name="Form">\EasyInputs\Form</namespace-alias>
+    <namespace-alias name="Input">\EasyInputs\Form\Input</namespace-alias>
+    <class final="false" abstract="false" namespace="EasyInputs" line="40" package="EasyInputs">
+      <extends/>
+      <name>EasyInputs</name>
+      <full_name>\EasyInputs\EasyInputs</full_name>
+      <docblock line="40">
+        <description>Error-free HTML form and input template engine.</description>
+        <long-description>EasyInputs provides an error-free universal means of generating HTML form
+inputs. EasyInputs is a developers-only plugin that provides a helper for
+generating form inputs. It provides objects that represent both the Form and
+the Input, standarizing how your HTML form elements are created, speeding
+development of plugins and themes.</long-description>
+        <tag name="category" line="40" description="Wordpress"/>
+        <tag name="package" line="40" description="EasyInputs"/>
+        <tag name="author" line="40" description="Thomas J Belknap" link="mailto:tbelknap@holisticnetworking.net"/>
+        <tag name="license" line="40" description="GPLv2 or later"/>
+        <tag name="link" line="40" description="http://holisticnetworking.net/easy-inputs-wordpress/" link="http://holisticnetworking.net/easy-inputs-wordpress/"/>
+      </docblock>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="50" package="EasyInputs">
+        <name>hiddenFields</name>
+        <full_name>\EasyInputs\EasyInputs::hiddenFields()</full_name>
+        <docblock line="50">
+          <description>For the Settings API, provide the required nonce fields.</description>
+          <long-description></long-description>
+          <tag name="param" line="50" description="&lt;p&gt;The Settings API setting to which this control&#10;belongs.&lt;/p&gt;" type="string" variable="$setting">
+            <type>string</type>
+          </tag>
+          <tag name="return" line="50" description="Nonce fields." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$setting</name>
+          <default></default>
+          <type>string</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="EasyInputs" line="75" package="EasyInputs">
+        <name>attrsToString</name>
+        <full_name>\EasyInputs\EasyInputs::attrsToString()</full_name>
+        <docblock line="75">
+          <description>Convert HTML attributes
+Passed an indexed array of attribute/value pairs, this function will
+return them as valid HTML attributes in a string.</description>
+          <long-description></long-description>
+          <tag name="param" line="75" description="&lt;p&gt;An array of HTML-compatible attribute/value pairs.&lt;/p&gt;" type="array" variable="$attrs">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="75" description="The attributes as a string." type="string">
+            <type>string</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$attrs</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="EasyInputs" line="105" package="EasyInputs">
+        <name>__construct</name>
+        <full_name>\EasyInputs\EasyInputs::__construct()</full_name>
+        <docblock line="105">
+          <description>Giddyup.</description>
+          <long-description>This function constructs our EasyInputs class for use in WordPress. Each
+time a new instance of EasyInputs is created, a new Form class is
+created. While not all WordPress forms require actual &lt;form&gt; tags, the
+Form class acts as our model for internal representation of the form two
+which our EasyInputs class is being applied.</long-description>
+          <tag name="param" line="105" description="&lt;p&gt;An array of arguments that instantiates the Form&#10;class. Minimally, this array needs to include a 'name', and preferably&#10;also a 'type' value. The name is intended to be HTML compatible and is&#10;used for certain values unless overridden. The type must be either&#10;post_meta, setting or custom, correlating to the types of supported form&#10;elements.&lt;/p&gt;" type="array" variable="$args">
+            <type>array</type>
+          </tag>
+          <tag name="return" line="105" description="" type="void">
+            <type>void</type>
+          </tag>
+        </docblock>
+        <argument line="0" by_reference="false">
+          <name>$args</name>
+          <default></default>
+          <type>array</type>
+        </argument>
+      </method>
+    </class>
+    <source>eJylV21v2zYQ/u5fcQhS2Akce9tH52Vtt7bLkBbBmq0f2sKgpbPFhSI5kkrmrv3vuyMlmU6cbOsEFJEp3nNvz7305Htb2cH08HAAh/AM3hlXXjr0Hl4aV3sIWFslAgLqldQ4oVt88akVxbVYIbwQfn2ubRN8PBZNqIwDuKpMLTz8DM9RXWth4SQs0tvTyijpgyw0hlvjrqVeTej1LIorWaD2CK8uL26+AwJi1a79pK+BnioEO5tOd6NMkcw5ktGeIzovLbsyJYApuTi4VA05AW9EjbNoObSmtx9+/eV8NvgRfeGkDdLo2b8JyG/ofLz7zeTbxeBZDMDsXgDaD1FF50MbkclCfhpcJM9nd10nwwea7PUU8Dzax4NB4/ODD2ze8a7DD/GdBNokv3DOuKOlQ4Sfrl5fwJLugNAlxLg9lPENKFhnbmSJnoQAN2CNljcUC6GgRqE9mCWsUKMTgbKzUcVgKUOTHFQSHJR4g8pYQjkyWq3BpryESoRMK1So6A6jMVimJLrSgZ9nMmbxOxakJSI5ZFqgDrAwoaIzjLnlGDAe/45GjcEHOhNOfmLwytzC2jQuixoqrAmHbHIIhUMKW0lSFrEkCQZrPeJbHJDkkI/hJj2U176iChJeGbeOjIu83Sq0hyrt/5baY7X29cVWKEEVk5n814DxIgP5OeSIx0i/xcCp8/Ds8nzcJSx+cfhHIx2WoI0m7i8lqpLDFeU7GIqPEzUlynGK9n1Co6BsI0P3IRi4rWTBWSfGFUYHZ1QHRnEzJHBPh8PQON0pebPDnGn8a5sFhRWWjS64fUAlyxL1y3hzdMfEgyiRwsKPXMKIKi+sR/2Ng+wzP8mM4/7sS/+2n6yBU+IeaQnL0Zbg8KQt7bXF071k1R5wWzndM7HTzS1xbA9uhGro7Infg+nZFsQjCCI62ws3tiQiMcBwvAVBfXUuQnCj7RDwc3B8z5XJKXzIGln8M5tFKmwANmJtilrpdB7jk//L+feD0dStQipmNksumoC++3xJ/CXqUYeTusQ/+dU5seYa7i9Po8dghXR+nAjVp/5Wqp5WrW1c70CVSlKyvKuX1FBjSxx5gOPJgH2WIU7rjUEMdVSY2lITXCjcbeA/kJoLJrNG+HvWbFGcGmPImR6NujJvo8Qot/QRnqfvu1kOulFqJ9WDmbc2E92jplHGA2rLKKi8W3R2ZP8a13B6BvsUjQOYbSnboL3/yL83BTR84mMhDMcRYEy9sFbU2QspVFEJ50cRL1ONumy136OlpJFqShwNgeF6nQc7eJpz9BXV2bqxXQYoSTnFqHkRTMNjjadSNktT9yVjgNcBYla/xPDILaoOL8iasg4ab+kSzzrqa8Sn7ancj7V0MU7KpED21dLemcC7ShIBtQkglMp2p2XcndqODtQxGloTTvj0DIJYxfLBbDR0KgR7J5KDNUVQRa8oQeg0IfSTXMSIkO08OOJopknV4aWGvzNG5N8CmUvCWiXJg8dLz622K48OmrQAxMUiBTFIwSXUrRV9jFjhBF5LLWsKzrrtGAlL08bgeThJXaim5KwMubsSXXhVIC+XtOMs1LpDE8obvsQNeZha7yQWMUuxWxwj6lwlgy7aTS/vEbzv9flruNdxZAtqiYIIEwE9rXSKs2eoU7rY85MOVgp14wMjoyRPXYdkjQ/zGoMY9yOXYemuqcdkgHOoRDeJQ4sVd0XfWGtcSIb0Ues2rIfa142R5aMzeD7v62SUpfFuW5pOaedLoWeiGPYppQz9LCvnSOB53ADSLjcvpaPpGarRfP7y/OLFfH4AExgquZiyH5OUdvo/1vD4K2Hi5N2Jk1v/3DSMRvyhJCsMaX9CHzLz897LMYDPnyH7/T5R7uN/WTyYw0dnsWL5Oe17RIIcpxt9o/sy+Bskl4wK</source>
+  </file>
+  <file path="testing-easy-inputs.php" generated-path="testing-easy-inputs.html" hash="de263e15d982575027318b7c6a479e7f" package="EasyInputs">
+    <docblock line="0">
+      <description>Test Plugin for EasyInputs</description>
+      <long-description></long-description>
+      <tag name="package" line="0" description="EasyInputs"/>
+      <tag name="author" line="0" description="Thomas J Belknap" link="mailto:tbelknap@holisticnetworking.net"/>
+      <tag name="license" line="0" description="GPLv2 or later"/>
+      <tag name="link" line="0" description="http://holisticnetworking.net/easy-inputs-wordpress/" link="http://holisticnetworking.net/easy-inputs-wordpress/"/>
+    </docblock>
+    <source>eJyFVV1z4kYQfNevmIdU+aNAgF2pVMwlsexgHykOU3zkyk/UShrQBmlXt7uC4t+nVxKHk3Pd8SS0Oz3d0zOjD3+UWRn0roNZXm2loqko+I6WbJ1UWxoJe6SxKitnTxdW8/EdZc6V9q7X20qXVXGY6KKX6VwiKFHsDtrsEN1jRHdlE/0n28TI0kmtzvBCpZRyoZV1Rvw/YRj8zcbW9/vhoBuzE0FUuUwbAGS6EJb+CumB850SZXtyZgdy3zIK8Rhc9yD3OqDrmga1sjYI9slbsVRfuC9FshNb/u8J3Ysm2VcaJxb0wcXN0/37yX+vw3OZsLJMz7PJ/oYAlAvHpj1SO8LvuxLeFraL92lp2NoeAHoBtBE96vJo5DZzdNMf3L7Dky65EDKnO/oB4asg8HSWmbRUGr01oiA8bgwzWb1xB2F4SEddUSIUGU6BYWRcOSbpvL89yCt0KjfHGggvK5WyIZcxQXRhSW/qP8/TFT2zYiNymlUxakSTtk6gXvo3NuOU4gbIhzx5FouWBT1pIAvfYENi9CWS7JsGoptTkhaxg6LXKJfCefKGdN2ZV2B8bNw4xYbvF+CsMyV0j8fOdAlJGRAh8iDznGKmyvKmyjs1Bm7T5/Hy48tqSdH0lT5H83k0Xb4OcRv9hFPec4MlizKXgIYwI5Q7gn8N8Wk0f/yImOhhPBkvX33vPI2X09FiQU8vc4poFs2X48fVJJrTbDWfvSxGIdGCPTGuEb5T5k1tFSqZYtRkblvprzDXgl6eUib2DJMTlnuQE5Sgz37sX40ico3x9kJx+1zLIckNKe06dDASTeP0t87W8Wd3O9gPSdihn3/FAKNOjBEWCTxdVB7h9rbfoQdtnb/5KSLq3wwGg+7gtv8L0WoRvZn/OW9hI7xG60rsIKES9nLO015vKOtVw9PW522uY2i0EM+hhxnjyKoLRwqVsVaYo5eR6kYoEpQ+VDS13egEPZFSWa8d7K+qBZb1akmE784Dfw0HUiF2tX+k4384wVTt4Y6IIZxzywc0es0Ds6+wvC121tuFNQwCw18qaXitvb4m8TqVZl0Kl12u10/jyWi9vqKQLlyzmLtvFkyY5MLaEF+Ji2Hwk2Pp3fgNWg+nNX7OdXk1DP4FpIIcPw==</source>
+  </file>
+  <package name="EasyInputs" full_name="EasyInputs"/>
+  <package name="global" full_name="global"/>
+  <namespace name="EasyInputs" full_name="EasyInputs"/>
+  <deprecated count="0"/>
+</project>
