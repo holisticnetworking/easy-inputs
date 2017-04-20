@@ -130,4 +130,24 @@ class FormClassTest extends \WP_UnitTestCase
         $this->assertTrue(is_array($group), 'setFieldsetDefaults function returned a ' . gettype($group)
             . ' instead of an array.');
     }
+    
+    /**
+     * Make sure we always get a string back.
+     */
+    public function testAttrsToString()
+    {
+        $attributes = $this->ei->Form->attrsToString(['class' => 'bubblebutt']);
+        $this->assertTrue(is_string($attributes), "Attributes returned a " . gettype($attributes)
+            . " instead of a string");
+    }
+    
+    /**
+     * Make sure we always get a string back.
+     */
+    public function testHiddenFields()
+    {
+        $fields = $this->ei->Form->hiddenFields('TestSetting');
+        $this->assertTrue(is_string($fields), "Fields returned a " . gettype($fields)
+            . " instead of a string");
+    }
 }

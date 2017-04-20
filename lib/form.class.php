@@ -88,7 +88,7 @@ class Form
             $this->name,
             $this->action,
             $this->method,
-            EasyInputs::attrsToString($this->attrs)
+            Form::attrsToString($this->attrs)
         );
     }
     /**
@@ -147,7 +147,7 @@ class Form
         if (is_array($args)) :
             extract($args);
             $title      = !empty($title) ? $title : null;
-            $attr_str   = !empty($attrs) ? EasyInputs::attrsToString($attrs) : $attr_str;
+            $attr_str   = !empty($attrs) ? Form::attrsToString($attrs) : $attr_str;
         else :
             $title  = $args;
         endif;
@@ -174,7 +174,7 @@ class Form
         return sprintf(
             '<label %s %s>%s</label>',
             !empty($for) ? sprintf('for="%s"', $for) : '',
-            is_array($attrs) ? EasyInputs::attrsToString($attrs) : '',
+            is_array($attrs) ? Form::attrsToString($attrs) : '',
             !empty($text) && is_string($text) ? $text : ucfirst(preg_replace('/[_\-]/', ' ', $for)) // Convert fieldname
         );
     }

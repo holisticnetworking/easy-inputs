@@ -86,7 +86,7 @@ class Input
                 '<input id="%s" type="text" name="%s" %s value="%s" />',
                 $this->name,
                 $this->fieldName(),
-                EasyInputs::attrsToString($this->attrs),
+                Form::attrsToString($this->attrs),
                 $this->value
             );
         endif;
@@ -141,7 +141,7 @@ class Input
             $radios .= sprintf(
                 '<input name="%4$s" type="radio" value="%1$s" %2$s>%3$s</input>',
                 $value,
-                EasyInputs::attrsToString($this->attrs),
+                Form::attrsToString($this->attrs),
                 $label,
                 $this->fieldName()
             );
@@ -171,7 +171,7 @@ class Input
         return sprintf(
             '<select id="%1$s" %2$sname="%3$s">%4$s</select>',
             $this->name,
-            EasyInputs::attrsToString($this->attrs),
+            Form::attrsToString($this->attrs),
             $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
             $options
         );
@@ -206,7 +206,7 @@ class Input
         return sprintf(
             '<textarea name="%s" %s>%s</textarea>',
             $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
-            EasyInputs::attrsToString($this->attrs),
+            Form::attrsToString($this->attrs),
             $this->value
         );
     }
@@ -221,7 +221,7 @@ class Input
             $this->name,
             $this->type,
             $this->fieldName($this->name, $this->group),
-            EasyInputs::attrsToString($this->attrs),
+            Form::attrsToString($this->attrs),
             $this->value
         );
     }
