@@ -86,15 +86,15 @@ class Input
                 '<input id="%s" type="text" name="%s" %s value="%s" />',
                 $this->name,
                 $this->fieldName(),
-                Form::attrsToString($this->attrs),
+                $this->Form->attrsToString($this->attrs),
                 $this->value
             );
         endif;
         // If label is set to false, do not create a label. Otherwise, use the tag or convert the field name.
         if (isset($this->args['label'])) :
-            $label  = !empty($args['label']) ? Form::label($field, $args['label']) : null;
+            $label  = !empty($args['label']) ? $this->Form->label($field, $args['label']) : null;
         else :
-            $label  = Form::label($this->name, null);
+            $label  = $this->Form->label($this->name, null);
         endif;
         return sprintf(
             '<div class="input %s">%s%s</div>',
@@ -141,7 +141,7 @@ class Input
             $radios .= sprintf(
                 '<input name="%4$s" type="radio" value="%1$s" %2$s>%3$s</input>',
                 $value,
-                Form::attrsToString($this->attrs),
+                $this->Form->attrsToString($this->attrs),
                 $label,
                 $this->fieldName()
             );
@@ -171,7 +171,7 @@ class Input
         return sprintf(
             '<select id="%1$s" %2$sname="%3$s">%4$s</select>',
             $this->name,
-            Form::attrsToString($this->attrs),
+            $this->Form->attrsToString($this->attrs),
             $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
             $options
         );
@@ -206,7 +206,7 @@ class Input
         return sprintf(
             '<textarea name="%s" %s>%s</textarea>',
             $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
-            Form::attrsToString($this->attrs),
+            $this->Form->attrsToString($this->attrs),
             $this->value
         );
     }
@@ -221,7 +221,7 @@ class Input
             $this->name,
             $this->type,
             $this->fieldName($this->name, $this->group),
-            Form::attrsToString($this->attrs),
+            $this->Form->attrsToString($this->attrs),
             $this->value
         );
     }
