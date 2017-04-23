@@ -178,7 +178,7 @@ class TestingEasyInputs
                         'type' => 'textarea',
                         'attrs' =>
                         [
-                            'cols' => 20,
+                            'cols' => 40,
                             'rows' => 8
                         ]
                     ]
@@ -223,15 +223,18 @@ class TestingEasyInputs
                     . ' AND an automatically-generated nonce:</p>';
                 echo $ei->Form->inputs(
                     [
-                    'a-group-input'     => [
-                        'type' => 'checkbox',
-                        'options' => [ 'yes' => 'Yes', 'no' => 'No']
-                    ],
-                    'a-radio-button'    => [
-                        'type' => 'radio',
-                        'options' => [ 'yes' => 'Da', 'no' => 'Niet']
-                    ],
-                    'an-input'          => []
+                        'a-group-input'     => [
+                            'type' => 'checkbox',
+                            'options' => [ 'yes' => 'Yes', 'no' => 'No']
+                        ],
+                        'a-radio-button'    => [
+                            'type' => 'radio',
+                            'options' => [ 'yes' => 'Da', 'no' => 'Niet']
+                        ],
+                        'an-input'          => [
+                            'label'     => 'Arbitrary Label',
+                            'wrapper'   => false
+                        ]
                     ]
                 );
                 
