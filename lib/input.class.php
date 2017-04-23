@@ -155,7 +155,7 @@ class Input
         }
         $select     = '';
         $options    = '';
-        if(!empty($this->options)) :
+        if (!empty($this->options)) :
             foreach ($this->options as $value => $label) :
                 $selected   = ( !empty($this->value) && $value == $this->value ) ? ' selected="selected" ' : '';
                 $options    .= sprintf(
@@ -250,7 +250,7 @@ class Input
     public function wrap($input)
     {
         $input  = !empty($this->label) ? $this->label . $input : $input;
-        if($this->wrapper) :
+        if ($this->wrapper) :
             return sprintf(
                 $this->wrapper,
                 $input
@@ -319,7 +319,7 @@ class Input
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
         
         // Either no wrapper or a user-defined one:
-        if(isset($args['wrapper'])) :
+        if (isset($args['wrapper'])) :
             $this->wrapper  = !empty($args['wrapper']) ? $args['wrapper'] : null;
         // Default:
         else :
@@ -327,7 +327,7 @@ class Input
         endif;
         
         // Either no label or a user-defined one:
-        if(isset($args['label'])) :
+        if (isset($args['label'])) :
             $this->label  = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
         // Default:
         else :

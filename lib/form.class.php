@@ -359,8 +359,8 @@ class Form
     /**
      * Call the correct function if it exists.
      *
-     * This function allows us to call Input types directly at the discretion of the 
-     * developer. 
+     * This function allows us to call Input types directly at the discretion of the
+     * developer.
      *
      * @param string $name The function requested.
      * @param array $settings An optional array of arguments.
