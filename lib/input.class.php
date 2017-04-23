@@ -71,16 +71,23 @@ class Input
      */
     public $validate;
     
+    /**
+     * A sprintf-compatible wrapper for the input.
+     */
+    public $wrapper;
+    
     
     /**
      * This function creates the HTML for the required input element.
      */
     public function create()
     {
+        $label  = null;
+        $input  = null;
         // If a public method exists, then we're dealing with a form element:
         if (is_callable(__NAMESPACE__ . '\Input::' . $this->type)) :
             $input  = $this->{$this->type}();
-            // Generic text input.
+        // Generic text input.
         else :
             $input  = sprintf(
                 '<input id="%s" type="text" name="%s" %s value="%s" />',
@@ -90,18 +97,7 @@ class Input
                 $this->value
             );
         endif;
-        // If label is set to false, do not create a label. Otherwise, use the tag or convert the field name.
-        if (isset($this->args['label'])) :
-            $label  = !empty($args['label']) ? $this->Form->label($field, $args['label']) : null;
-        else :
-            $label  = $this->Form->label($this->name, null);
-        endif;
-        return sprintf(
-            '<div class="input %s">%s%s</div>',
-            $this->type,
-            $label,
-            $input
-        );
+        return $this->wrap($input);
     }
     
     /**
@@ -159,15 +155,17 @@ class Input
         }
         $select     = '';
         $options    = '';
-        foreach ($this->options as $value => $label) :
-            $selected   = ( !empty($this->value) && $value == $this->value ) ? ' selected="selected" ' : '';
-            $options    .= sprintf(
-                '<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
-                $this->value,
-                $selected,
-                $label
-            );
-        endforeach;
+        if(!empty($this->options)) :
+            foreach ($this->options as $value => $label) :
+                $selected   = ( !empty($this->value) && $value == $this->value ) ? ' selected="selected" ' : '';
+                $options    .= sprintf(
+                    '<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
+                    $this->value,
+                    $selected,
+                    $label
+                );
+            endforeach;
+        endif;
         return sprintf(
             '<select id="%1$s" %2$sname="%3$s">%4$s</select>',
             $this->name,
@@ -227,6 +225,41 @@ class Input
     }
     
     /**
+     * Mimics the native WP submit_button function
+     */
+    public function submit_button()
+    {
+        return sprintf(
+            '<input type="submit" name="%2$s" id="%3$s" class="%1$s" value="%4$s"  />',
+            !empty($this->args['class']) ? $this->args['class'] : 'button button-primary',
+            $this->name,
+            !empty($this->args['id']) ? $this->args['id'] : 'submit',
+            !empty($this->value) ? $this->value : 'Save Changes'
+        );
+    }
+    
+    /**
+     * Wrap input in the requested HTML.
+     *
+     * This function performs two essential tasks. The first is to include the requested
+     * <label> element to the input. The second is to wrap the result in either user-requested
+     * HTML or the default.
+     *
+     * @param string $input The unwrapped HTML input element
+     */
+    public function wrap($input)
+    {
+        $input  = !empty($this->label) ? $this->label . $input : $input;
+        if($this->wrapper) :
+            return sprintf(
+                $this->wrapper,
+                $input
+            );
+        endif;
+        return $input;
+    }
+    
+    /**
      * Wrapper function to return a wp_editor instance
      */
     public function editor()
@@ -243,7 +276,7 @@ class Input
             '',
             array_map(
                 function (&$value) {
-                        return sprintf('[%s]', $value);
+                    return sprintf('[%s]', $value);
                 },
                 $this->group
             )
@@ -281,7 +314,24 @@ class Input
         $this->options      = !empty($args['options']) ? $args['options'] : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
+        $this->label        = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
         $this->group        = !empty($args['group']) ? $this->Form->splitGroup($args['group']) : $this->Form->group;
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
+        
+        // Either no wrapper or a user-defined one:
+        if(isset($args['wrapper'])) :
+            $this->wrapper  = !empty($args['wrapper']) ? $args['wrapper'] : null;
+        // Default:
+        else :
+            $this->wrapper  = sprintf('<div class="input %s">', $this->type) . '%s</div>';
+        endif;
+        
+        // Either no label or a user-defined one:
+        if(isset($args['label'])) :
+            $this->label  = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
+        // Default:
+        else :
+            $this->label  = $this->Form->label($name);
+        endif;
     }
 }

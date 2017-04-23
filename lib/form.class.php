@@ -88,7 +88,7 @@ class Form
             $this->name,
             $this->action,
             $this->method,
-            Form::attrsToString($this->attrs)
+            $this->attrsToString($this->attrs)
         );
     }
     /**
@@ -174,7 +174,7 @@ class Form
         return sprintf(
             '<label %s %s>%s</label>',
             !empty($for) ? sprintf('for="%s"', $for) : '',
-            is_array($attrs) ? Form::attrsToString($attrs) : '',
+            is_array($attrs) ? $this->attrsToString($attrs) : '',
             !empty($text) && is_string($text) ? $text : ucfirst(preg_replace('/[_\-]/', ' ', $for)) // Convert fieldname
         );
     }
@@ -326,7 +326,8 @@ class Form
             <input type="hidden" name="action" value="update" />',
             esc_attr($setting)
         );
-        $fields .= \EasyInputs\Input::nonce($setting);
+        // $fields .= \EasyInputs\Input::nonce($setting);
+        $fields .= (new Input($name, $args, $this))->nonce($setting);
         return $fields;
     }
    
@@ -357,6 +358,9 @@ class Form
     
     /**
      * Call the correct function if it exists.
+     *
+     * This function allows us to call Input types directly at the discretion of the 
+     * developer. 
      *
      * @param string $name The function requested.
      * @param array $settings An optional array of arguments.

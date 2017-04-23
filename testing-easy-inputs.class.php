@@ -92,14 +92,15 @@ class TestingEasyInputs
                     . 'are available, including data attributes.</p>';
                 echo $ei->Form->input(
                     'another_text_input',
-                    array(
-                    'value' => 'Input Value',
-                    'attrs' => array(
-                        'class' => 'custom classes',
-                        'data-nana-nana' => 'boo-boo'
-                     ),
-                     'label' => 'Specify any label you want.'
-                    )
+                    [
+                        'value' => 'Input Value',
+                        'attrs' => [
+                            'class' => 'custom classes',
+                            'data-nana-nana' => 'boo-boo'
+                         ],
+                         'label' => 'Specify any label you want.',
+                         'wrapper' => false
+                    ]
                 );
             
                 // Labels Optional:
@@ -235,16 +236,7 @@ class TestingEasyInputs
                 );
                 
                 
-                echo $ei->Form->input(
-                    'form_submit',
-                    [
-                        'type'  => 'button',
-                        'value' => 'Save It!',
-                        'attrs' => [
-                            'class' => 'button'
-                        ]
-                    ]
-                );
+                echo $ei->Form->submit_button('Submit', ['label' => false]);
         
             // Close the form:
             echo $ei->Form->close();
