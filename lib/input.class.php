@@ -7,7 +7,8 @@
  * @license GPLv2 or later
  * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
- 
+ namespace WPScholar;
+
 namespace EasyInputs;
 
 /**
@@ -114,13 +115,13 @@ class Input
      *
      * @return string the opening tag for the form element.
      */
-    public static function nonce($name = '', $action = '', $referer = true, $echo = false)
+    public function nonce()
     {
         return wp_nonce_field(
-            $name,
-            $action,
-            $referer,
-            $echo
+            $this->Form->name,
+            $this->Form->action,
+            true,
+            false
         );
     }
     
@@ -133,12 +134,13 @@ class Input
             return;
         }
         $radios = '';
-        foreach ($this->options as $value => $label) :
+        foreach ($this->options as $key => $data) :
+            $selected   = (!empty($this->value) && $data['value'] == $this->value) ? ' selected ' : '';
             $radios .= sprintf(
                 '<input name="%4$s" type="radio" value="%1$s" %2$s>%3$s</input>',
-                $value,
+                $data['value'],
                 $this->Form->attrsToString($this->attrs),
-                $label,
+                $data['name'],
                 $this->fieldName()
             );
         endforeach;
@@ -156,13 +158,13 @@ class Input
         $select     = '';
         $options    = '';
         if (!empty($this->options)) :
-            foreach ($this->options as $value => $label) :
-                $selected   = ( !empty($this->value) && $value == $this->value ) ? ' selected="selected" ' : '';
+            foreach ($this->options as $value => $data) :
+                $selected   = ( !empty($this->value) && $value == $this->value ) ? ' selected ' : '';
                 $options    .= sprintf(
                     '<option id="%1$s" value="%1$s"%2$s>%3$s</option>',
-                    $this->value,
+                    $data['value'],
                     $selected,
-                    $label
+                    $data['name']
                 );
             endforeach;
         endif;
@@ -184,14 +186,16 @@ class Input
             return;
         }
         $boxes  = '';
-        foreach ($this->options as $key => $value) :
+        foreach ($this->options as $key => $data) :
             $fieldname  = !empty($this->group) ? $this->group : $this->name;
-            $boxes  .= sprintf(
-                '<input name="%3$s" type="checkbox" value="%1$s">%2$s</input>',
-                $key,
-                $value,
-                $this->fieldName() . '[]'
+            $input  = sprintf(
+                '<input id="%1$s" name="%3$s" type="checkbox" value="%1$s" %4$s><label for="%1$s">%2$s</label>',
+                $data['value'],
+                $data['name'],
+                $this->fieldName() . '[]',
+                !empty($data['selected']) ? 'checked' : ''
             );
+            $boxes  .= $this->wrap($input, false);
         endforeach;
         return $boxes;
     }
@@ -247,9 +251,9 @@ class Input
      *
      * @param string $input The unwrapped HTML input element
      */
-    public function wrap($input)
+    public function wrap($input, $label=true)
     {
-        $input  = !empty($this->label) ? $this->label . $input : $input;
+        if($label) $input  = !empty($this->label) ? $this->label . $input : $input;
         if ($this->wrapper) :
             return sprintf(
                 $this->wrapper,
@@ -289,6 +293,24 @@ class Input
         );
     }
     
+    /**
+     * Order our options into a consistent format
+     */
+    public function doOptions($options)
+    {
+        if(!is_array($options)) return false;
+        foreach($options as $key=>$option) :
+            if(!is_array($option)) :
+                $option = [
+                    'name'  => $option,
+                    'value' => $key
+                ];
+                $options[$key]  = $option;
+            endif;
+        endforeach;
+        return $options;
+    }
+    
     
     
     /**
@@ -311,11 +333,13 @@ class Input
         $this->Form         = $form;
         $this->name         = $name;
         $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : array();
-        $this->options      = !empty($args['options']) ? $args['options'] : array();
+        $this->options      = !empty($args['options']) ? $this->doOptions($args['options']) : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
         $this->label        = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
-        $this->group        = !empty($args['group']) ? $this->Form->splitGroup($args['group']) : $this->Form->group;
+        $this->group        = !empty($args['group']) 
+            ? $this->Form->splitGroup($args['group']) 
+            : (array)$this->Form->group;
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
         
         // Either no wrapper or a user-defined one:

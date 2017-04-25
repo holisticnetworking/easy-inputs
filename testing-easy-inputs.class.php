@@ -62,6 +62,17 @@ class TestingEasyInputs
             'easy-inputs',
             [ $this, 'optionPage' ]
         );
+        // Register our settings.
+	    add_action( 'admin_init', [$this,'registerSettings'] );
+    }
+    
+    
+    /**
+     * Add an options page to demonstrate the plugin.
+     */
+    public function registerSettings()
+    {
+        return true;
     }
 
 

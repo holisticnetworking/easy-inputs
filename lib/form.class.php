@@ -368,7 +368,7 @@ class Form
     public function __call($name, $settings)
     {
         if (method_exists('EasyInputs\Input', $name)) :
-            $input_name             = $settings[0];
+            $input_name             = isset($settings[0]) ? $settings[0]: $this->name;
             $input_args             = isset($settings[1]) ? $settings[1] : array();
             $input_args['type']     = $name;
             return ( new Input($input_name, $input_args, $this) )->create();
