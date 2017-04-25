@@ -9,6 +9,7 @@
  */
 
 namespace EasyInputs;
+use ReflectionMethod;
 
 /**
  * This class defines an HTML form.
@@ -367,15 +368,20 @@ class Form
      */
     public function __call($name, $settings)
     {
-        if (method_exists('EasyInputs\Input', $name)) :
+        $reflector  = new ReflectionMethod(__NAMESPACE__ . '\Input::' . $name);
+        if ($reflector->isPublic()) :
             $input_name             = isset($settings[0]) ? $settings[0]: $this->name;
             $input_args             = isset($settings[1]) ? $settings[1] : array();
             $input_args['type']     = $name;
             return ( new Input($input_name, $input_args, $this) )->create();
         else :
+            $bt         = debug_backtrace();
+            $caller     = array_shift($bt);
             $message    = sprintf(
-                'Sorry. Invalid function, %s, called.',
-                $name
+                'Sorry. Invalid function <em>%s</em> called in %s on line %s.',
+                $name,
+                $caller['file'],
+                $caller['line']
             );
             return $message;
             error_log($message);

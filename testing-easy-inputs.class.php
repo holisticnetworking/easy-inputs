@@ -223,6 +223,8 @@ class TestingEasyInputs
                 echo $ei->Form->editor(
                     'i-edit-content'
                 );
+                
+                echo $ei->Form->doOptions();
             
             
             

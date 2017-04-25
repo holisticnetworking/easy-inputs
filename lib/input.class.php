@@ -7,9 +7,9 @@
  * @license GPLv2 or later
  * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
- namespace WPScholar;
-
 namespace EasyInputs;
+
+use ReflectionMethod;
 
 /**
  * This class defines an HTML input.
@@ -77,6 +77,14 @@ class Input
      */
     public $wrapper;
     
+    /**
+     * The list of publically-callable 
+     */
+    public $input_methods   = [
+        'radio', 'select', 'checkbox', 'textarea', 'button', 
+        'submit_button', 'editor'
+    ];
+    
     
     /**
      * This function creates the HTML for the required input element.
@@ -85,18 +93,13 @@ class Input
     {
         $label  = null;
         $input  = null;
+        $reflector  = new ReflectionMethod(__NAMESPACE__ . '\Input::' . $this->type);
         // If a public method exists, then we're dealing with a form element:
-        if (is_callable(__NAMESPACE__ . '\Input::' . $this->type)) :
+        if ($reflector->isPublic()) :
             $input  = $this->{$this->type}();
         // Generic text input.
         else :
-            $input  = sprintf(
-                '<input id="%s" type="text" name="%s" %s value="%s" />',
-                $this->name,
-                $this->fieldName(),
-                $this->Form->attrsToString($this->attrs),
-                $this->value
-            );
+            $input  = $this->text();
         endif;
         return $this->wrap($input);
     }
@@ -122,6 +125,20 @@ class Input
             $this->Form->action,
             true,
             false
+        );
+    }
+    
+    /**
+     * An HTML text input
+     */
+    public function text()
+    {
+        return sprintf(
+            '<input id="%s" type="text" name="%s" %s value="%s" />',
+            $this->name,
+            $this->fieldName(),
+            $this->Form->attrsToString($this->attrs),
+            $this->value
         );
     }
     
@@ -243,27 +260,6 @@ class Input
     }
     
     /**
-     * Wrap input in the requested HTML.
-     *
-     * This function performs two essential tasks. The first is to include the requested
-     * <label> element to the input. The second is to wrap the result in either user-requested
-     * HTML or the default.
-     *
-     * @param string $input The unwrapped HTML input element
-     */
-    public function wrap($input, $label=true)
-    {
-        if($label) $input  = !empty($this->label) ? $this->label . $input : $input;
-        if ($this->wrapper) :
-            return sprintf(
-                $this->wrapper,
-                $input
-            );
-        endif;
-        return $input;
-    }
-    
-    /**
      * Wrapper function to return a wp_editor instance
      */
     public function editor()
@@ -274,7 +270,7 @@ class Input
     /**
      * Return a valid field name attribute.
      */
-    public function fieldName()
+    private function fieldName()
     {
         $group  = implode(
             '',
@@ -294,9 +290,30 @@ class Input
     }
     
     /**
+     * Wrap input in the requested HTML.
+     *
+     * This function performs two essential tasks. The first is to include the requested
+     * <label> element to the input. The second is to wrap the result in either user-requested
+     * HTML or the default.
+     *
+     * @param string $input The unwrapped HTML input element
+     */
+    private function wrap($input, $label=true)
+    {
+        if($label) $input  = !empty($this->label) ? $this->label . $input : $input;
+        if ($this->wrapper) :
+            return sprintf(
+                $this->wrapper,
+                $input
+            );
+        endif;
+        return $input;
+    }
+    
+    /**
      * Order our options into a consistent format
      */
-    public function doOptions($options)
+    private function doOptions($options)
     {
         if(!is_array($options)) return false;
         foreach($options as $key=>$option) :
