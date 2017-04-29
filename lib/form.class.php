@@ -65,6 +65,12 @@ class Form
     public $group;
     
     /**
+     * Whether to prefix the form name to the input names
+     * @var string
+     */
+    public $prefix  = true;
+    
+    /**
      * May or may not be useful.
      * @var string
      */
@@ -255,33 +261,6 @@ class Form
 
 
     /**
-     * Based on the passed type property, set the action and method values of our ojbect.
-     *
-     * @param string $type The WordPress-compatible form type.
-     *      post_meta, setting, custom
-     *
-     * @return null
-     */
-    public function setType(string $type = null)
-    {
-        switch ($type) :
-            case 'setting':
-                $this->action   = 'options.php';
-                $this->method   = 'POST';
-                break;
-            case 'meta':
-                $this->action   = 'post.php';
-                $this->method   = 'POST';
-                break;
-            default:
-                $this->action   = 'options.php';
-                $this->method   = 'POST';
-                break;
-        endswitch;
-    }
-
-
-    /**
      * Display a group of inputs
      *
      * @param string $group The name of our group.
@@ -358,6 +337,34 @@ class Form
     }
     
     /**
+     * Based on the passed type property, set the action and method values of our ojbect.
+     *
+     * @param string $type The WordPress-compatible form type.
+     *      post_meta, setting, custom
+     *
+     * @return null
+     */
+    private function setType(string $type = null)
+    {
+        switch ($type) :
+            case 'setting':
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                $this->prefix   = isset($this->prefix) ? $this->prefix : false;
+                break;
+            case 'meta':
+                $this->action   = 'post.php';
+                $this->method   = 'POST';
+                $this->prefix   = isset($this->prefix) ? $this->prefix : false;
+                break;
+            default:
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                break;
+        endswitch;
+    }
+    
+    /**
      * Call the correct function if it exists.
      *
      * This function allows us to call Input types directly at the discretion of the
@@ -407,6 +414,7 @@ class Form
         $this->nonce_base   = !empty($args['nonce_base']) ? $args['nonce_base'] : $this->name;
         $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : [];
         $this->group        = !empty($args['group']) ? $this->splitGroup($args['group']) : null;
+        $this->prefix       = isset($args['prefix']) ? $args['prefix'] : true;
         $this->setType($this->type);
     }
 }

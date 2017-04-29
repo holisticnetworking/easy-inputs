@@ -77,14 +77,6 @@ class Input
      */
     public $wrapper;
     
-    /**
-     * The list of publically-callable 
-     */
-    public $input_methods   = [
-        'radio', 'select', 'checkbox', 'textarea', 'button', 
-        'submit_button', 'editor'
-    ];
-    
     
     /**
      * This function creates the HTML for the required input element.
@@ -272,6 +264,10 @@ class Input
      */
     private function fieldName()
     {
+        $prefix = !empty($this->Form->prefix) ? $this->Form->name : '';
+        $name   = !empty($this->Form->group) || !empty($this->Form->prefix) 
+            ? sprintf('[%s]', $this->name) 
+            : $this->name;
         $group  = implode(
             '',
             array_map(
@@ -282,10 +278,10 @@ class Input
             )
         );
         return sprintf(
-            '%s%s[%s]',
-            $this->Form->name,
+            '%s%s%s',
+            $prefix,
             $group,
-            $this->name
+            $name
         );
     }
     

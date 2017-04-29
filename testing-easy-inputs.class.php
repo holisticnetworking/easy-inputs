@@ -40,13 +40,10 @@ class TestingEasyInputs
         require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
         // Spare yourself the trouble of declaring twice:
         global $ei;
-        $ei = new EasyInputs(
-            [
+        $ei = new EasyInputs([
             'name'  => 'testing-easy-inputs',
-            'type'  => 'setting',
-            'group' => 'FormGroup,Subgroup,Evensubbergroup'
-            ]
-        );
+            'type'  => 'setting'
+        ]);
     }
 
 
@@ -72,7 +69,20 @@ class TestingEasyInputs
      */
     public function registerSettings()
     {
-        return true;
+        global $ei;
+        register_setting( $ei->Form->name, 'my_text_input' );
+        register_setting( $ei->Form->name, 'another_text_input' );
+        register_setting( $ei->Form->name, 'still_another_text_input' );
+        register_setting( $ei->Form->name, 'separate_label' );
+        register_setting( $ei->Form->name, 'radio_buttons' );
+        register_setting( $ei->Form->name, 'color_select' );
+        register_setting( $ei->Form->name, 'color_checkbox' );
+        register_setting( $ei->Form->name, 'big_area_of_text' );
+        register_setting( $ei->Form->name, 'TheGroup' );
+        register_setting( $ei->Form->name, 'i-edit-content' );
+        register_setting( $ei->Form->name, 'a-group-input' );
+        register_setting( $ei->Form->name, 'a-radio-button' );
+        register_setting( $ei->Form->name, 'an-input' );
     }
 
 
@@ -89,6 +99,8 @@ class TestingEasyInputs
             . 'inputs. Go to the plugin file to see the function calls.</p>';
             // Create the form:
             echo $ei->Form->open();
+                settings_fields( $ei->Form->name );
+                do_settings_sections( 'easy-inputs' );
         
                 // Dead-simple input inclusion:
                 echo '<h2>Dead-simple input inclusion</h2>';
@@ -96,11 +108,11 @@ class TestingEasyInputs
             
                 // Now, let's include a value and some HTML attributes:
                 echo '<h2>Now, let\'s include a value and some HTML'
-                . 'attributes:</h2>';
+                . ' attributes:</h2>';
                 echo '<p>Please see the README.md file for the proper'
-                    . 'parameters and values for these. in general, all'
-                    . 'HTML5-valid attributes'
-                    . 'are available, including data attributes.</p>';
+                    . ' parameters and values for these. in general, all'
+                    . ' HTML5-valid attributes'
+                    . ' are available, including data attributes.</p>';
                 echo $ei->Form->input(
                     'another_text_input',
                     [
@@ -223,8 +235,6 @@ class TestingEasyInputs
                 echo $ei->Form->editor(
                     'i-edit-content'
                 );
-                
-                echo $ei->Form->doOptions();
             
             
             
@@ -252,7 +262,7 @@ class TestingEasyInputs
                 );
                 
                 
-                echo $ei->Form->submit_button('Submit', ['label' => false]);
+                echo $ei->Form->submit_button('Submit', ['label' => false, 'value' => 'Submit']);
         
             // Close the form:
             echo $ei->Form->close();
