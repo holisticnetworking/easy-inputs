@@ -270,8 +270,8 @@ class Input
     private function fieldName()
     {
         $prefix = !empty($this->Form->prefix) ? $this->Form->name : '';
-        $name   = !empty($this->Form->group) || !empty($this->Form->prefix) 
-            ? sprintf('[%s]', $this->name) 
+        $name   = !empty($this->Form->group) || !empty($this->Form->prefix)
+            ? sprintf('[%s]', $this->name)
             : $this->name;
         $group  = implode(
             '',
@@ -301,9 +301,11 @@ class Input
      *
      * @param string $input The unwrapped HTML input element
      */
-    private function wrap($input, $label=true)
+    private function wrap($input, $label = true)
     {
-        if($label) $input  = !empty($this->label) ? $this->label . $input : $input;
+        if ($label) {
+            $input  = !empty($this->label) ? $this->label . $input : $input;
+        }
         if ($this->wrapper) :
             return sprintf(
                 $this->wrapper,
@@ -318,9 +320,11 @@ class Input
      */
     private function doOptions($options)
     {
-        if(!is_array($options)) return false;
-        foreach($options as $key=>$option) :
-            if(!is_array($option)) :
+        if (!is_array($options)) {
+            return false;
+        }
+        foreach ($options as $key => $option) :
+            if (!is_array($option)) :
                 $option = [
                     'name'  => $option,
                     'value' => $key
@@ -358,8 +362,8 @@ class Input
         $this->value        = !empty($args['value']) ? $args['value'] : null;
         $this->label        = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
         $this->multiple     = !empty($args['multiple']) ? true : null;
-        $this->group        = !empty($args['group']) 
-            ? $this->Form->splitGroup($args['group']) 
+        $this->group        = !empty($args['group'])
+            ? $this->Form->splitGroup($args['group'])
             : (array)$this->Form->group;
         $this->validate     = !empty($args['validate']) ? $args['validate'] : null;
         

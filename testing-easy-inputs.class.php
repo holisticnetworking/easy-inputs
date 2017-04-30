@@ -60,7 +60,7 @@ class TestingEasyInputs
             [ $this, 'optionPage' ]
         );
         // Register our settings.
-	    add_action( 'admin_init', [$this,'registerSettings'] );
+        add_action('admin_init', [$this,'registerSettings']);
     }
     
     
@@ -70,19 +70,19 @@ class TestingEasyInputs
     public function registerSettings()
     {
         global $ei;
-        register_setting( $ei->Form->name, 'my_text_input' );
-        register_setting( $ei->Form->name, 'another_text_input' );
-        register_setting( $ei->Form->name, 'still_another_text_input' );
-        register_setting( $ei->Form->name, 'separate_label' );
-        register_setting( $ei->Form->name, 'radio_buttons' );
-        register_setting( $ei->Form->name, 'color_select' );
-        register_setting( $ei->Form->name, 'color_checkbox' );
-        register_setting( $ei->Form->name, 'big_area_of_text' );
-        register_setting( $ei->Form->name, 'TheGroup' );
-        register_setting( $ei->Form->name, 'i-edit-content' );
-        register_setting( $ei->Form->name, 'a-group-input' );
-        register_setting( $ei->Form->name, 'a-radio-button' );
-        register_setting( $ei->Form->name, 'an-input' );
+        register_setting($ei->Form->name, 'my_text_input');
+        register_setting($ei->Form->name, 'another_text_input');
+        register_setting($ei->Form->name, 'still_another_text_input');
+        register_setting($ei->Form->name, 'separate_label');
+        register_setting($ei->Form->name, 'radio_buttons');
+        register_setting($ei->Form->name, 'color_select');
+        register_setting($ei->Form->name, 'color_checkbox');
+        register_setting($ei->Form->name, 'big_area_of_text');
+        register_setting($ei->Form->name, 'TheGroup');
+        register_setting($ei->Form->name, 'i-edit-content');
+        register_setting($ei->Form->name, 'a-group-input');
+        register_setting($ei->Form->name, 'a-radio-button');
+        register_setting($ei->Form->name, 'an-input');
     }
 
 
@@ -99,8 +99,8 @@ class TestingEasyInputs
             . 'inputs. Go to the plugin file to see the function calls.</p>';
             // Create the form:
             echo $ei->Form->open();
-                settings_fields( $ei->Form->name );
-                do_settings_sections( 'easy-inputs' );
+                settings_fields($ei->Form->name);
+                do_settings_sections('easy-inputs');
         
                 // Dead-simple input inclusion:
                 echo '<h2>Dead-simple input inclusion</h2>';

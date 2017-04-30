@@ -9,6 +9,7 @@
  */
 
 namespace EasyInputs;
+
 use ReflectionMethod;
 
 /**
@@ -230,7 +231,7 @@ class Form
         $open   = is_array($args) && $args['fieldset'] ? $this->fieldsetOpen($args) : '';
         $close  = is_array($args) && $args['fieldset'] ? $this->fieldsetClose() : '';
         foreach ($inputs as $name => $a) :
-            if( is_array($a) ) :
+            if (is_array($a)) :
                 $output .= $this->input($name, $a);
             else :
                 $output .= $this->input($a);
