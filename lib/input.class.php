@@ -12,7 +12,7 @@ namespace EasyInputs;
 use ReflectionMethod;
 
 /**
- * This class defines an HTML input.
+ * A class defining the HTML form element.
  *
  * The Input class of Easy Inputs is instatiated with every new input created. What is
  * returned is always a string. The create() function is used as the main entry point
@@ -300,6 +300,7 @@ class Input
      * HTML or the default.
      *
      * @param string $input The unwrapped HTML input element
+     * @param boolean $label Indicates whether or not to include a <label> element.
      */
     private function wrap($input, $label = true)
     {
@@ -317,6 +318,8 @@ class Input
     
     /**
      * Order our options into a consistent format
+     *
+     * @param array $options The passed options.
      */
     private function doOptions($options)
     {

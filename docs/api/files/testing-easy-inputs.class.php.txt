@@ -40,13 +40,10 @@ class TestingEasyInputs
         require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
         // Spare yourself the trouble of declaring twice:
         global $ei;
-        $ei = new EasyInputs(
-            [
+        $ei = new EasyInputs([
             'name'  => 'testing-easy-inputs',
-            'type'  => 'setting',
-            'group' => 'FormGroup,Subgroup,Evensubbergroup'
-            ]
-        );
+            'type'  => 'setting'
+        ]);
     }
 
 
@@ -62,6 +59,30 @@ class TestingEasyInputs
             'easy-inputs',
             [ $this, 'optionPage' ]
         );
+        // Register our settings.
+        add_action('admin_init', [$this,'registerSettings']);
+    }
+    
+    
+    /**
+     * Add an options page to demonstrate the plugin.
+     */
+    public function registerSettings()
+    {
+        global $ei;
+        register_setting($ei->Form->name, 'my_text_input');
+        register_setting($ei->Form->name, 'another_text_input');
+        register_setting($ei->Form->name, 'still_another_text_input');
+        register_setting($ei->Form->name, 'separate_label');
+        register_setting($ei->Form->name, 'radio_buttons');
+        register_setting($ei->Form->name, 'color_select');
+        register_setting($ei->Form->name, 'color_checkbox');
+        register_setting($ei->Form->name, 'big_area_of_text');
+        register_setting($ei->Form->name, 'TheGroup');
+        register_setting($ei->Form->name, 'i-edit-content');
+        register_setting($ei->Form->name, 'a-group-input');
+        register_setting($ei->Form->name, 'a-radio-button');
+        register_setting($ei->Form->name, 'an-input');
     }
 
 
@@ -78,6 +99,8 @@ class TestingEasyInputs
             . 'inputs. Go to the plugin file to see the function calls.</p>';
             // Create the form:
             echo $ei->Form->open();
+                settings_fields($ei->Form->name);
+                do_settings_sections('easy-inputs');
         
                 // Dead-simple input inclusion:
                 echo '<h2>Dead-simple input inclusion</h2>';
@@ -85,21 +108,22 @@ class TestingEasyInputs
             
                 // Now, let's include a value and some HTML attributes:
                 echo '<h2>Now, let\'s include a value and some HTML'
-                . 'attributes:</h2>';
+                . ' attributes:</h2>';
                 echo '<p>Please see the README.md file for the proper'
-                    . 'parameters and values for these. in general, all'
-                    . 'HTML5-valid attributes'
-                    . 'are available, including data attributes.</p>';
+                    . ' parameters and values for these. in general, all'
+                    . ' HTML5-valid attributes'
+                    . ' are available, including data attributes.</p>';
                 echo $ei->Form->input(
                     'another_text_input',
-                    array(
-                    'value' => 'Input Value',
-                    'attrs' => array(
-                        'class' => 'custom classes',
-                        'data-nana-nana' => 'boo-boo'
-                     ),
-                     'label' => 'Specify any label you want.'
-                    )
+                    [
+                        'value' => 'Input Value',
+                        'attrs' => [
+                            'class' => 'custom classes',
+                            'data-nana-nana' => 'boo-boo'
+                         ],
+                         'label' => 'Specify any label you want.',
+                         'wrapper' => false
+                    ]
                 );
             
                 // Labels Optional:
@@ -177,7 +201,7 @@ class TestingEasyInputs
                         'type' => 'textarea',
                         'attrs' =>
                         [
-                            'cols' => 20,
+                            'cols' => 40,
                             'rows' => 8
                         ]
                     ]
@@ -222,29 +246,23 @@ class TestingEasyInputs
                     . ' AND an automatically-generated nonce:</p>';
                 echo $ei->Form->inputs(
                     [
-                    'a-group-input'     => [
-                        'type' => 'checkbox',
-                        'options' => [ 'yes' => 'Yes', 'no' => 'No']
-                    ],
-                    'a-radio-button'    => [
-                        'type' => 'radio',
-                        'options' => [ 'yes' => 'Da', 'no' => 'Niet']
-                    ],
-                    'an-input'          => []
-                    ]
-                );
-                
-                
-                echo $ei->Form->input(
-                    'form_submit',
-                    [
-                        'type'  => 'button',
-                        'value' => 'Save It!',
-                        'attrs' => [
-                            'class' => 'button'
+                        'a-group-input'     => [
+                            'type' => 'checkbox',
+                            'options' => [ 'yes' => 'Yes', 'no' => 'No']
+                        ],
+                        'a-radio-button'    => [
+                            'type' => 'radio',
+                            'options' => [ 'yes' => 'Da', 'no' => 'Niet']
+                        ],
+                        'an-input'          => [
+                            'label'     => 'Arbitrary Label',
+                            'wrapper'   => false
                         ]
                     ]
                 );
+                
+                
+                echo $ei->Form->submit_button('Submit', ['label' => false, 'value' => 'Submit']);
         
             // Close the form:
             echo $ei->Form->close();

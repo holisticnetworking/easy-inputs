@@ -10,12 +10,17 @@
 
 namespace EasyInputs;
 
+use ReflectionMethod;
+
 /**
- * This class defines an HTML form.
+ * A class that defines an HTML form.
  *
- * An instance of class Form is created with every instance of EasyInputs. Whether or not
- * a form is created by EasyInputs, the Form class holds all the relevant form information
+ * An instance of class Form is created with every instance of EasyInputs. Regardless of
+ * whether we create form tags, the Form class holds all the relevant form information
  * to which any Input class will need to refer.
+ *
+ * This class also becomes the user's primary point of entry for creating new HTML form
+ * elements. 
  */
 class Form
 {
@@ -23,7 +28,7 @@ class Form
      * The name of the Easy Inputs instance.
      *
      * Unless otherwise specified, this will also be the ID of any output form element.
-     * @var string 
+     * @var string
      */
     public $name;
     
@@ -31,13 +36,13 @@ class Form
      * The type of form being created or simulated.
      *
      * Settings forms, post meta forms or custom forms are all allowed values.
-     * @var string 
+     * @var string
      */
     public $type;
     
     /**
      * The HTML action to send the form data to.
-     * @var string 
+     * @var string
      */
     public $action;
     
@@ -45,7 +50,7 @@ class Form
      * The HTML method of any output forms.
      *
      * GET, POST, PUT, DELETE
-     * @var string 
+     * @var string
      */
     public $method;
     
@@ -53,19 +58,25 @@ class Form
      * HTML attributes.
      *
      * All HTML5-compatible attributes, except for data attributes, are supported.
-     * @var array 
+     * @var array
      */
     public $attrs;
     
     /**
      * For data saved as an array, the array of subgroup names, in order of appearance.
-     * @var array 
+     * @var array
      */
     public $group;
     
     /**
+     * Whether to prefix the form name to the input names
+     * @var string
+     */
+    public $prefix  = true;
+    
+    /**
      * May or may not be useful.
-     * @var string 
+     * @var string
      */
     public $nonce_base;
 
@@ -88,7 +99,7 @@ class Form
             $this->name,
             $this->action,
             $this->method,
-            EasyInputs::attrsToString($this->attrs)
+            $this->attrsToString($this->attrs)
         );
     }
     /**
@@ -147,7 +158,7 @@ class Form
         if (is_array($args)) :
             extract($args);
             $title      = !empty($title) ? $title : null;
-            $attr_str   = !empty($attrs) ? EasyInputs::attrsToString($attrs) : $attr_str;
+            $attr_str   = !empty($attrs) ? Form::attrsToString($attrs) : $attr_str;
         else :
             $title  = $args;
         endif;
@@ -174,7 +185,7 @@ class Form
         return sprintf(
             '<label %s %s>%s</label>',
             !empty($for) ? sprintf('for="%s"', $for) : '',
-            is_array($attrs) ? EasyInputs::attrsToString($attrs) : '',
+            is_array($attrs) ? $this->attrsToString($attrs) : '',
             !empty($text) && is_string($text) ? $text : ucfirst(preg_replace('/[_\-]/', ' ', $for)) // Convert fieldname
         );
     }
@@ -189,7 +200,7 @@ class Form
      * "name" attribute, but does get used to create it. If grouping
      * is requested, this argument will be rolled into the combined
      * HTML name of the group.
-     * 
+     *
      * @param array  $args The args.
      *
      * @return string The HTML string for this input.
@@ -222,8 +233,12 @@ class Form
         $output = '';
         $open   = is_array($args) && $args['fieldset'] ? $this->fieldsetOpen($args) : '';
         $close  = is_array($args) && $args['fieldset'] ? $this->fieldsetClose() : '';
-        foreach ($inputs as $name => $args) :
-            $output .= $this->input($name, $args);
+        foreach ($inputs as $name => $a) :
+            if (is_array($a)) :
+                $output .= $this->input($name, $a);
+            else :
+                $output .= $this->input($a);
+            endif;
         endforeach;
         return sprintf(
             '%1$s%2$s%3$s',
@@ -254,33 +269,6 @@ class Form
 
 
     /**
-     * Based on the passed type property, set the action and method values of our ojbect.
-     *
-     * @param string $type The WordPress-compatible form type.
-     *      post_meta, setting, custom
-     *
-     * @return null
-     */
-    public function setType(string $type = null)
-    {
-        switch ($type) :
-            case 'setting':
-                $this->action   = 'options.php';
-                $this->method   = 'POST';
-                break;
-            case 'meta':
-                $this->action   = 'post.php';
-                $this->method   = 'POST';
-                break;
-            default:
-                $this->action   = 'options.php';
-                $this->method   = 'POST';
-                break;
-        endswitch;
-    }
-
-
-    /**
      * Display a group of inputs
      *
      * @param string $group The name of our group.
@@ -295,7 +283,7 @@ class Form
     
     /**
      * Ensures a consistent format for group names.
-     * 
+     *
      * @param string $group a comma separated list of nesting groups.
      */
     public function splitGroup($group)
@@ -326,7 +314,8 @@ class Form
             <input type="hidden" name="action" value="update" />',
             esc_attr($setting)
         );
-        $fields .= \EasyInputs\Input::nonce($setting);
+        // $fields .= \EasyInputs\Input::nonce($setting);
+        $fields .= (new Input($name, $args, $this))->nonce($setting);
         return $fields;
     }
    
@@ -356,22 +345,58 @@ class Form
     }
     
     /**
+     * Based on the passed type property, set the action and method values of our ojbect.
+     *
+     * @param string $type The WordPress-compatible form type.
+     *      post_meta, setting, custom
+     *
+     * @return null
+     */
+    private function setType(string $type = null)
+    {
+        switch ($type) :
+            case 'setting':
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                $this->prefix   = isset($this->prefix) ? $this->prefix : false;
+                break;
+            case 'meta':
+                $this->action   = 'post.php';
+                $this->method   = 'POST';
+                $this->prefix   = isset($this->prefix) ? $this->prefix : false;
+                break;
+            default:
+                $this->action   = 'options.php';
+                $this->method   = 'POST';
+                break;
+        endswitch;
+    }
+    
+    /**
      * Call the correct function if it exists.
-     * 
+     *
+     * This function allows us to call Input types directly at the discretion of the
+     * developer.
+     *
      * @param string $name The function requested.
      * @param array $settings An optional array of arguments.
      */
     public function __call($name, $settings)
     {
-        if (method_exists('EasyInputs\Input', $name)) :
-            $input_name             = $settings[0];
+        $reflector  = new ReflectionMethod(__NAMESPACE__ . '\Input::' . $name);
+        if ($reflector->isPublic()) :
+            $input_name             = isset($settings[0]) ? $settings[0]: $this->name;
             $input_args             = isset($settings[1]) ? $settings[1] : array();
             $input_args['type']     = $name;
             return ( new Input($input_name, $input_args, $this) )->create();
         else :
+            $bt         = debug_backtrace();
+            $caller     = array_shift($bt);
             $message    = sprintf(
-                'Sorry. Invalid function, %s, called.',
-                $name
+                'Sorry. Invalid function <em>%s</em> called in %s on line %s.',
+                $name,
+                $caller['file'],
+                $caller['line']
             );
             return $message;
             error_log($message);
@@ -397,6 +422,7 @@ class Form
         $this->nonce_base   = !empty($args['nonce_base']) ? $args['nonce_base'] : $this->name;
         $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : [];
         $this->group        = !empty($args['group']) ? $this->splitGroup($args['group']) : null;
+        $this->prefix       = isset($args['prefix']) ? $args['prefix'] : true;
         $this->setType($this->type);
     }
 }

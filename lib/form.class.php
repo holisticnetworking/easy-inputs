@@ -13,11 +13,14 @@ namespace EasyInputs;
 use ReflectionMethod;
 
 /**
- * This class defines an HTML form.
+ * A class that defines an HTML form.
  *
- * An instance of class Form is created with every instance of EasyInputs. Whether or not
- * a form is created by EasyInputs, the Form class holds all the relevant form information
+ * An instance of class Form is created with every instance of EasyInputs. Regardless of
+ * whether we create form tags, the Form class holds all the relevant form information
  * to which any Input class will need to refer.
+ *
+ * This class also becomes the user's primary point of entry for creating new HTML form
+ * elements. 
  */
 class Form
 {

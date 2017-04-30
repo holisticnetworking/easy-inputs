@@ -44,15 +44,16 @@ class EasyInputs
      * Giddyup.
      * This function constructs our EasyInputs class for use in WordPress. Each
      * time a new instance of EasyInputs is created, a new Form class is
-     * created. While not all WordPress forms require actual <form> tags, the
-     * Form class acts as our model for internal representation of the form two
-     * which our EasyInputs class is being applied.
+     * created. While not all WordPress forms require actual &lt;form&gt; tags,
+     * the Form class acts as our model to represent the overall form. It 
+     * defines what kind of data we're handling, a default name to be applied to 
+     * the data and a few other details.
      *
      * @param array $args An array of arguments that instantiates the Form
      * class. Minimally, this array needs to include a 'name', and preferably
      * also a 'type' value. The name is intended to be HTML compatible and is
      * used for certain values unless overridden. The type must be either
-     * post_meta, setting or custom, correlating to the types of supported form
+     * meta, setting or custom, correlating to the types of supported form
      * elements.
      *
      * @return void
