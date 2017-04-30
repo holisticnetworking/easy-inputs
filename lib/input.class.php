@@ -77,6 +77,11 @@ class Input
      */
     public $wrapper;
     
+    /**
+     * Can multiple values be assigned to this input? (outputs '[]')
+     */
+    public $multiple;
+    
     
     /**
      * This function creates the HTML for the required input element.
@@ -277,11 +282,13 @@ class Input
                 $this->group
             )
         );
+        $multiple = !empty($this->multiple) ? '[]' : '';
         return sprintf(
-            '%s%s%s',
+            '%s%s%s%s',
             $prefix,
             $group,
-            $name
+            $name,
+            $multiple
         );
     }
     
@@ -350,6 +357,7 @@ class Input
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
         $this->label        = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
+        $this->multiple     = !empty($args['multiple']) ? true : null;
         $this->group        = !empty($args['group']) 
             ? $this->Form->splitGroup($args['group']) 
             : (array)$this->Form->group;

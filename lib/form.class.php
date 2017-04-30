@@ -229,8 +229,12 @@ class Form
         $output = '';
         $open   = is_array($args) && $args['fieldset'] ? $this->fieldsetOpen($args) : '';
         $close  = is_array($args) && $args['fieldset'] ? $this->fieldsetClose() : '';
-        foreach ($inputs as $name => $args) :
-            $output .= $this->input($name, $args);
+        foreach ($inputs as $name => $a) :
+            if( is_array($a) ) :
+                $output .= $this->input($name, $a);
+            else :
+                $output .= $this->input($a);
+            endif;
         endforeach;
         return sprintf(
             '%1$s%2$s%3$s',
