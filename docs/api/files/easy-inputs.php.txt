@@ -45,8 +45,8 @@ class EasyInputs
      * This function constructs our EasyInputs class for use in WordPress. Each
      * time a new instance of EasyInputs is created, a new Form class is
      * created. While not all WordPress forms require actual &lt;form&gt; tags,
-     * the Form class acts as our model to represent the overall form. It 
-     * defines what kind of data we're handling, a default name to be applied to 
+     * the Form class acts as our model to represent the overall form. It
+     * defines what kind of data we're handling, a default name to be applied to
      * the data and a few other details.
      *
      * @param array $args An array of arguments that instantiates the Form

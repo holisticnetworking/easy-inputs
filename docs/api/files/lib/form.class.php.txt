@@ -20,7 +20,7 @@ use ReflectionMethod;
  * to which any Input class will need to refer.
  *
  * This class also becomes the user's primary point of entry for creating new HTML form
- * elements. 
+ * elements.
  */
 class Form
 {
