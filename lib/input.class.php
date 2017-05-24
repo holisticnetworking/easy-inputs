@@ -354,7 +354,7 @@ class Input
      *
      * @return string HTML containing a legend.
      */
-    public function __construct(string $name = null, array $args = [], Form &$form = null)
+    public function __construct($name = null, $args = [], Form &$form = null)
     {
         if (empty($name)) {
             return;
