@@ -149,13 +149,14 @@ class Input
         }
         $radios = '';
         foreach ($this->options as $key => $data) :
-            $selected   = (!empty($this->value) && $data['value'] == $this->value) ? ' selected ' : '';
             $radios .= sprintf(
-                '<input name="%4$s" type="radio" value="%1$s" %2$s>%3$s</input>',
+                '<label class="radios" for="%4$s-%1$s">
+                    <input name="%4$s" id="%4$s-%1$s" type="radio" value="%1$s" %5$s%2$s />%3$s</label>',
                 $data['value'],
                 $this->Form->attrsToString($this->attrs),
                 $data['name'],
-                $this->fieldName()
+                $this->fieldName(),
+                $this->value == $data['value'] ? 'checked' : null
             );
         endforeach;
         return $radios;
@@ -202,14 +203,15 @@ class Input
         $boxes  = '';
         foreach ($this->options as $key => $data) :
             $fieldname  = !empty($this->group) ? $this->group : $this->name;
+            $selected   = in_array($data['value'], (array)$this->value) ? 'checked' : null;
             $input  = sprintf(
                 '<input id="%1$s" name="%3$s" type="checkbox" value="%1$s" %4$s><label for="%1$s">%2$s</label>',
                 $data['value'],
                 $data['name'],
                 $this->fieldName() . '[]',
-                !empty($data['selected']) ? 'checked' : ''
+                $selected
             );
-            $boxes  .= $this->wrap($input, false);
+            $boxes  .= sprintf('<div class="checkboxes">%s</div>', $input);
         endforeach;
         return $boxes;
     }

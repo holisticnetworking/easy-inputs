@@ -162,22 +162,24 @@ class TestingEasyInputs
                 echo $ei->Form->input(
                     'radio_buttons',
                     [
-                        'type' => 'radio',
-                        'options' => [ 'y' => 'Yes', 'n' => 'No' ]
+                        'type'      => 'radio',
+                        'options'   => ['y' => 'Yes', 'n' => 'No'],
+                        'value'     => 'y'
                     ]
                 );
                 echo $ei->Form->input(
                     'color_select',
                     [
-                            'type' => 'select',
-                            'options' => [
-                                'gr' => 'Green',
-                                'bl' => 'Blue',
-                                'yl' => 'Yellow',
-                                'rd' => 'Red',
-                                'or' => 'Orange'
-                            ]
-                        ]
+                        'type' => 'select',
+                        'options' => [
+                            'gr' => 'Green',
+                            'bl' => 'Blue',
+                            'yl' => 'Yellow',
+                            'rd' => 'Red',
+                            'or' => 'Orange'
+                        ],
+                        'value' => 'bl'
+                    ]
                 );
                 echo $ei->Form->input(
                     'color_checkbox',
@@ -189,7 +191,8 @@ class TestingEasyInputs
                                 'yl' => 'Yellow',
                                 'rd' => 'Red',
                                 'or' => 'Orange'
-                            ]
+                            ],
+                            'value' => ['gr', 'bl', 'or']
                         ]
                 );
             
