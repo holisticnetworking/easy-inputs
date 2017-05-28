@@ -277,7 +277,11 @@ class Form
      */
     public function setGroup($group)
     {
-        $this->group    = $this->splitGroup($group);
+        if(is_null($group)) :
+            $this->group    = null;
+        else :
+            $this->group    = $this->splitGroup($group);
+        endif;
         return true;
     }
     

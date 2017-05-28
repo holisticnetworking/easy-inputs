@@ -82,6 +82,27 @@ class Input
      */
     public $multiple;
     
+    /**
+     * List of supported attributes with regexes to validate against.
+     */
+    public $supported_attributes    = [
+        'accesskey'         => '/^[a-zA-Z\-_.]{1}$/',
+        'class'             => '/^[a-zA-Z\-_.]{1,200}$/',
+        'tabindex'          => '/[0-9]{1,20}/',
+        'width'             => '/[0-9]{1,20}/',
+        'height'            => '/[0-9]{1,20}/',
+        'size'              => '/[0-9]{1,20}/',
+        'maxlength'         => '/[0-9]{1,20}/',
+        'autocomplete'      => '/on|off/',
+        'autofocus'         => '/autofocus/',
+        'list'              => '/^[a-zA-Z\-_.]{1,200}$/',
+        'min'               => '/[0-9\-\/]{1,20}/',
+        'max'               => '/[0-9\-\/]{1,20}/',
+        'placeholder'       => '/^[a-zA-Z\-_. \?!,:]{1,200}$/',
+        'required'          => '/required/',
+        'step'              => '/(\-)[0-9]{1,20}/'
+    ];
+    
     
     /**
      * This function creates the HTML for the required input element.
@@ -341,6 +362,32 @@ class Input
     }
     
     
+    /**
+     * Check the passed set of attributes against a list of supported types.
+     *
+     * Checks for the existence of a given attribute in our supported list, and also
+     * checks it against a basic regex to be sure the value is also supported.
+     *
+     * @param array $options The passed options.
+     */
+    private function doAttributes($attribs)
+    {
+        $attrs    = [];
+        if (!is_array($attribs)) {
+            return false;
+        }
+        foreach ($attribs as $key => $value) :
+            if(
+                array_key_exists($key, $this->supported_attributes) 
+                && preg_match($this->supported_attributes[$key], $value)
+            ) :
+                $attrs[$key]  = $value;
+            endif;
+        endforeach;
+        return $attrs;
+    }
+    
+    
     
     /**
      * Construct our Object
@@ -361,7 +408,7 @@ class Input
         }
         $this->Form         = $form;
         $this->name         = $name;
-        $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : array();
+        $this->attrs        = !empty($args['attrs']) ? $this->doAttributes($args['attrs']) : array();
         $this->options      = !empty($args['options']) ? $this->doOptions($args['options']) : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;

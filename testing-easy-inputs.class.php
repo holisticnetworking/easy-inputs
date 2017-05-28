@@ -264,6 +264,15 @@ class TestingEasyInputs
                     ]
                 );
                 
+                // Demonstrating validated HTML attributes:
+                $ei->Form->setGroup(null);
+                echo $ei->Form->input(
+                    'attributes',
+                    ['attrs'    => [
+                        'step' => '-5'
+                    ]]
+                );
+                
                 
                 echo $ei->Form->submit_button('Submit', ['label' => false, 'value' => 'Submit']);
         
