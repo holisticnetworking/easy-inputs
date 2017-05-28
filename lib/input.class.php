@@ -129,11 +129,6 @@ class Input
         return null;
     }
     
-    private function toCamelCase($string)
-    {
-        return lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
-    }
-    
     /**
      * Return a WP Settings API nonce field.
      *
@@ -498,7 +493,7 @@ class Input
      * Checks for the existence of a given attribute in our supported list, and also
      * checks it against a basic regex to be sure the value is also supported.
      *
-     * @param array $options The passed options.
+     * @param array $attribs The passed options.
      */
     private function doAttributes($attribs)
     {
@@ -514,6 +509,18 @@ class Input
             endif;
         endforeach;
         return $attrs;
+    }
+    
+    
+    
+    /**
+     * Convert string to camelCase.
+     *
+     * @param string $string The string to convert into camelCase
+     */
+    private function toCamelCase($string)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
     }
     
     

@@ -124,7 +124,7 @@ class Form
      * @return string HTML containing the opening tag for a fieldset with
      * optional legend.
      */
-    public function fieldsetOpen(array $args)
+    public function fieldsetOpen($args)
     {
         extract($args);
         return sprintf(
@@ -175,7 +175,7 @@ class Form
      *
      * @return string The HTML string for this label.
      */
-    public static function label(string $for = null, string $text = null, array $attrs = null)
+    public static function label($for = null, $text = null, $attrs = null)
     {
         // Bounce bad requests.
         if (empty($for)) {
@@ -205,7 +205,7 @@ class Form
      *
      * @return string The HTML string for this input.
      */
-    public function input(string $name, array $args = [])
+    public function input($name, $args = [])
     {
         return ( new Input($name, $args, $this) )->create();
     }
@@ -227,7 +227,7 @@ class Form
      *
      * @return string A string of HTML including all inputs from $inputs.
      */
-    public function inputs(array $inputs = [], array $args = [])
+    public function inputs($inputs = [], $args = [])
     {
         $args   = $this->setFieldsetDefaults($args);
         $output = '';
@@ -257,7 +257,7 @@ class Form
      *
      * @return string A string of HTML including all inputs from $inputs.
      */
-    public function setFieldsetDefaults(array $args = [])
+    public function setFieldsetDefaults($args = [])
     {
         $defaults   = [
             'fieldset'  => true,
@@ -275,9 +275,13 @@ class Form
      *
      * @return bool true
      */
-    public function setGroup(string $group)
+    public function setGroup($group)
     {
-        $this->group    = $this->splitGroup($group);
+        if (is_null($group)) :
+            $this->group    = null;
+        else :
+            $this->group    = $this->splitGroup($group);
+        endif;
         return true;
     }
     
@@ -304,7 +308,7 @@ class Form
      *
      * @api
      */
-    public function hiddenFields(string $setting)
+    public function hiddenFields($setting)
     {
         if (empty($setting)) {
             return;
@@ -332,7 +336,7 @@ class Form
      *
      * @api
      */
-    public static function attrsToString(array $attrs)
+    public static function attrsToString($attrs)
     {
         if (empty($attrs)) {
             return null;
@@ -352,7 +356,7 @@ class Form
      *
      * @return null
      */
-    private function setType(string $type = null)
+    private function setType($type = null)
     {
         switch ($type) :
             case 'setting':
@@ -411,7 +415,7 @@ class Form
      *
      * @return null
      */
-    public function __construct(array $args)
+    public function __construct($args)
     {
         // Bounce incomplete requests:
         if (empty($args) || empty($args['name'])) {
