@@ -275,13 +275,13 @@ class TestingEasyInputs
                 );
                 
                 echo $ei->Form->input(
-                    'telephone',
+                    'datetime_local',
                     ['attrs'    => [],
-                    'type'  => 'tel']
+                    'type'  => 'datetime-local']
                 );
                 
                 
-                echo $ei->Form->submit_button('Submit', ['label' => false, 'value' => 'Submit']);
+                echo $ei->Form->submitButton('Submit', ['label' => false, 'value' => 'Submit']);
         
             // Close the form:
             echo $ei->Form->close();

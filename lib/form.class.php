@@ -277,7 +277,7 @@ class Form
      */
     public function setGroup($group)
     {
-        if(is_null($group)) :
+        if (is_null($group)) :
             $this->group    = null;
         else :
             $this->group    = $this->splitGroup($group);

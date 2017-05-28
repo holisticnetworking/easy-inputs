@@ -114,8 +114,8 @@ class Input
         $label  = null;
         $input  = null;
         // Do nothing unless a valid type exists:
-        $function   = preg_replace('/\-/', '_', $this->type);
-        if(method_exists(__NAMESPACE__ . '\Input', $function)) :
+        $function   = $this->toCamelCase($this->type);
+        if (method_exists(__NAMESPACE__ . '\Input', $function)) :
             $reflector  = new ReflectionMethod(__NAMESPACE__ . '\Input::' . $function);
             // If a public method exists that matches the type property:
             if ($reflector->isPublic()) :
@@ -127,6 +127,11 @@ class Input
             return $this->wrap($input);
         endif;
         return null;
+    }
+    
+    private function toCamelCase($string)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
     }
     
     /**
@@ -211,7 +216,7 @@ class Input
     /**
      * A datetime-local picker input
      */
-    public function datetime_local()
+    public function datetimeLocal()
     {
         return $this->generic();
     }
@@ -393,7 +398,7 @@ class Input
     /**
      * Mimics the native WP submit_button function
      */
-    public function submit_button()
+    public function submitButton()
     {
         return sprintf(
             '<input type="submit" name="%2$s" id="%3$s" class="%1$s" value="%4$s"  />',
@@ -502,8 +507,7 @@ class Input
             return false;
         }
         foreach ($attribs as $key => $value) :
-            if(
-                array_key_exists($key, $this->supported_attributes) 
+            if (array_key_exists($key, $this->supported_attributes)
                 && preg_match($this->supported_attributes[$key], $value)
             ) :
                 $attrs[$key]  = $value;
