@@ -95,12 +95,14 @@ class Input
         'maxlength'         => '/[0-9]{1,20}/',
         'autocomplete'      => '/on|off/',
         'autofocus'         => '/autofocus/',
+        'autosave'          => '/^[a-zA-Z\-_.]{1,200}$/',
+        'results'           => '/[0-9]{1,20}/',
         'list'              => '/^[a-zA-Z\-_.]{1,200}$/',
         'min'               => '/[0-9\-\/]{1,20}/',
         'max'               => '/[0-9\-\/]{1,20}/',
         'placeholder'       => '/^[a-zA-Z\-_. \?!,:]{1,200}$/',
         'required'          => '/required/',
-        'step'              => '/(\-)[0-9]{1,20}/'
+        'step'              => '/[0-9]{1,20}/'
     ];
     
     
@@ -111,15 +113,20 @@ class Input
     {
         $label  = null;
         $input  = null;
-        $reflector  = new ReflectionMethod(__NAMESPACE__ . '\Input::' . $this->type);
-        // If a public method exists, then we're dealing with a form element:
-        if ($reflector->isPublic()) :
-            $input  = $this->{$this->type}();
-        // Generic text input.
-        else :
-            $input  = $this->text();
+        // Do nothing unless a valid type exists:
+        $function   = preg_replace('/\-/', '_', $this->type);
+        if(method_exists(__NAMESPACE__ . '\Input', $function)) :
+            $reflector  = new ReflectionMethod(__NAMESPACE__ . '\Input::' . $function);
+            // If a public method exists that matches the type property:
+            if ($reflector->isPublic()) :
+                $input  = $this->{$function}();
+            // Generic text input.
+            else :
+                $input  = $this->generic();
+            endif;
+            return $this->wrap($input);
         endif;
-        return $this->wrap($input);
+        return null;
     }
     
     /**
@@ -149,15 +156,133 @@ class Input
     /**
      * An HTML text input
      */
-    public function text()
+    public function generic()
     {
         return sprintf(
-            '<input id="%s" type="text" name="%s" %s value="%s" />',
+            '<input id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s" />',
             $this->name,
+            $this->type,
             $this->fieldName(),
             $this->Form->attrsToString($this->attrs),
             $this->value
         );
+    }
+    
+    /**
+     * A color picker input
+     */
+    public function color()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A date picker input
+     */
+    public function date()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A month picker input
+     */
+    public function month()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A week picker input
+     */
+    public function week()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A datetime picker input
+     */
+    public function datetime()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A datetime-local picker input
+     */
+    public function datetime_local()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A email input
+     */
+    public function email()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A number input
+     */
+    public function number()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A range slider input
+     */
+    public function range()
+    {
+        $range  = $this->generic();
+        $output = $this->output();
+        return $range.$output;
+    }
+    
+    /**
+     * An output for other values
+     */
+    public function output()
+    {
+        return sprintf(
+            '<output id="output-%1$s" for="%1$s"></output>',
+            $this->name
+        );
+    }
+    
+    /**
+     * A search input
+     */
+    public function search()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A telephone input
+     */
+    public function tel()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A time input
+     */
+    public function time()
+    {
+        return $this->generic();
+    }
+    
+    /**
+     * A url input
+     */
+    public function url()
+    {
+        return $this->generic();
     }
     
     /**

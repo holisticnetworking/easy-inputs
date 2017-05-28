@@ -270,7 +270,14 @@ class TestingEasyInputs
                     'attributes',
                     ['attrs'    => [
                         'step' => '-5'
-                    ]]
+                    ],
+                    'type'  => 'number']
+                );
+                
+                echo $ei->Form->input(
+                    'telephone',
+                    ['attrs'    => [],
+                    'type'  => 'tel']
                 );
                 
                 
