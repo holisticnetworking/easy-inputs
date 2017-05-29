@@ -487,31 +487,6 @@ class Input
     }
     
     
-    /**
-     * Check the passed set of attributes against a list of supported types.
-     *
-     * Checks for the existence of a given attribute in our supported list, and also
-     * checks it against a basic regex to be sure the value is also supported.
-     *
-     * @param array $attribs The passed options.
-     */
-    private function doAttributes($attribs)
-    {
-        $attrs    = [];
-        if (!is_array($attribs)) {
-            return false;
-        }
-        foreach ($attribs as $key => $value) :
-            if (array_key_exists($key, $this->supported_attributes)
-                && preg_match($this->supported_attributes[$key], $value)
-            ) :
-                $attrs[$key]  = $value;
-            endif;
-        endforeach;
-        return $attrs;
-    }
-    
-    
     
     /**
      * Convert string to camelCase.
@@ -544,7 +519,7 @@ class Input
         }
         $this->Form         = $form;
         $this->name         = $name;
-        $this->attrs        = !empty($args['attrs']) ? $this->doAttributes($args['attrs']) : array();
+        $this->attrs        = !empty($args['attrs']) ? $this->Form->doAttributes($args['attrs']) : array();
         $this->options      = !empty($args['options']) ? $this->doOptions($args['options']) : array();
         $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
