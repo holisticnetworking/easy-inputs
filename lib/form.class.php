@@ -79,6 +79,29 @@ class Form
      * @var string
      */
     public $nonce_base;
+    
+    /**
+     * List of supported attributes with regexes to validate against.
+     */
+    public $supported_attributes    = [
+        'accesskey'         => '/^[a-zA-Z\-_.]{1}$/',
+        'class'             => '/^[a-zA-Z\-_.]{1,200}$/',
+        'tabindex'          => '/[0-9]{1,20}/',
+        'width'             => '/[0-9]{1,20}/',
+        'height'            => '/[0-9]{1,20}/',
+        'size'              => '/[0-9]{1,20}/',
+        'maxlength'         => '/[0-9]{1,20}/',
+        'autocomplete'      => '/on|off/',
+        'autofocus'         => '/autofocus/',
+        'autosave'          => '/^[a-zA-Z\-_.]{1,200}$/',
+        'results'           => '/[0-9]{1,20}/',
+        'list'              => '/^[a-zA-Z\-_.]{1,200}$/',
+        'min'               => '/[0-9\-\/]{1,20}/',
+        'max'               => '/[0-9\-\/]{1,20}/',
+        'placeholder'       => '/^[a-zA-Z\-_. \?!,:]{1,200}$/',
+        'required'          => '/required/',
+        'step'              => '/[0-9]{1,20}/'
+    ];
 
 
     /**
@@ -377,6 +400,30 @@ class Form
     }
     
     /**
+     * Check the passed set of attributes against a list of supported types.
+     *
+     * Checks for the existence of a given attribute in our supported list, and also
+     * checks it against a basic regex to be sure the value is also supported.
+     *
+     * @param array $attribs The passed options.
+     */
+    public function doAttributes($attribs)
+    {
+        $attrs    = [];
+        if (!is_array($attribs)) {
+            return false;
+        }
+        foreach ($attribs as $key => $value) :
+            if (array_key_exists($key, $this->supported_attributes)
+                && preg_match($this->supported_attributes[$key], $value)
+            ) :
+                $attrs[$key]  = $value;
+            endif;
+        endforeach;
+        return $attrs;
+    }
+    
+    /**
      * Call the correct function if it exists.
      *
      * This function allows us to call Input types directly at the discretion of the
@@ -424,7 +471,7 @@ class Form
         $this->name         = $args['name'];
         $this->type         = !empty($args['type']) ? $args['type'] : 'post_meta';
         $this->nonce_base   = !empty($args['nonce_base']) ? $args['nonce_base'] : $this->name;
-        $this->attrs        = !empty($args['attrs']) ? $args['attrs'] : [];
+        $this->attrs        = !empty($args['attrs']) ? $this->doAttributes($args['attrs']) : [];
         $this->group        = !empty($args['group']) ? $this->splitGroup($args['group']) : null;
         $this->prefix       = isset($args['prefix']) ? $args['prefix'] : true;
         $this->setType($this->type);
