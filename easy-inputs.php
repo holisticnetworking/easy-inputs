@@ -14,6 +14,7 @@ Description: A WordPress Forms template engine.
 Version: 0.1b
 Author: Thomas J Belknap
 Author URI: http://belknap.biz
+GitHub Plugin URI: holisticnetworking/easy-inputs
 License: GPLv2 or later
 */
 
