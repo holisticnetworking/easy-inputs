@@ -126,7 +126,7 @@ class Input
             endif;
             return $this->wrap($input);
         endif;
-        return null;
+        return __NAMESPACE__ . '\Input::' . $function;
     }
     
     /**
@@ -521,7 +521,7 @@ class Input
         $this->name         = $name;
         $this->attrs        = !empty($args['attrs']) ? $this->Form->doAttributes($args['attrs']) : array();
         $this->options      = !empty($args['options']) ? $this->doOptions($args['options']) : array();
-        $this->type         = !empty($args['type']) ? $args['type'] : 'text';
+        $this->type         = !empty($args['type']) ? $args['type'] : 'generic';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
         $this->label        = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
         $this->multiple     = !empty($args['multiple']) ? true : null;
