@@ -140,11 +140,6 @@ class Input
      * This function returns, rather than outputs, the nonce, in case we
      * need to do something further before output.
      *
-     * @param string $name   A name from which to create our nonce.
-     * @param string $action The action requiring our nonce.
-     * @param bool $referer Whether to include a referer input as well.
-     * @param bool $echo Whether to echo or return as a value.
-     *
      * @return string the opening tag for the form element.
      */
     public function nonce()
@@ -415,6 +410,24 @@ class Input
     {
         return wp_editor($this->value, $this->name);
     }
+
+    /**
+     * Creates a media uploader-compatible input
+     * @see https://codex.wordpress.org/Javascript_Reference/wp.media
+     */
+    public function uploader() {
+        $uploader   = sprintf(
+            '<div class="ei-uploader hide-if-no-js">
+            <a title="" href="javascript:;" class="set-image">Set Image</a><br />
+            <a title="" href="javascript:;" class="remove-image">Remove Image</a>
+            <input type="hidden" id="%1$s" name="%2$s" value="%3$s" />
+            </div>',
+            isset($this->id) ? $this->id : $this->name,
+            $this->name,
+            $this->value
+        );
+        return $uploader;
+    }
     
     /**
      * Return a valid field name attribute.
@@ -453,6 +466,8 @@ class Input
      *
      * @param string $input The unwrapped HTML input element
      * @param boolean $label Indicates whether or not to include a <label> element.
+     *
+     * @return string
      */
     private function wrap($input, $label = true)
     {
@@ -472,6 +487,8 @@ class Input
      * Order our options into a consistent format
      *
      * @param array $options The passed options.
+     *
+     * @return mixed
      */
     private function doOptions($options)
     {
@@ -489,21 +506,19 @@ class Input
         endforeach;
         return $options;
     }
-    
-    
-    
+
     /**
      * Convert string to camelCase.
      *
      * @param string $string The string to convert into camelCase
+     *
+     * @return string
      */
     private function toCamelCase($string)
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
     }
-    
-    
-    
+
     /**
      * Construct our Object
      *
@@ -514,7 +529,7 @@ class Input
      * array of input arguments containing the above static values.
      * @param EasyInputs\Form $form An instance of the Easy Inputs form class.
      *
-     * @return string HTML containing a legend.
+     * @return mixed HTML containing a legend or null.
      */
     public function __construct($name = null, $args = [], Form &$form = null)
     {
