@@ -124,7 +124,11 @@ class Input
             else :
                 $input  = $this->generic();
             endif;
-            return $this->wrap($input);
+            if($this->type == 'button') :
+                return $input;
+            else :
+                return $this->wrap($input);
+            endif;
         endif;
         return __NAMESPACE__ . '\Input::' . $function;
     }
