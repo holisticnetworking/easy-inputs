@@ -38,6 +38,7 @@ echo $ei->Form->input('my-input');
 ```
 
 Want a radio button group? No sweat:
+
 ```
 echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['yes' => 'Yes', 'no' => 'No']]);
 ```
@@ -50,8 +51,7 @@ The above code will output:
     <label class="radios" for="MyForm[my-radio]-no"><input name="MyForm[my-radio]" id="MyForm[my-radio]-no" type="radio" value="no">No</label>
 </div>
 ```
-Don't want that pesky `div` wrapping your input? No sweat:
-```echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['Yes', 'No'], 'div' => false]);```
+Don't want that pesky `div` wrapping your input? No sweat! Simply add `'div' => false` to your config array and poof! It's gone!
 
 Here's a more involved case. In this instance, we're also adding a custom label and setting a few HTML attributes for the input. Note that all HTML5 attributes are supported by this API, with just a few listed in this case for brevity:
 ```
