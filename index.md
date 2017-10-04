@@ -1,12 +1,12 @@
 # The Last Form Builder You'll Ever Need
 ***
-This plugin introduces a new Forms API that facilitates and speeds the creation of forms within WordPress. As much as a modern WordPress website relies on forms and inputs - for settings, post meta data, user meta data and even front end forms - there is no unified way of creating them in WordPress. The result is buggy, error-prone form creation with sprintf()'s and replacing values.
+As dependent as a modern WordPress website is on forms and inputs - for settings, post meta data, user meta data and even front end forms - there is no unified way of creating them in WordPress. The result is buggy, error-prone form creation with sprintf()'s and replacing values. Not only buggy and error prone, building HTML form elements "the old fashioned way" is also BORING and SLOW. What if there was a faster, easier way?
 
 ![alt text][screenshot]
 
 [screenshot]: img/bad-screenshot.png "Be kind: sprintf() at a minimum."
 
-Instead, this API borrows heavily from CakePHP's FormHelper to provide a uniform set of methods that will create form fields including WordPress editor windows.
+As a solution, this API borrows heavily from CakePHP's FormHelper to provide a uniform set of methods that will create form fields including WordPress editor windows. In this way, setting up the configuration of a WordPress form or form field feels a lot more like configuring other WP elements such as `wp_nav_menu()`.
 To install this plugin, download the repository
 
 ## Usage
@@ -29,12 +29,21 @@ echo $ei->Form->input('my-input');
 
 Want a radio button group? No sweat:
 ```
-echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['Yes', 'No']]);
+echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['yes' => 'Yes', 'no' => 'No']]);
 ```
 
 The above code will output:
+```
+<div class="input radio">
+    <label for="availability">Availability</label>
+    <label class="radios" for="MyForm[my-radio]-yes"><input name="MyForm[my-radio]" id="MyForm[my-radio]-yes" type="radio" value="yes">Yes</label>
+    <label class="radios" for="MyForm[my-radio]-no"><input name="MyForm[my-radio]" id="MyForm[my-radio]-no" type="radio" value="no">No</label>
+</div>
+```
+Don't want that pesky `div` wrapping your input? No sweat:
+```echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['Yes', 'No'], 'div' => false]);```
 
-
+Here's a more involved case. In this instance, we're also adding a custom label and setting a few HTML attributes for the input. Note that all HTML5 attributes are supported by this plugin, with just a few listed in this case for brevity:
 ```
 echo $ei->Form->input([ 'this-input',
 	[
