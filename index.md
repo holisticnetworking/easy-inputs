@@ -47,15 +47,15 @@ The above code will output:
 ```
 <div class="input radio">
     <label for="my-radio">My Radio</label>
-    <label class="radios" for="MyForm[my-radio]-yes"><input name="MyForm[my-radio]" id="MyForm[my-radio]-yes" type="radio" value="yes">Yes</label>
-    <label class="radios" for="MyForm[my-radio]-no"><input name="MyForm[my-radio]" id="MyForm[my-radio]-no" type="radio" value="no">No</label>
+    <label class="radios" for="testing-easy-inputs[my-radio]-yes"><input name="testing-easy-inputs[my-radio]" id="testing-easy-inputs[my-radio]-yes" type="radio" value="yes">Yes</label>
+    <label class="radios" for="testing-easy-inputs[my-radio]-no"><input name="testing-easy-inputs[my-radio]" id="testing-easy-inputs[my-radio]-no" type="radio" value="no">No</label>
 </div>
 ```
 Don't want that pesky `div` wrapping your input? No sweat! Simply add `'div' => false` to your config array and poof! It's gone!
 
 Here's a more involved case. In this instance, we're also adding a custom label and setting a few HTML attributes for the input. Note that all HTML5 attributes are supported by this API, with just a few listed in this case for brevity:
 ```
-echo $ei->Form->input([ 'this-input',
+echo $ei->Form->input('this-input',
 	[
 		'type' => 'text',
 		'label'	=> 'This Input is Awesome!!',
@@ -65,9 +65,15 @@ echo $ei->Form->input([ 'this-input',
 			'class' => 'a series of classes'
 		],
 	]
-]);
+);
 ```
-
+Here is the resulting HTML:
+```
+<div class="input text">
+    <label for="this-input">This Input is Awesome!!</label>
+    <input id="this-input" type="text" name="testing-easy-inputs[totally-different-group][this-input]" value="">
+</div>
+```
 ## Easy Configuration
 While a simple one-line bit of code can get you a basic form input, most any configuration you might want for your input can also be provided for with the `$args` argument.
 ### Forms
