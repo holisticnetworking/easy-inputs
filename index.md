@@ -45,7 +45,7 @@ echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['yes' => 'Ye
 The above code will output:
 ```
 <div class="input radio">
-    <label for="availability">Availability</label>
+    <label for="my-radio">My Radio</label>
     <label class="radios" for="MyForm[my-radio]-yes"><input name="MyForm[my-radio]" id="MyForm[my-radio]-yes" type="radio" value="yes">Yes</label>
     <label class="radios" for="MyForm[my-radio]-no"><input name="MyForm[my-radio]" id="MyForm[my-radio]-no" type="radio" value="no">No</label>
 </div>
