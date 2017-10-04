@@ -30,6 +30,8 @@ As you can see, you can set baseline options that apply to both the hypothetical
 testing-easy-inputs[FormGroup][Subgroup][Evensubbergroup]
 ```
 
+In the event that a given input within a form needs to be held in a different array, we can use the `group` element on the input as well. See below for further information.
+
 Creating a text input can be as simple as passing the `name` of the field as follows:
 ```
 echo $ei->Form->input('my-input');
@@ -55,11 +57,12 @@ Here's a more involved case. In this instance, we're also adding a custom label 
 ```
 echo $ei->Form->input([ 'this-input',
 	[
-		'type'		=> 'text',
-		'label'	=> 'This Input is Awesome!!'
-		'attr'		=> [
-			'id' 		=> 'MyInput',
-			'class'	=> 'a series of classes'
+		'type' => 'text',
+		'label'	=> 'This Input is Awesome!!',
+		'group' => 'totally-different-group',
+		'attr' => [
+			'id' => 'MyInput',
+			'class' => 'a series of classes'
 		],
 	]
 ]);
