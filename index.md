@@ -10,21 +10,33 @@ Instead, this API borrows heavily from CakePHP's FormHelper to provide a uniform
 To install this plugin, download the repository
 
 ## Usage
-Using the plugin couldn't be easier. Simply include the plugin, instatiate the class and start creating inputs right away!
-
+Using the plugin couldn't be easier. Simply include the plugin, instantiate the class and start creating inputs right away!
 ```
 require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
-$ei = new EasyInputs(
-    [
-    'name'		=> 'testing-easy-inputs',
-    'type'		=> 'setting',
-    'nonce_base'	=> 'A World Become One, of Salads and Sun.',
-    'group'		=> 'FormGroup,Subgroup,Evensubbergroup'
-    ]
-);
+$ei = new EasyInputs([
+    'name' => 'testing-easy-inputs',
+    'type' => 'setting',
+    'nonce_base' => 'A World Become One, of Salads and Sun.',
+    'group' => 'FormGroup,Subgroup,Evensubbergroup'
+]);
+```
+Since we're creating a setting, we don't need to worry about creating the `form` element. Instead, we can move right on to building our form elements.
 
-echo $ei->Form->input([
-'this-input',
+Creating a text input can be as simple as passing the `name` of the field as follows:
+```
+echo $ei->Form->input('my-input');
+```
+
+Want a radio button group? No sweat:
+```
+echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['Yes', 'No']]);
+```
+
+The above code will output:
+
+
+```
+echo $ei->Form->input([ 'this-input',
 	[
 		'type'		=> 'text',
 		'label'	=> 'This Input is Awesome!!'
@@ -40,11 +52,6 @@ As you can see, you can set baseline options that apply to both the hypothetical
 
 ```
 testing-easy-inputs[FormGroup][Subgroup][Evensubbergroup]
-```
-
-Creating an input can be as simple as passing the `name` of the field as follows:
-```
-echo $ei->Form->input('my-input');
 ```
 
 ## Easy Configuration
@@ -63,3 +70,18 @@ While a simple one-line bit of code can get you a basic form input, most any con
 * the `options` element provides a key/value pairing of options for checkbox, select and radio button elements.
 * The `value` element contains the value to either be assigned to a text input or textarea element, or the index of `options` to be checked.
 * The `group` element allows you to specify the group to apply to a single element.
+
+## HTML5 Form Elements
+Easy Inputs was built to be compatible with all HTML5 form elements including:
+* Color
+* Date
+* Datetime-local
+* Email
+* Month
+* Number
+* Range
+* Search
+* Tel
+* Time
+* URL
+* Week
