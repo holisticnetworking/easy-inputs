@@ -166,6 +166,14 @@ class Input
             $this->value
         );
     }
+
+    /**
+     * A text input
+     */
+    public function text()
+    {
+        return $this->generic();
+    }
     
     /**
      * A color picker input
@@ -540,7 +548,7 @@ class Input
         $this->name         = $name;
         $this->attrs        = !empty($args['attrs']) ? $this->Form->doAttributes($args['attrs']) : array();
         $this->options      = !empty($args['options']) ? $this->doOptions($args['options']) : array();
-        $this->type         = !empty($args['type']) ? $args['type'] : 'generic';
+        $this->type         = !empty($args['type']) ? $args['type'] : 'text';
         $this->value        = !empty($args['value']) ? $args['value'] : null;
         $this->label        = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
         $this->multiple     = !empty($args['multiple']) ? true : null;
@@ -559,10 +567,10 @@ class Input
         
         // Either no label or a user-defined one:
         if (isset($args['label'])) :
-            $this->label  = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
+            $this->label  = !empty($args['label']) ? $this->Form->label($this->name, $args['label']) : null;
         // Default:
         else :
-            $this->label  = $this->Form->label($name);
+            $this->label  = $this->Form->label($this->name);
         endif;
     }
 }
