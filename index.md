@@ -9,10 +9,10 @@ As dependent as a modern WordPress website is on forms and inputs - for settings
 As a solution, this API borrows heavily from CakePHP's FormHelper to provide a uniform set of methods that will create form fields including WordPress editor windows. In this way, setting up the configuration of a WordPress form or form field feels a lot more like configuring other WP elements such as `wp_nav_menu()`.
 
 ## Installation
-To install this plugin, clone the repository into your /wp-content/plugins directory. There is no need to "activate" this "plugin". Once the files are in place, simply include them into your project as shown below.
+To install this API, clone the repository into your /wp-content/plugins directory. There is no need to "activate" this "plugin". Once the files are in place, simply include them into your project as shown below.
 
 ## Usage
-Using the plugin couldn't be easier. Simply include the plugin, instantiate the class and start creating inputs right away!
+Using the API couldn't be easier. Simply include the API, instantiate the class and start creating inputs right away!
 ```
 require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
 $ei = new EasyInputs([
@@ -53,7 +53,7 @@ The above code will output:
 Don't want that pesky `div` wrapping your input? No sweat:
 ```echo $ei->Form->input('my-radio', ['type' => 'radio', 'options' => ['Yes', 'No'], 'div' => false]);```
 
-Here's a more involved case. In this instance, we're also adding a custom label and setting a few HTML attributes for the input. Note that all HTML5 attributes are supported by this plugin, with just a few listed in this case for brevity:
+Here's a more involved case. In this instance, we're also adding a custom label and setting a few HTML attributes for the input. Note that all HTML5 attributes are supported by this API, with just a few listed in this case for brevity:
 ```
 echo $ei->Form->input([ 'this-input',
 	[
