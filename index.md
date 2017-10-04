@@ -24,6 +24,12 @@ $ei = new EasyInputs([
 ```
 The only two required settings to include are the type and name of the form. `type` helps define the required elements for the form. `name` will be used as a prefix to inputs unless otherwise specified and goes into creating our nonces. Since we're creating a setting, we don't need to worry about creating the `form` element. Instead, we can move right on to building our form elements.
 
+As you can see, you can set baseline options that apply to both the hypothetical Form and all of it's inputs. In this case, we didn't need to create a &lt;form&gt; element, because we're creating inputs for a settings page. But we set our nonce base for any future nonces we need to create. We can also set a comma-separated list of nested groups in case we need to organize our data into arrays:
+
+```
+testing-easy-inputs[FormGroup][Subgroup][Evensubbergroup]
+```
+
 Creating a text input can be as simple as passing the `name` of the field as follows:
 ```
 echo $ei->Form->input('my-input');
@@ -57,12 +63,6 @@ echo $ei->Form->input([ 'this-input',
 		],
 	]
 ]);
-```
-
-As you can see, you can set baseline options that apply to both the hypothetical Form and all of it's inputs. In this case, we didn't need to create a &lt;form&gt; element, because we're creating inputs for a settings page. But we set our nonce base for any future nonces we need to create. We can also set a comma-separated list of nested groups in case we need to organize our data into arrays:
-
-```
-testing-easy-inputs[FormGroup][Subgroup][Evensubbergroup]
 ```
 
 ## Easy Configuration
