@@ -7,7 +7,9 @@ As dependent as a modern WordPress website is on forms and inputs - for settings
 [screenshot]: img/bad-screenshot.png "Be kind: sprintf() at a minimum."
 
 As a solution, this API borrows heavily from CakePHP's FormHelper to provide a uniform set of methods that will create form fields including WordPress editor windows. In this way, setting up the configuration of a WordPress form or form field feels a lot more like configuring other WP elements such as `wp_nav_menu()`.
-To install this plugin, download the repository
+
+## Installation
+To install this plugin, clone the repository into your /wp-content/plugins directory. There is no need to "activate" this "plugin". Once the files are in place, simply include them into your project as shown below.
 
 ## Usage
 Using the plugin couldn't be easier. Simply include the plugin, instantiate the class and start creating inputs right away!
@@ -20,7 +22,7 @@ $ei = new EasyInputs([
     'group' => 'FormGroup,Subgroup,Evensubbergroup'
 ]);
 ```
-Since we're creating a setting, we don't need to worry about creating the `form` element. Instead, we can move right on to building our form elements.
+The only two required settings to include are the type and name of the form. `type` helps define the required elements for the form. `name` will be used as a prefix to inputs unless otherwise specified and goes into creating our nonces. Since we're creating a setting, we don't need to worry about creating the `form` element. Instead, we can move right on to building our form elements.
 
 Creating a text input can be as simple as passing the `name` of the field as follows:
 ```
