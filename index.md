@@ -2,6 +2,7 @@
 ***
 ## -->> NEW FOR 1.1.0! The WordPress Media Uploader has appeared! <<--
 **By popular demand, the WordPress Media Uploader is now represented in Easy Inputs! See below under the section on "WordPress Fields"**
+
 As dependent as a modern WordPress website is on forms and inputs - for settings, post meta data, user meta data and even front end forms - there is no unified way of creating them in WordPress. The result is buggy, error-prone form creation with sprintf()'s and replacing values. Not only buggy and error prone, building HTML form elements "the old fashioned way" is also BORING and SLOW. What if there was a faster, easier way?
 
 ![alt text][screenshot]
