@@ -424,17 +424,36 @@ class Input
      * @see https://codex.wordpress.org/Javascript_Reference/wp.media
      */
     public function uploader() {
+        $label  = '';
+        if(empty($this->value)) :
+            $label  = __('Set Image');
+        else :
+            $image = $this->get_image_id($this->value);
+            $label  = wp_get_attachment_image($image, 'thumbnail');
+        endif;
         $uploader   = sprintf(
             '<div class="ei-uploader hide-if-no-js">
-            <a title="" href="javascript:;" class="set-image">Set Image</a><br />
+            <a title="" href="javascript:;" class="set-image">%4$s</a><br />
             <a title="" href="javascript:;" class="remove-image">Remove Image</a>
             <input type="hidden" id="%1$s" name="%2$s" value="%3$s" />
             </div>',
             isset($this->id) ? $this->id : $this->name,
-            $this->name,
-            $this->value
+            $this->fieldName($this->name, $this->group),
+            $this->value,
+            $label
         );
         return $uploader;
+    }
+
+    /**
+     * Return the ID of the full-size image URL given.
+     * @param $image_url
+     * @return mixed
+     */
+    public function get_image_id($image_url) {
+        global $wpdb;
+        $attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ));
+        return $attachment[0];
     }
     
     /**
