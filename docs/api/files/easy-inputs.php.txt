@@ -7,15 +7,17 @@
  * @license GPLv2 or later
  * @link    http://holisticnetworking.net/easy-inputs-wordpress/
  */
-/*
-Plugin Name: Easy Inputs
-Plugin URI:
-Description: A WordPress Forms template engine.
-Version: 0.1b
-Author: Thomas J Belknap
-Author URI: http://belknap.biz
-License: GPLv2 or later
-*/
+/**
+ * Plugin Name: Easy Inputs
+ * Plugin URI: https://holisticnetworking.github.io/easy-inputs/
+ * Description: A WordPress Forms template engine.
+ * Version: 1.0
+ * Author: Thomas J Belknap
+ * Author URI: http://holisticnetworking.net
+ * GitHub Plugin URI: holisticnetworking/easy-inputs
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 namespace EasyInputs;
 

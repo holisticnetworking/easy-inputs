@@ -124,9 +124,13 @@ class Input
             else :
                 $input  = $this->generic();
             endif;
-            return $this->wrap($input);
+            if($this->type == 'button') :
+                return $input;
+            else :
+                return $this->wrap($input);
+            endif;
         endif;
-        return null;
+        return __NAMESPACE__ . '\Input::' . $function;
     }
     
     /**
@@ -135,11 +139,6 @@ class Input
      * Don't overthink it. Just let WordPress handle creating the nonce.
      * This function returns, rather than outputs, the nonce, in case we
      * need to do something further before output.
-     *
-     * @param string $name   A name from which to create our nonce.
-     * @param string $action The action requiring our nonce.
-     * @param bool $referer Whether to include a referer input as well.
-     * @param bool $echo Whether to echo or return as a value.
      *
      * @return string the opening tag for the form element.
      */
@@ -166,6 +165,14 @@ class Input
             $this->Form->attrsToString($this->attrs),
             $this->value
         );
+    }
+
+    /**
+     * A text input
+     */
+    public function text()
+    {
+        return $this->generic();
     }
     
     /**
@@ -411,6 +418,43 @@ class Input
     {
         return wp_editor($this->value, $this->name);
     }
+
+    /**
+     * Creates a media uploader-compatible input
+     * @see https://codex.wordpress.org/Javascript_Reference/wp.media
+     */
+    public function uploader() {
+        $label  = '';
+        if(empty($this->value)) :
+            $label  = __('Set Image');
+        else :
+            $image = $this->get_image_id($this->value);
+            $label  = wp_get_attachment_image($image, 'thumbnail');
+        endif;
+        $uploader   = sprintf(
+            '<div class="ei-uploader hide-if-no-js">
+            <a title="" href="javascript:;" class="set-image">%4$s</a><br />
+            <a title="" href="javascript:;" class="remove-image">Remove Image</a>
+            <input type="hidden" id="%1$s" name="%2$s" value="%3$s" />
+            </div>',
+            isset($this->id) ? $this->id : $this->name,
+            $this->fieldName($this->name, $this->group),
+            $this->value,
+            $label
+        );
+        return $uploader;
+    }
+
+    /**
+     * Return the ID of the full-size image URL given.
+     * @param $image_url
+     * @return mixed
+     */
+    public function get_image_id($image_url) {
+        global $wpdb;
+        $attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ));
+        return $attachment[0];
+    }
     
     /**
      * Return a valid field name attribute.
@@ -449,6 +493,8 @@ class Input
      *
      * @param string $input The unwrapped HTML input element
      * @param boolean $label Indicates whether or not to include a <label> element.
+     *
+     * @return string
      */
     private function wrap($input, $label = true)
     {
@@ -468,6 +514,8 @@ class Input
      * Order our options into a consistent format
      *
      * @param array $options The passed options.
+     *
+     * @return mixed
      */
     private function doOptions($options)
     {
@@ -485,21 +533,19 @@ class Input
         endforeach;
         return $options;
     }
-    
-    
-    
+
     /**
      * Convert string to camelCase.
      *
      * @param string $string The string to convert into camelCase
+     *
+     * @return string
      */
     private function toCamelCase($string)
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $string))));
     }
-    
-    
-    
+
     /**
      * Construct our Object
      *
@@ -510,7 +556,7 @@ class Input
      * array of input arguments containing the above static values.
      * @param EasyInputs\Form $form An instance of the Easy Inputs form class.
      *
-     * @return string HTML containing a legend.
+     * @return mixed HTML containing a legend or null.
      */
     public function __construct($name = null, $args = [], Form &$form = null)
     {
@@ -540,10 +586,10 @@ class Input
         
         // Either no label or a user-defined one:
         if (isset($args['label'])) :
-            $this->label  = !empty($args['label']) ? $this->Form->label($name, $args['label']) : null;
+            $this->label  = !empty($args['label']) ? $this->Form->label($this->name, $args['label']) : null;
         // Default:
         else :
-            $this->label  = $this->Form->label($name);
+            $this->label  = $this->Form->label($this->name);
         endif;
     }
 }

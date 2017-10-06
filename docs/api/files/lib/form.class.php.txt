@@ -312,6 +312,8 @@ class Form
      * Ensures a consistent format for group names.
      *
      * @param string $group a comma separated list of nesting groups.
+     *
+     * @return string
      */
     public function splitGroup($group)
     {
