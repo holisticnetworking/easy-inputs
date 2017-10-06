@@ -1,5 +1,7 @@
 # Step Aside, sprintf(). Here comes something awesome-er.
 ***
+## -->> NEW FOR 1.1.0! The WordPress Media Uploader has appeared! <<--
+**By popular demand, the WordPress Media Uploader is now represented in Easy Inputs! See below under the section on "WordPress Fields"**
 As dependent as a modern WordPress website is on forms and inputs - for settings, post meta data, user meta data and even front end forms - there is no unified way of creating them in WordPress. The result is buggy, error-prone form creation with sprintf()'s and replacing values. Not only buggy and error prone, building HTML form elements "the old fashioned way" is also BORING and SLOW. What if there was a faster, easier way?
 
 ![alt text][screenshot]
@@ -72,6 +74,42 @@ Here is the resulting HTML:
 <div class="input text">
     <label for="this-input">This Input is Awesome!!</label>
     <input id="this-input" type="text" name="testing-easy-inputs[totally-different-group][this-input]" value="">
+</div>
+```
+### WordPress Fields
+Easy Inputs also allows you to create WordPress-specific fields such as the Editor or, with v. 1.1.0, the Media Uploader.
+
+Creating an Editor is pretty minimal:
+```
+`$ei->Form->editor('my-field-name');
+```
+Adding a Media Uploader field takes a bit more work. This new "input" is less of a single input and more of a construct aimed at producing a Media Uploader-compatible form element, as has frequently been requested. The Uploader requires a bit of javascript to get working.
+
+To get started, you will need to include both the WordPress Media Uploader scripts AND your own javascript handler. More by way of explanation than for actual use, I have included a small javascript function that does what your code should. Load it like this:
+
+```
+function enqueue_uploader() {
+    wp_enqueue_media();
+    wp_enqueue_script('uploader', plugins_url('easy-inputs/inc/js/uploader.js'));
+}
+add_action('admin_enqueue_scripts', 'enqueue_uploader');
+```
+
+Now simply add our new "input" where appropriate. Here is a minimal example:
+```
+$this->ei->Form->uploader(
+     'tile',
+    ['value' => $tile]
+);
+```
+
+The resulting HTML should look like this:
+```
+<div class="input uploader"><label for="tile">Tile</label><div class="ei-uploader hide-if-no-js">
+    <a title="" href="javascript:;" class="set-image">Set Image</a><br>
+    <a title="" href="javascript:;" class="remove-image">Remove Image</a>
+    <input type="hidden" id="image" name="Course[tile]" value="">
+    </div>
 </div>
 ```
 ## Easy Configuration
