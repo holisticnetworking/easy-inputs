@@ -142,15 +142,23 @@ class Input
      *
      * @return string the opening tag for the form element.
      */
-    public function nonce()
+    public function nonce($name=null)
     {
         return wp_nonce_field(
             $this->Form->name,
-            $this->Form->action,
+            $name,
             true,
             false
         );
     }
+
+    /**
+     * Verifies a nonce.
+     */
+    public function nonceVerify($name=null) {
+        return wp_verify_nonce($name, $this->Form->name);
+    }
+}
     
     /**
      * An HTML text input
