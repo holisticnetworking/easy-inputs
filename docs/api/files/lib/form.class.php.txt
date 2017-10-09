@@ -73,7 +73,7 @@ class Form
      * @var string
      */
     public $prefix  = true;
-    
+
     /**
      * May or may not be useful.
      * @var string
@@ -313,7 +313,7 @@ class Form
      *
      * @param string $group a comma separated list of nesting groups.
      *
-     * @return string
+     * @return array An array of group elements.
      */
     public function splitGroup($group)
     {
@@ -340,10 +340,9 @@ class Form
         }
         $fields = sprintf(
             '<input type="hidden" name="option_page" value="%s" />
-            <input type="hidden" name="action" value="update" />',
+                <input type="hidden" name="action" value="update" />',
             esc_attr($setting)
         );
-        // $fields .= \EasyInputs\Input::nonce($setting);
         $fields .= (new Input($name, $args, $this))->nonce($setting);
         return $fields;
     }
@@ -408,6 +407,8 @@ class Form
      * checks it against a basic regex to be sure the value is also supported.
      *
      * @param array $attribs The passed options.
+     *
+     * @return array A sanitized array of HTML attributes
      */
     public function doAttributes($attribs)
     {
@@ -433,6 +434,8 @@ class Form
      *
      * @param string $name The function requested.
      * @param array $settings An optional array of arguments.
+     *
+     * @return string Either an error message or the HTML element.
      */
     public function __call($name, $settings)
     {
@@ -452,7 +455,6 @@ class Form
                 $caller['line']
             );
             return $message;
-            error_log($message);
         endif;
     }
 
@@ -462,13 +464,13 @@ class Form
      *
      * @param array $args Includes all four static properties of our class.
      *
-     * @return null
+     * @return mixed|boolean True on creation.
      */
     public function __construct($args)
     {
         // Bounce incomplete requests:
         if (empty($args) || empty($args['name'])) {
-            return;
+            return false;
         }
         $this->name         = $args['name'];
         $this->type         = !empty($args['type']) ? $args['type'] : 'post_meta';
@@ -477,6 +479,7 @@ class Form
         $this->group        = !empty($args['group']) ? $this->splitGroup($args['group']) : null;
         $this->prefix       = isset($args['prefix']) ? $args['prefix'] : true;
         $this->setType($this->type);
+        return true;
     }
 }
 
