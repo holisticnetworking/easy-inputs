@@ -58,11 +58,6 @@ class Input
     public $options;
     
     /**
-     * A basis for a nonce field
-     */
-    public $nonce_base;
-    
-    /**
      * A comma-separated list of nested groups
      */
     public $group;
@@ -78,7 +73,8 @@ class Input
     public $wrapper;
     
     /**
-     * Can multiple values be assigned to this input? (outputs '[]')
+     * Setting this value to "true" will append the input's name with [],
+     * thereby making it capable of holding multiple values.
      */
     public $multiple;
     
@@ -124,7 +120,9 @@ class Input
             else :
                 $input  = $this->generic();
             endif;
-            if($this->type == 'button') :
+
+            // To wrap or not to wrap:
+            if(in_array($this->type, ['button', 'nonce', 'nonceVerify'])) :
                 return $input;
             else :
                 return $this->wrap($input);
@@ -132,24 +130,38 @@ class Input
         endif;
         return __NAMESPACE__ . '\Input::' . $function;
     }
-    
+
     /**
      * Return a WP Settings API nonce field.
      *
-     * Don't overthink it. Just let WordPress handle creating the nonce.
-     * This function returns, rather than outputs, the nonce, in case we
-     * need to do something further before output.
+     * Port of the wp_nonce_field function. Don't over-think it.
+     * Just let WordPress handle creating the nonce. This function returns,
+     * rather than outputs, the nonce, in case we need to do something further
+     * before output.
      *
-     * @return string the opening tag for the form element.
+     * @param $name mixed|string
+     *
+     * @return string The output of the wp_nonce_field function.
      */
     public function nonce()
     {
         return wp_nonce_field(
             $this->Form->name,
-            $this->Form->action,
+            $this->name,
             true,
             false
         );
+    }
+
+    /**
+     * Verify a nonce created by EasyInputs
+     *
+     * Port of the wp_verify_nonce function.
+     *
+     * @return boolean false, 1 or 2
+     */
+    public function verifyNonce() {
+        return wp_verify_nonce($_POST[$this->name], $this->Form->name);
     }
     
     /**
@@ -420,7 +432,8 @@ class Input
     }
 
     /**
-     * Creates a media uploader-compatible input
+     * Creates a media uploader-compatible input. Note that the output HTML will
+     * still require the JS components of the Media Uploader to function.
      * @see https://codex.wordpress.org/Javascript_Reference/wp.media
      */
     public function uploader() {
@@ -458,6 +471,8 @@ class Input
     
     /**
      * Return a valid field name attribute.
+     *
+     * @return string The combined
      */
     private function fieldName()
     {
@@ -494,7 +509,7 @@ class Input
      * @param string $input The unwrapped HTML input element
      * @param boolean $label Indicates whether or not to include a <label> element.
      *
-     * @return string
+     * @return string The wrapped element.
      */
     private function wrap($input, $label = true)
     {
@@ -515,7 +530,7 @@ class Input
      *
      * @param array $options The passed options.
      *
-     * @return mixed
+     * @return mixed|array An EasyInputs array of options.
      */
     private function doOptions($options)
     {
@@ -539,7 +554,7 @@ class Input
      *
      * @param string $string The string to convert into camelCase
      *
-     * @return string
+     * @return string aCamelCasedString, PSR2-style.
      */
     private function toCamelCase($string)
     {
