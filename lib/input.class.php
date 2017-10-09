@@ -58,11 +58,6 @@ class Input
     public $options;
     
     /**
-     * A basis for a nonce field
-     */
-    public $nonce_base;
-    
-    /**
      * A comma-separated list of nested groups
      */
     public $group;
@@ -124,7 +119,9 @@ class Input
             else :
                 $input  = $this->generic();
             endif;
-            if($this->type == 'button') :
+
+            // To wrap or not to wrap:
+            if(in_array($this->type, ['button', 'nonce', 'nonceVerify'])) :
                 return $input;
             else :
                 return $this->wrap($input);
@@ -140,13 +137,15 @@ class Input
      * This function returns, rather than outputs, the nonce, in case we
      * need to do something further before output.
      *
+     * @param $name mixed|string
+     *
      * @return string the opening tag for the form element.
      */
-    public function nonce($name=null)
+    public function nonce()
     {
         return wp_nonce_field(
             $this->Form->name,
-            $name,
+            $this->name,
             true,
             false
         );
@@ -155,10 +154,9 @@ class Input
     /**
      * Verifies a nonce.
      */
-    public function nonceVerify($name=null) {
-        return wp_verify_nonce($name, $this->Form->name);
+    public function nonceVerify() {
+        return wp_verify_nonce($this->name, $this->Form->name);
     }
-}
     
     /**
      * An HTML text input
