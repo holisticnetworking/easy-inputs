@@ -122,7 +122,7 @@ class Input
             endif;
 
             // To wrap or not to wrap:
-            if(in_array($this->type, ['button', 'nonce', 'nonceVerify'])) :
+            if (in_array($this->type, ['button', 'nonce', 'nonceVerify'])) :
                 return $input;
             else :
                 return $this->wrap($input);
@@ -160,7 +160,8 @@ class Input
      *
      * @return boolean false, 1 or 2
      */
-    public function verifyNonce() {
+    public function verifyNonce()
+    {
         return wp_verify_nonce($_POST[$this->name], $this->Form->name);
     }
     
@@ -436,12 +437,13 @@ class Input
      * still require the JS components of the Media Uploader to function.
      * @see https://codex.wordpress.org/Javascript_Reference/wp.media
      */
-    public function uploader() {
+    public function uploader()
+    {
         $label  = '';
-        if(empty($this->value)) :
+        if (empty($this->value)) :
             $label  = __('Set Image');
         else :
-            $image = $this->get_image_id($this->value);
+            $image = $this->getImageId($this->value);
             $label  = wp_get_attachment_image($image, 'thumbnail');
         endif;
         $uploader   = sprintf(
@@ -463,9 +465,10 @@ class Input
      * @param $image_url
      * @return mixed
      */
-    public function get_image_id($image_url) {
+    public function getImageId($image_url)
+    {
         global $wpdb;
-        $attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url ));
+        $attachment = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $image_url));
         return $attachment[0];
     }
     
