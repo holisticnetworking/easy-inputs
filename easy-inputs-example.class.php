@@ -30,7 +30,7 @@ namespace EasyInputs;
  * An example class that utilizes the EasyInputs framework.
  */
 
-class TestingEasyInputs
+class EasyInputsExample
 {
     /**
      * Register an instance of Easy Inputs

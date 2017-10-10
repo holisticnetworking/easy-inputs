@@ -42,6 +42,11 @@ class Input
      * An optional array of HTML attributes to apply to the element.
      */
     public $attrs;
+
+    /**
+     * The HTML label for the input.
+     */
+    public $label;
     
     /**
      * Data attribute/value pairs.
@@ -77,6 +82,11 @@ class Input
      * thereby making it capable of holding multiple values.
      */
     public $multiple;
+
+    /**
+     * Holds our Form instance for easy access.
+     */
+    public $Form;
     
     /**
      * List of supported attributes with regexes to validate against.
@@ -138,8 +148,6 @@ class Input
      * Just let WordPress handle creating the nonce. This function returns,
      * rather than outputs, the nonce, in case we need to do something further
      * before output.
-     *
-     * @param $name mixed|string
      *
      * @return string The output of the wp_nonce_field function.
      */
@@ -311,7 +319,7 @@ class Input
     public function radio()
     {
         if (empty($this->options)) {
-            return;
+            return null;
         }
         $radios = '';
         foreach ($this->options as $key => $data) :
@@ -334,9 +342,8 @@ class Input
     public function select()
     {
         if (empty($this->options)) {
-            return;
+            return null;
         }
-        $select     = '';
         $options    = '';
         if (!empty($this->options)) :
             foreach ($this->options as $value => $data) :
@@ -353,7 +360,7 @@ class Input
             '<select id="%1$s" %2$sname="%3$s">%4$s</select>',
             $this->name,
             $this->Form->attrsToString($this->attrs),
-            $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
+            $this->fieldName(),
             $options
         );
     }
@@ -364,11 +371,10 @@ class Input
     public function checkbox()
     {
         if (empty($this->options)) {
-            return;
+            return null;
         }
         $boxes  = '';
         foreach ($this->options as $key => $data) :
-            $fieldname  = !empty($this->group) ? $this->group : $this->name;
             $selected   = in_array($data['value'], (array)$this->value) ? 'checked' : null;
             $input  = sprintf(
                 '<input id="%1$s" name="%3$s" type="checkbox" value="%1$s" %4$s><label for="%1$s">%2$s</label>',
@@ -389,7 +395,7 @@ class Input
     {
         return sprintf(
             '<textarea name="%s" %s>%s</textarea>',
-            $this->fieldName($this->name, !empty($this->group) ? $this->group : null),
+            $this->fieldName(),
             $this->Form->attrsToString($this->attrs),
             $this->value
         );
@@ -404,7 +410,7 @@ class Input
             '<button id="%1$s" type="%2$s" name="%3$s" %4$s value="%5$s">%5$s</button>',
             $this->name,
             $this->type,
-            $this->fieldName($this->name, $this->group),
+            $this->fieldName(),
             $this->Form->attrsToString($this->attrs),
             $this->value
         );
@@ -417,9 +423,9 @@ class Input
     {
         return sprintf(
             '<input type="submit" name="%2$s" id="%3$s" class="%1$s" value="%4$s"  />',
-            !empty($this->args['class']) ? $this->args['class'] : 'button button-primary',
+            !empty($this->attrs['class']) ? $this->attrs['class'] : 'button button-primary',
             $this->name,
-            !empty($this->args['id']) ? $this->args['id'] : 'submit',
+            !empty($this->attrs['id']) ? $this->attrs['id'] : 'submit',
             !empty($this->value) ? $this->value : 'Save Changes'
         );
     }
@@ -439,7 +445,6 @@ class Input
      */
     public function uploader()
     {
-        $label  = '';
         if (empty($this->value)) :
             $label  = __('Set Image');
         else :
@@ -453,7 +458,7 @@ class Input
             <input type="hidden" id="%1$s" name="%2$s" value="%3$s" />
             </div>',
             isset($this->id) ? $this->id : $this->name,
-            $this->fieldName($this->name, $this->group),
+            $this->fieldName(),
             $this->value,
             $label
         );
@@ -572,14 +577,14 @@ class Input
      * @param string $name The name of the field.
      * @param array $args Either a string for the name of the field, or else an
      * array of input arguments containing the above static values.
-     * @param EasyInputs\Form $form An instance of the Easy Inputs form class.
+     * @param Form $form An instance of the Easy Inputs form class.
      *
-     * @return mixed HTML containing a legend or null.
+     * @return boolean True on successful creation.
      */
     public function __construct($name = null, $args = [], Form &$form = null)
     {
-        if (empty($name)) {
-            return;
+        if (empty($name) || empty($form)) {
+            return false;
         }
         $this->Form         = $form;
         $this->name         = $name;
@@ -609,5 +614,6 @@ class Input
         else :
             $this->label  = $this->Form->label($this->name);
         endif;
+        return true;
     }
 }

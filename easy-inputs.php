@@ -21,8 +21,7 @@
 
 namespace EasyInputs;
 
-use EasyInputs\Form;
-use EasyInputs\Form\Input;
+use \EasyInputs\Form;
 
 /**
  * Error-free HTML form and input template engine.
@@ -44,7 +43,7 @@ class EasyInputs
     /**
      * @var \EasyInputs\Form|null
      */
-    var $Form   = null;
+    public $Form   = null;
     /**
      * Giddyup.
      * This function constructs our EasyInputs class for use in WordPress. Each
@@ -61,7 +60,6 @@ class EasyInputs
      * meta, setting or custom, correlating to the types of supported form
      * elements.
      *
-     * @return void
      */
     public function __construct(array $args)
     {

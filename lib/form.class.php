@@ -111,8 +111,6 @@ class Form
      * It should be used in combination with the close() function. This form will also
      * optionally include WordPress nonce fields, created using the $id param.
      *
-     * @param string $id|null The name of the form. Also serves as the HTML id tag. Optional
-     *
      * @return string the opening tag for the form element.
      */
     public function open()
@@ -196,19 +194,19 @@ class Form
      * @param string $text Optional. Label text. The ID will be used if this value is left empty.
      * @param array $attrs HTML attributes.
      *
-     * @return string The HTML string for this label.
+     * @return mixed/string The HTML string for this label or null
      */
     public static function label($for = null, $text = null, $attrs = null)
     {
         // Bounce bad requests.
         if (empty($for)) {
-            return;
+            return null;
         }
 
         return sprintf(
             '<label %s %s>%s</label>',
             !empty($for) ? sprintf('for="%s"', $for) : '',
-            is_array($attrs) ? $this->attrsToString($attrs) : '',
+            is_array($attrs) ? Form::attrsToString($attrs) : '',
             !empty($text) && is_string($text) ? $text : ucfirst(preg_replace('/[_\-]/', ' ', $for)) // Convert fieldname
         );
     }
@@ -269,7 +267,6 @@ class Form
             $output,
             $close
         );
-        return $output;
     }
     
     /**
@@ -329,21 +326,21 @@ class Form
      * @param string $setting The Settings API setting to which this control
      * belongs.
      *
-     * @return string Nonce fields.
+     * @return mixed/string Nonce fields or null
      *
      * @api
      */
     public function hiddenFields($setting)
     {
         if (empty($setting)) {
-            return;
+            return null;
         }
         $fields = sprintf(
             '<input type="hidden" name="option_page" value="%s" />
                 <input type="hidden" name="action" value="update" />',
             esc_attr($setting)
         );
-        $fields .= (new Input($name, $args, $this))->nonce($setting);
+        $fields .= (new Input($this->name, $this->args, $this))->nonce();
         return $fields;
     }
    
@@ -377,8 +374,6 @@ class Form
      *
      * @param string $type The WordPress-compatible form type.
      *      post_meta, setting, custom
-     *
-     * @return null
      */
     private function setType($type = null)
     {
@@ -408,7 +403,7 @@ class Form
      *
      * @param array $attribs The passed options.
      *
-     * @return array A sanitized array of HTML attributes
+     * @return array|bool Either the attributes or else false
      */
     public function doAttributes($attribs)
     {
