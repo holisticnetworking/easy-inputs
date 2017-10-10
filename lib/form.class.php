@@ -75,10 +75,10 @@ class Form
     public $prefix  = true;
 
     /**
-     * May or may not be useful.
-     * @var string
+     * An array of inputs, with attributes
+     * @var array
      */
-    public $nonce_base;
+    public $inputRegistry   = [];
     
     /**
      * List of supported attributes with regexes to validate against.
@@ -228,7 +228,12 @@ class Form
      */
     public function input($name, $args = [])
     {
-        return ( new Input($name, $args, $this) )->create();
+        if(array_key_exists($name, $this->inputRegistry)) :
+            $args   = array_merge($args, $this->inputRegistry[$name]);
+            return ( new Input($name, $args, $this) )->create();
+        else :
+            return ( new Input($name, $args, $this) )->create();
+        endif;
     }
 
 
@@ -252,14 +257,10 @@ class Form
     {
         $args   = $this->setFieldsetDefaults($args);
         $output = '';
-        $open   = is_array($args) && $args['fieldset'] ? $this->fieldsetOpen($args) : '';
-        $close  = is_array($args) && $args['fieldset'] ? $this->fieldsetClose() : '';
+        $open   = !empty($args['fieldset']) ? $this->fieldsetOpen($args) : '';
+        $close  = !empty($args['fieldset']) ? $this->fieldsetClose() : '';
         foreach ($inputs as $name => $a) :
-            if (is_array($a)) :
-                $output .= $this->input($name, $a);
-            else :
-                $output .= $this->input($a);
-            endif;
+            $output .= $this->input($name, (array)$a);
         endforeach;
         return sprintf(
             '%1$s%2$s%3$s',
