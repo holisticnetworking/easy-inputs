@@ -125,21 +125,24 @@ class EasyInputsExample
     /**
      * Basic usage section
      */
-    public function basicUsage() {
+    public function basicUsage()
+    {
         echo sprintf('<p>%s</p>', _('Quick and simple setup'));
     }
 
     /**
      * Simple text input
      */
-    public function basicTextField() {
+    public function basicTextField()
+    {
         global $ei;
         echo $ei->Form->input('basic_text');
     }
     /**
      * Radio button
      */
-    public function basicRadio() {
+    public function basicRadio()
+    {
         global $ei;
         echo $ei->Form->input(
             'basic_radio',
@@ -155,7 +158,8 @@ class EasyInputsExample
     /**
      * Don't use a label
      */
-    public function basicNoLabel() {
+    public function basicNoLabel()
+    {
         global $ei;
         echo $ei->Form->input('basic_no_label', ['label' => false]);
     }

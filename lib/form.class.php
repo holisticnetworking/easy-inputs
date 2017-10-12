@@ -228,7 +228,7 @@ class Form
      */
     public function input($name, $args = [])
     {
-        if(array_key_exists($name, $this->inputRegistry)) :
+        if (array_key_exists($name, $this->inputRegistry)) :
             $args   = array_merge($args, $this->inputRegistry[$name]);
             return ( new Input($name, $args, $this) )->create();
         else :
@@ -260,7 +260,7 @@ class Form
         $open   = !empty($args['fieldset']) ? $this->fieldsetOpen($args) : '';
         $close  = !empty($args['fieldset']) ? $this->fieldsetClose() : '';
         // Differentiates between associative and numeric arrays:
-        if($this->hasStringKeys($inputs)) :
+        if ($this->hasStringKeys($inputs)) :
             foreach ($inputs as $name => $a) :
                 $output .= $this->input($name, $a);
             endforeach;
@@ -285,16 +285,18 @@ class Form
      *
      * @see https://stackoverflow.com/questions/173400/how-to-check-if-php-array-is-associative-or-sequential/4254008#4254008
      */
-    function hasStringKeys(array $array) {
+    private function hasStringKeys(array $array)
+    {
         return count(array_filter(array_keys($array), 'is_string')) > 0;
     }
 
     /**
      * Adds new items to the inputRegistry
      */
-    public function registerInputs($inputs = []) {
-        if(is_array($inputs) && !empty($inputs)) :
-            foreach($inputs as $name=>$args) :
+    public function registerInputs($inputs = [])
+    {
+        if (is_array($inputs) && !empty($inputs)) :
+            foreach ($inputs as $name => $args) :
                 $this->inputRegistry[$name] = (array)$args;
             endforeach;
         endif;
