@@ -40,5 +40,5 @@ Author URI: http://holisticnetworking.net
 
 namespace EasyInputs;
 
-require_once plugin_dir_path(__FILE__) . 'testing-easy-inputs.class.php';
-$tei    = new TestingEasyInputs();
+require_once plugin_dir_path(__FILE__) . 'easy-inputs-example.class.php';
+$tei    = new EasyInputsExample();
