@@ -38,11 +38,34 @@ class EasyInputsExample
     public function registerEi()
     {
         require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
-        // Spare yourself the trouble of declaring twice:
+        // You could either declare your object a global or include it into your
+        // plugin/theme's classes as necessary. Here, we declare a global:
         global $ei;
+
+        // Instantiate EasyInputs, providing the two required settings:
         $ei = new EasyInputs([
             'name'  => 'testing-easy-inputs',
             'type'  => 'setting'
+        ]);
+
+        $this->doInputs();
+    }
+
+    /**
+     * Registers a set of inputs for use in your forms.
+     *
+     * Here we use a function to declare a list of inputs that will be used later.
+     */
+    public function doInputs()
+    {
+        global $ei;
+        $ei->Form->registerInputs([
+            'apple'     => [],
+            'orange'    => ['type' => 'button', 'value' => 'Press an Orange!'],
+            'grape'     => ['type' => 'select', 'options' => [
+                'I love grapes!',
+                'Bah. Grapes.'
+            ]]
         ]);
     }
 
@@ -53,8 +76,8 @@ class EasyInputsExample
     public function addPage()
     {
         add_options_page(
-            'Testing Easy Inputs',
-            'Easy Inputs',
+            'Easy Inputs Examples',
+            'Easy Inputs Examples',
             'publish_posts',
             'easy-inputs',
             [ $this, 'optionPage' ]
@@ -65,7 +88,7 @@ class EasyInputsExample
     
     
     /**
-     * Add an options page to demonstrate the plugin.
+     * Register our settings.
      */
     public function registerSettings()
     {
@@ -105,6 +128,9 @@ class EasyInputsExample
                 // Dead-simple input inclusion:
                 echo '<h2>Dead-simple input inclusion</h2>';
                 echo $ei->Form->input('my_text_input');
+
+                echo '<h1>Using the Input Registry:</h1>';
+                echo $ei->Form->inputs(['apple', 'orange', 'grape', 'kumquat']);
             
                 // Now, let's include a value and some HTML attributes:
                 echo '<h2>Now, let\'s include a value and some HTML'

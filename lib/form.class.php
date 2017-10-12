@@ -259,9 +259,16 @@ class Form
         $output = '';
         $open   = !empty($args['fieldset']) ? $this->fieldsetOpen($args) : '';
         $close  = !empty($args['fieldset']) ? $this->fieldsetClose() : '';
-        foreach ($inputs as $name => $a) :
-            $output .= $this->input($name, (array)$a);
-        endforeach;
+        // Differentiates between associative and numeric arrays:
+        if($this->hasStringKeys($inputs)) :
+            foreach ($inputs as $name => $a) :
+                $output .= $this->input($name, $a);
+            endforeach;
+        else :
+            foreach ($inputs as $input) :
+                $output .= $this->input($input);
+            endforeach;
+        endif;
         return sprintf(
             '%1$s%2$s%3$s',
             $open,
@@ -269,7 +276,30 @@ class Form
             $close
         );
     }
-    
+
+    /**
+     * Returns true of there are any string-based keys in an array.
+     *
+     * @param array $array
+     * @return bool
+     *
+     * @see https://stackoverflow.com/questions/173400/how-to-check-if-php-array-is-associative-or-sequential/4254008#4254008
+     */
+    function hasStringKeys(array $array) {
+        return count(array_filter(array_keys($array), 'is_string')) > 0;
+    }
+
+    /**
+     * Adds new items to the inputRegistry
+     */
+    public function registerInputs($inputs = []) {
+        if(is_array($inputs) && !empty($inputs)) :
+            foreach($inputs as $name=>$args) :
+                $this->inputRegistry[$name] = (array)$args;
+            endforeach;
+        endif;
+    }
+
     /**
      * Set defaults for fieldsets.
      *

@@ -11,7 +11,7 @@
  * Plugin Name: Easy Inputs
  * Plugin URI: https://holisticnetworking.github.io/easy-inputs/
  * Description: A WordPress Forms template engine.
- * Version: 1.0
+ * Version: 1.2.0
  * Author: Thomas J Belknap
  * Author URI: http://holisticnetworking.net
  * GitHub Plugin URI: holisticnetworking/easy-inputs
@@ -21,7 +21,7 @@
 
 namespace EasyInputs;
 
-use \EasyInputs\Form;
+use EasyInputs\Form;
 
 /**
  * Error-free HTML form and input template engine.
