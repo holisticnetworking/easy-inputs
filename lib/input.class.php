@@ -132,7 +132,7 @@ class Input
             endif;
 
             // To wrap or not to wrap:
-            if (in_array($this->type, ['button', 'nonce', 'nonceVerify'])) :
+            if (in_array($this->type, ['button', 'nonce', 'nonceVerify', 'submitButton'])) :
                 return $input;
             else :
                 return $this->wrap($input);
