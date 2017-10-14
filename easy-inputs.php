@@ -5,7 +5,7 @@
  * @package EasyInputs
  * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
  * @license GPLv2 or later
- * @link    http://holisticnetworking.net/easy-inputs-wordpress/
+ * @link    https://holisticnetworking.github.io/easy-inputs/
  */
 /**
  * Plugin Name: Easy Inputs
@@ -36,7 +36,7 @@ use EasyInputs\Form;
  * @package  EasyInputs
  * @author   Thomas J Belknap <tbelknap@holisticnetworking.net>
  * @license  GPLv2 or later
- * @link     http://holisticnetworking.net/easy-inputs-wordpress/
+ * @link     https://holisticnetworking.github.io/easy-inputs/
  */
 class EasyInputs
 {
