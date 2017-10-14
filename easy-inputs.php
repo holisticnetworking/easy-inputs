@@ -1,6 +1,6 @@
 <?php
 /**
- * A WordPress Forms template engine.
+ * Error-free HTML form and input template engine for WordPress.
  *
  * @package EasyInputs
  * @author  Thomas J Belknap <tbelknap@holisticnetworking.net>
@@ -10,7 +10,7 @@
 /**
  * Plugin Name: Easy Inputs
  * Plugin URI: https://holisticnetworking.github.io/easy-inputs/
- * Description: A WordPress Forms template engine.
+ * Description: Error-free HTML form and input template engine for WordPress.
  * Version: 1.2.0
  * Author: Thomas J Belknap
  * Author URI: http://holisticnetworking.net
@@ -24,7 +24,7 @@ namespace EasyInputs;
 use EasyInputs\Form;
 
 /**
- * Error-free HTML form and input template engine.
+ * Error-free HTML form and input template engine for WordPress.
  *
  * EasyInputs provides an error-free universal means of generating HTML form
  * inputs. EasyInputs is a developers-only plugin that provides a helper for
