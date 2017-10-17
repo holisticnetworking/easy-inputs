@@ -308,7 +308,7 @@ class EasyInputsExample
     public function enqueueUploader()
     {
         wp_enqueue_media();
-        wp_enqueue_script('uploader', plugins_url('easy-inputs/inc/js/uploader.js'));
+        wp_enqueue_script('uploader', plugins_url('/inc/js/uploader.js', __FILE__));
     }
     
     /**
