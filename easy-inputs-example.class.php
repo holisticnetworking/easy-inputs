@@ -37,7 +37,7 @@ class EasyInputsExample
      */
     public function registerEi()
     {
-        require_once plugin_dir_path(__FILE__) . '../easy-inputs/easy-inputs.php';
+        require_once plugin_dir_path(__FILE__) . '/easy-inputs.php';
         // You could either declare your object a global or include it into your
         // plugin/theme's classes as necessary. Here, we declare a global:
         global $ei;
